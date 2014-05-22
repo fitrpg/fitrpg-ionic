@@ -6,10 +6,8 @@ var bodyParser    = require('body-parser'),
     mongoose      = require('mongoose'),
     morgan        = require('morgan'),
     methodOverride= require('method-override'),
-    OAuth         = require('oauth').OAuth,
-    passport      = require('passport');
-
-
+    passport      = require('passport'),
+    session       = require('express-session');
 
 mongoose.connect(process.env.DB_URL || 'mongodb://localhost/myApp');
 /*
