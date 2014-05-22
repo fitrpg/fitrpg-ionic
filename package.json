@@ -7,9 +7,19 @@
     "gulp-sass": "^0.7.1",
     "gulp-concat": "^2.2.0",
     "gulp-minify-css": "^0.3.0",
-    "gulp-rename": "^1.2.0"
+    "gulp-rename": "^1.2.0",
+    "express": "*",
+    "mongoose": "*",
+    "q": "*",
+    "cookie-parser": "^1.1.0",
+    "request": "^2.35.0"
   },
   "devDependencies": {
+    "morgan": "*",
+    "body-parser": "*",
+    "tiny-lr": "*",
+    "cookie-parser": "^1.1.0",
+    "request": "^2.35.0",
     "bower": "^1.3.3",
     "gulp-util": "^2.2.14",
     "shelljs": "^0.3.0"
