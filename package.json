@@ -17,6 +17,7 @@
     "gulp-sass": "^0.7.1",
     "method-override": "^1.0.1",
     "mongoose": "*",
+    "oauth": "^0.9.12",
     "passport": "^0.2.0",
     "q": "*",
     "request": "^2.35.0",
