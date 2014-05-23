@@ -1,7 +1,6 @@
 'use strict'
 
 var mongoose = require('mongoose');
-var Q        = require('Q');
 
 var GroupSchema = new mongoose.Schema({
   _id   : String,

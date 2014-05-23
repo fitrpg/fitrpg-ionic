@@ -1,33 +1,33 @@
 'use strict'
 
-var Solo = require('./solo_model');
+var PastSolo = require('./past_solo_model');
 var Q = require('Q');
 
 module.exports = exports = {
   get : function (req, res, next) {
-    $promise = Q.nbind(Solo.findById, Solo);
+    $promise = Q.nbind(PastSolo.findById, PastSolo);
     $promise(req.param('id'))
-      .then(function (solo) {
-        res.json(solo);
+      .then(function (pastSolo) {
+        res.json(pastSolo);
       })
       .fail(function (reason) {
         next(reason);
       })
   },
-  getSolos : function (req, res, next) {
-    $promise = Q.nbind(Solo.find, Solo);
+  getPastSolos : function (req, res, next) {
+    $promise = Q.nbind(PastSolo.find, PastSolo);
     $promise()
-      .then(function (solos) {
-        res.json(solos);
+      .then(function (pastSolos) {
+        res.json(pastSolos);
       })
       .fail(function (reason) {
         next(reason);
       })
   },
   post : function (req, res, next) {
-    var solo = req.body.solo;
-    var $promise = Q.nbind(Solo.create, Solo);
-    $promise(solo)
+    var pastSolo = req.body.pastSolo;
+    var $promise = Q.nbind(PastSolo.create, PastSolo);
+    $promise(pastSolo)
       .then(function(id){
         res.send(id);
       })
