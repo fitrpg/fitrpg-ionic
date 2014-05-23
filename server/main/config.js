@@ -24,7 +24,8 @@ module.exports = exports = function (app, express, routers) {
   app.use('/user' , routers.UserRouter);
   app.use('/solo' , routers.SoloRouter);
   app.use('/group', routers.GroupRouter);
-  app.use('/item', routers.ItemRouter)
+  app.use('/item', routers.ItemRouter);
+  app.use('/battle', routers.BattleRouter);
   app.use(middle.logError);
   app.use(middle.handleError);
   app.use(methodOverride());
