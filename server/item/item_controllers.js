@@ -1,21 +1,21 @@
 'use strict'
 
-var Group = require('./group_model.js');
+var Item = require('./item_model.js');
 var Q     = require('Q');
 
 module.exports = exports = {
   get : function(req, res, next) {
-    var $promise = Q.nbind(Group.findById, Group);
+    var $promise = Q.nbind(Item.findById, Item);
     $promise(req.param('id'))
-      .then(function (group) {
-        res.json(group);
+      .then(function (itrm) {
+        res.json(itrm);
       })
       .fail(function (reason) {
         next(reason);
       })
   },
-  getGroups : function(req, res, next) {
-    var $promise = Q.nbind(Group.find, Group);
+  getItems : function(req, res, next) {
+    var $promise = Q.nbind(Item.find, Item);
     $promise()
       .then(function (groups) {
         res.json(groups);
@@ -25,8 +25,8 @@ module.exports = exports = {
       })
   },
   post : function(req, res, next) {
-    var $promise = Q.nbind(Group.save, Group);
-    $promise(req.body.group)
+    var $promise = Q.nbind(Item.save, Item);
+    $promise(req.body.item)
       .then(function (id) {
         res.send(id);
       })
