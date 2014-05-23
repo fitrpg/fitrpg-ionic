@@ -1,5 +1,5 @@
 module.exports = exports = function(app,passport) {
-  var JawboneStrategy = require('passport-jawbone').Strategy;
+  var JawboneStrategy = require('../../passport-jawbone/lib/passport-jawbone/index').Strategy;
   var jawbone = require('jawbone-up');
 
   var JAWBONE_CLIENT_ID = 'FdNCRVpJNW4';
@@ -9,7 +9,7 @@ module.exports = exports = function(app,passport) {
     clientID: JAWBONE_CLIENT_ID,
     clientSecret: JAWBONE_CLIENT_SECRET,
     // CHANGE THIS URL ADDRESS WHEN PULLING TO REPO
-    callbackURL: "https://fitrpgtest.azurewebsites.net/auth/jawbone/callback"
+    callbackURL: "https://fitbitgamify.azurewebsites.net/"
     },
     function(accessToken,refreshToken,profile,done) {
       console.log('Token: ', accessToken);
