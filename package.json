@@ -2,6 +2,10 @@
   "name": "ionic-project",
   "version": "1.0.0",
   "description": "An Ionic project",
+  "scripts" :{
+    "predeploy": "npm install",
+    "start" : "node server/server.js"
+  },
   "dependencies": {
     "cookie-parser": "^1.1.0",
     "express": "*",
@@ -15,15 +19,18 @@
     "mongoose": "*",
     "passport": "^0.2.0",
     "q": "*",
-    "request": "^2.35.0"
-  },
-  "devDependencies": {
+    "request": "^2.35.0",
     "morgan": "*",
     "body-parser": "*",
     "tiny-lr": "*",
     "cookie-parser": "^1.1.0",
     "request": "^2.35.0",
     "bower": "^1.3.3",
+    "gulp-util": "^2.2.14",
+    "shelljs": "^0.3.0",
+    "tiny-lr": "*"
+  },
+  "devDependencies": {
     "gulp-util": "^2.2.14",
     "shelljs": "^0.3.0"
   }
