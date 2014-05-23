@@ -8,7 +8,8 @@ module.exports = exports = function(app,passport) {
   var jawbone = new JawboneStrategy({
     clientID: JAWBONE_CLIENT_ID,
     clientSecret: JAWBONE_CLIENT_SECRET,
-    callbackURL: "https://fitbitgamify.azurewebsites.net/FitbitRPG"
+    // CHANGE THIS URL ADDRESS WHEN PULLING TO REPO
+    callbackURL: "https://fitrpgtest.azurewebsites.net/auth/jawbone/callback"
     },
     function(accessToken,refreshToken,profile,done) {
       console.log('Token: ', accessToken);
@@ -35,7 +36,7 @@ module.exports = exports = function(app,passport) {
     passport.authenticate('jawbone',{ failureRedirect:'/login'}),
     function(req,res){
       console.log('Successful authentication!');
-      res.redirect('/');
+      res.redirect('/note');
   });
 
   app.get('/jawbone/pubsub', function(req,res){
@@ -43,7 +44,8 @@ module.exports = exports = function(app,passport) {
   });
 
   app.get('/jawbone/update', function(req,res){
-    up.webhook.create('http://127.0.0.1:9000/jawbone/pubsub',function(err,body){
+    // CHANGE THIS URL ADDRESS WHEN PULLING TO REPO
+    up.webhook.create('http://fitrpgtest.azurewebsites.net/jawbone/pubsub',function(err,body){
       console.log(JSON.parse(body).data);
     });
   });
