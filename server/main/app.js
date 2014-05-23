@@ -22,4 +22,6 @@ require('../user/user_routes.js')(UserRouter);
 
 require('../jawbone/jawbone.js')(app, passport);
 
+require('../jawbone/jawbone.js')(app, passport);
+
 module.exports = exports = app;
