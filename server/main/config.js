@@ -22,6 +22,7 @@ module.exports = exports = function (app, express, routers) {
   app.use(middle.cors);
   app.use('/note' , routers.NoteRouter);
   app.use('/user' , routers.UserRouter);
+  app.use('/solo' , routers.SoloRouter)
   app.use(middle.logError);
   app.use(middle.handleError);
   app.use(methodOverride());
