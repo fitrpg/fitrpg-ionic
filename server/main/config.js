@@ -21,14 +21,15 @@ module.exports = exports = function (app, express, routers) {
   app.use(bodyParser());
   app.use(middle.cors);
   app.use('/note' , routers.NoteRouter);
+  app.use('/user' , routers.UserRouter);
   app.use(middle.logError);
   app.use(middle.handleError);
   app.use(methodOverride());
-  /* 
-   * passport.initialize() middleware is required to initialize Passport. 
-   * Because this application uses persistent login sessions, passport.session() 
+  /*
+   * passport.initialize() middleware is required to initialize Passport.
+   * Because this application uses persistent login sessions, passport.session()
    * middleware must also be used. If enabling session support, express.session()
-   * must be used BEFORE passport.session() to ensure that the login is 
+   * must be used BEFORE passport.session() to ensure that the login is
    * restored in the correct order.
    */
   app.use(session({secret: 'amiraconormatt', maxAge: 360*5}));
