@@ -1,12 +1,12 @@
 'use strict'
 
-var controller = require('./user_controllers.js');
+var controller = require('./past_solo_controllers.js');
 
 module.exports = exports = function (router) {
   router.route('/')
-    .get(controller.getUsers)
+    .get(controller.getPastSolos)
     .post(controller.post);
 
   router.route('/id/')
     .get(controller.get)
-};
+}
