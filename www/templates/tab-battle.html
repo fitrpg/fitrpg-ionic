@@ -1,0 +1,47 @@
+<ion-view title="Battle">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+
+  <ion-content class="has-header">
+    <div class="padding">
+       <div class="button-bar bar-positive">
+       <!-- add ngclick filter to buttons and put a default filter to show only equipment -->
+        <a class="button">Pending</a>
+        <a class="button">Outcome</a>
+      </div>
+    </div>
+
+    <div class="list">
+      <div class="item item-divider">
+        Waiting
+      </div>
+
+      <ion-list>
+        <ion-item ng-repeat="battle in battles" type="item-text-wrap">
+          {{battle.name}}
+          <!-- add ngclick event to add battle to user database with status waiting -->
+          <ion-option-button class="button-assertive">Cancel</ion-option-button>
+        </ion-item>
+      </ion-list>
+
+      <div class="item item-divider">
+        Requests
+      </div>
+
+      <ion-list>
+        <ion-item ng-repeat="battle in battles" type="item-text-wrap">
+          {{battle.name}}
+          <!-- add ngclick event to add battle to user database with status waiting -->
+          <ion-option-button class="button-positive">Fight</ion-option-button>
+          <ion-option-button class="button-assertive">Flee</ion-option-button>
+        </ion-item>
+      </ion-list>
+
+    </div>
+
+  </ion-content>
+</ion-view>
+
+
+

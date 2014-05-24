@@ -16,6 +16,7 @@
     "gulp-rename": "^1.2.0",
     "gulp-sass": "^0.7.1",
     "method-override": "^1.0.1",
+    "jawbone-up": "^0.1.1",
     "mongoose": "*",
     "passport": "^0.2.0",
     "q": "*",
