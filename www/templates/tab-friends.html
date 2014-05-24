@@ -2,28 +2,24 @@
   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button class="button button-icon icon ion-plus"></button>
+  </ion-nav-buttons>
 
   <ion-content class="has-header">
   <!--SEARCH BAR-->
-  <div class="list">
-
-    <div class="item item-input-inset">
-      <label class="item-input-wrapper">
-        <input type="text" placeholder="Email">
+    <div class="list list-inset">
+      <label class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" placeholder="Search">
       </label>
-      <button class="button button-small">
-        Cancel
-      </button>
     </div>
-
-  </div>
 
     <ion-list>
       <ion-item ng-repeat="friend in friends" type="item-text-wrap">
         {{friend.name}}
-        <button class="button button-small">
-          Battle!
-        </button>
+        <!-- add ngclick event to add battle to user database with status waiting -->
+        <ion-option-button class="button-positive">Battle</ion-option-button>
       </ion-item>
     </ion-list>
   </ion-content>

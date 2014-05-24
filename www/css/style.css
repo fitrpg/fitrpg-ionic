@@ -1,7 +1,30 @@
 /* Empty. Add your own CSS if you like */
-h1 {
-  text-align: center;
+.padding-horizontal {
+  padding: 30px;
 }
-.xp {
-  text-align: right;
+
+#xpbar {
+  background-color: black;
+  border-radius: 10px; /* (height of inner div) / 2 + padding */
+  padding: 3px;
+}
+
+#xpbar > div {
+   background-color: red;
+   width: 40%; /* Adjust with JavaScript */
+   height: 10px;
+   border-radius: 10px;
+}
+
+#healthbar {
+  background-color: black;
+  border-radius: 10px; /* (height of inner div) / 2 + padding */
+  padding: 3px;
+}
+
+#healthbar > div {
+   background-color: orange;
+   width: 80%; /* Adjust with JavaScript */
+   height: 10px;
+   border-radius: 10px;
 }

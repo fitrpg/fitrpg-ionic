@@ -4,9 +4,15 @@
   </ion-nav-buttons>
 
   <ion-content class="has-header">
+    <div class="padding">
+       <div class="button-bar bar-positive">
+       <!-- add ngclick filter to buttons and put a default filter to show only equipment -->
+        <a class="button">Equipment</a>
+        <a class="button">Items</a>
+      </div>
+    </div>
     <div class="list">
-      <a class="item item-icon-left" ng-repeat="item in shop" href="#/app/store/{{item.id}}">
-        <!-- <i class="icon ion-email"></i> -->
+      <a class="item" ng-repeat="item in shop" href="#/app/store/{{item.id}}">
         {{item.name}}
       </a>
     </div>

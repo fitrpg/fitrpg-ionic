@@ -4,6 +4,14 @@
   </ion-nav-buttons>
 
   <ion-content class="has-header">
+    <div class="padding">
+       <div class="button-bar bar-positive">
+       <!-- add ngclick filter to buttons and put a default filter to show only equipment -->
+        <a class="button">All</a>
+        <a class="button">Friends</a>
+      </div>
+    </div>
+
     <ion-list>
       <ion-item ng-repeat="leader in leaderboard" type="item-text-wrap" href="#/app/leaderboard/{{leader.id}}">
         {{leader.name}}
