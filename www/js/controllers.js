@@ -1,10 +1,7 @@
 angular.module('starter.controllers', [])
 
-.controller('DashCtrl', function($scope) {
-  $scope.XP = 200;
-  $scope.currentXP = 40;
-  $scope.HP = 500;
-  $scope.currentHP = 350;
+.controller('DashCtrl', function($scope, User) {
+  $scope.user = User;
 })
 
 .controller('FriendsCtrl', function($scope, Friends) {

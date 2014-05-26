@@ -3,6 +3,42 @@ angular.module('starter.services', [])
 /**
  * A simple example service that returns some data.
  */
+.factory('User', function() {
+  // Might use a resource here that returns a JSON array
+
+  // Some fake testing data
+  var user =
+    {
+      id: 0,
+      username: 'FatChicken007',
+      profile: {
+        displayName: 'FatChicken007',
+        picture: '',
+      },
+      attributes: {
+        strength: 100,
+        endurance: 30,
+        vitality: 48,
+        dexterity: 75,
+        level: 10,
+        levelXp: 3500,
+        requiredLevelXp: 7500,
+        hp: 375,
+        maxHp: 450,
+        charClass: 'Warrior',
+        gold: 800,
+        skillPoints: 20,
+        weapon1: 'Broadsword',
+        weapon2: 'Shield',
+        armor1: 'Breastplate',
+        accessory1: 'Talisman',
+        accessory2: 'Stone of Jordan',
+      },
+    };
+
+  return user;
+})
+
 .factory('Inventory', function() {
   // Might use a resource here that returns a JSON array
 

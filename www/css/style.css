@@ -2,3 +2,8 @@
 .padding-horizontal {
   padding: 30px;
 }
+
+.row {
+  margin-left: 0;
+  margin-right: 0;
+}
