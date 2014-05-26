@@ -12,6 +12,7 @@ angular.module('app.auth', ['LocalStorageModule'])
   }
 
   $scope.logout = function () {
+    console.log('logging out');
     localStorageService.clearAll();
     location.reload();
   };
@@ -34,11 +35,12 @@ angular.module('app.auth', ['LocalStorageModule'])
   return {
     login: function () {
       loginWindow = $window.open(url, '_blank', 'location=no,toolbar=no');
+      console.log('opens the window');
       loginWindow.addEventListener('loadstart', function (event) {
+        console.log('gets to the event listener');
         hasToken = event.url.indexOf('?token=');
         if (hasToken > -1) {
           token = event.url.substring(hasToken + 7);
-          $window.alert(event.url);
           location.reload();
           loginWindow.close();
           localStorageService.set('jawbone-token', token);
