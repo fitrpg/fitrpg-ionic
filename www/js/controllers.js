@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['LocalStorageModule'])
 
 .controller('DashCtrl', function($scope, User) {
   $scope.user = User;
@@ -63,7 +63,13 @@ angular.module('starter.controllers', [])
 .controller('HelpCtrl', function($scope, $stateParams, Leaderboard) {
 })
 
-
+// .controller('LogoutCtrl', function($scope, $state, localStorageService, $window) {
+//   $scope.logout = function () {
+//     console.log('logging out');
+//     localStorageService.clearAll();
+//     $window.location.reload();
+//   };
+// })
 
 .controller('LoginCtrl', function($scope, $state) {
   $scope.login = function() {

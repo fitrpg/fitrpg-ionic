@@ -2,3 +2,5 @@ node_modules/
 platforms/android
 platforms/ios
 www/lib
+.DS_store
+www/._.DS_store
