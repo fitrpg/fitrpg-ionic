@@ -4,14 +4,62 @@
   The FriendsCtrl pulls data from the Friends service (service.js)
   The Friends service returns an array of friend data
 -->
-<ion-view title="{{inventoryItem.name}}">
-  <ion-content has-header="true" padding="true">
-  YOLO
-  <button class="button button-block button-positive">
-    Sell
-  </button>
-  <button class="button button-block button-positive">
-    Equip
-  </button>
+<ion-view title="Item Details">
+  <ion-content has-header="true" padding="true" scroll="false">
+
+  <div class="list card">
+
+    <div class="item item-avatar">
+      <img src="mcfly.jpg">
+      <h2>{{inventoryItem.name}}</h2>
+      <p>Type: Weapon</p>
+    </div>
+
+    <div class="item item-body">
+      <p class="pull-left">
+        Strength<br><br>
+        Vitality<br><br>
+        Endurance<br><br>
+        Dexterity<br><br>
+        Sell Price
+      </p>
+      <p class="pull-right">
+        <!-- Current attributes and add weapon attributes -->
+        100 <i class="icon ion-ios7-arrow-thin-right"></i> 150<br><br>
+        100 <i class="icon ion-ios7-arrow-thin-right"></i> 150<br><br>
+        100 <i class="icon ion-ios7-arrow-thin-right"></i> 150<br><br>
+        100 <i class="icon ion-ios7-arrow-thin-right"></i> 150<br><br>
+        500 Gold
+      </p>
+      <!-- <div class="row">
+        <div class="col">
+          <p>Strength</p>
+          <p>Endurance</p>
+          <p>Dexterity</p>
+          <p>Vitality</p>
+        </div>
+        <div class="col text-right">
+        <p>100 <i class="icon ion-ios7-arrow-thin-right"></i> 150</p>
+        <p>100 <i class="icon ion-ios7-arrow-thin-right"></i> 150</p>
+        <p>100 <i class="icon ion-ios7-arrow-thin-right"></i> 150</p>
+        <p>100 <i class="icon ion-ios7-arrow-thin-right"></i> 150</p>
+        </div>
+      </div> -->
+
+    </div>
+
+    <div class="item tabs tabs-secondary tabs-icon-left">
+      <a class="tab-item" href="#">
+        <i class="icon ion-pricetag"></i>
+        Sell
+      </a>
+      <a class="tab-item" href="#">
+        <i class="icon ion-person-add"></i>
+        Equip
+      </a>
+    </div>
+
+  </div>
+
   </ion-content>
 </ion-view>

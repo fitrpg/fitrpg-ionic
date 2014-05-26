@@ -5,15 +5,17 @@
 
   <ion-content class="has-header">
     <div class="padding">
-       <div class="button-bar bar-positive">
+       <div class="button-bar bar-light">
        <!-- add ngclick filter to buttons and put a default filter to show only equipment -->
         <a class="button">Equipment</a>
         <a class="button">Items</a>
       </div>
     </div>
     <div class="list">
-      <a class="item" ng-repeat="item in shop" href="#/app/store/{{item.id}}">
+      <a class="item item-icon-left item-icon-right" ng-repeat="item in shop" href="#/app/store/{{item.id}}">
+        <i class="icon ion-flash"></i>
         {{item.name}}
+        <i class="icon ion-ios7-arrow-right"></i>
       </a>
     </div>
   </ion-content>

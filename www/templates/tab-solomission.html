@@ -5,7 +5,7 @@
 
   <ion-content class="has-header">
     <div class="padding">
-       <div class="button-bar bar-positive">
+       <div class="button-bar bar-light">
        <!-- add ngclick filter to buttons and put a default filter to show only equipment -->
         <a class="button">New</a>
         <a class="button">Complete</a>
@@ -18,8 +18,10 @@
       </div>
 
       <!-- filter by boss fights -->
-      <a class="item" ng-repeat="mission in soloMissions" type="item-text-wrap" href="#/app/solomission/{{mission.id}}">
-        {{mission.name}}
+      <a class="item item-icon-left item-icon-right" ng-repeat="mission in soloMissions | filter: {type: 'boss'}" type="item-text-wrap" href="#/app/solomission/{{mission.id}}">
+        <i class="icon ion-flash"></i>
+          {{mission.name}}
+        <i class="icon ion-ios7-arrow-right"></i>
       </a>
 
       <div class="item item-divider">
@@ -27,8 +29,10 @@
       </div>
 
       <!-- filter by quests -->
-      <a class="item" ng-repeat="mission in soloMissions" type="item-text-wrap" href="#/app/solomission/{{mission.id}}">
-        {{mission.name}}
+      <a class="item item-icon-left item-icon-right" ng-repeat="mission in soloMissions | filter: {type: 'quest'}" type="item-text-wrap" href="#/app/solomission/{{mission.id}}">
+        <i class="icon ion-flash"></i>
+          {{mission.name}}
+        <i class="icon ion-ios7-arrow-right"></i>
       </a>
 
     </div>

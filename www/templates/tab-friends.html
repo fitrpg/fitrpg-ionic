@@ -16,8 +16,10 @@
     </div>
 
     <ion-list>
-      <ion-item ng-repeat="friend in friends" type="item-text-wrap">
-        {{friend.name}}
+      <ion-item class="item-avatar" ng-repeat="friend in friends | orderBy:'name'" type="item-text-wrap">
+        <img src="venkman.jpg">
+        <h2>{{friend.name}}</h2>
+        <p>Level {{friend.level}} {{friend.charClass}}</p>
         <!-- add ngclick event to add battle to user database with status waiting -->
         <ion-option-button class="button-positive">Battle</ion-option-button>
       </ion-item>

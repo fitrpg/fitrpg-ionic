@@ -5,7 +5,7 @@
 
   <ion-content class="has-header">
     <div class="padding">
-       <div class="button-bar bar-positive">
+       <div class="button-bar bar-light">
        <!-- add ngclick filter to buttons and put a default filter to show only equipment -->
         <a class="button">All</a>
         <a class="button">Friends</a>
@@ -13,8 +13,10 @@
     </div>
 
     <ion-list>
-      <ion-item ng-repeat="leader in leaderboard" type="item-text-wrap" href="#/app/leaderboard/{{leader.id}}">
-        {{leader.name}}
+      <ion-item class="item-avatar" ng-repeat="leader in leaderboard | orderBy:'-level'" type="item-text-wrap">
+        <img src="venkman.jpg">
+        <h2>{{leader.name}}</h2>
+        <p>Level {{leader.level}} {{leader.charClass}}</p>
       </ion-item>
     </ion-list>
   </ion-content>

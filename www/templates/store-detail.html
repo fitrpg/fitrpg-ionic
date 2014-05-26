@@ -4,11 +4,42 @@
   The FriendsCtrl pulls data from the Friends service (service.js)
   The Friends service returns an array of friend data
 -->
-<ion-view title="{{shopItem.name}}">
+<ion-view title="Item Details">
   <ion-content has-header="true" padding="true">
-  YOLO
-  <button class="button button-block button-positive">
-    Buy
-  </button>
+    <div class="list card">
+
+      <div class="item item-avatar">
+        <img src="mcfly.jpg">
+        <h2>{{shopItem.name}}</h2>
+        <p>Type: Weapon</p>
+      </div>
+
+      <div class="item item-body">
+        <p class="pull-left">
+          Strength<br><br>
+          Vitality<br><br>
+          Endurance<br><br>
+          Dexterity<br><br>
+          Cost
+        </p>
+        <p class="pull-right">
+          <!-- Current attributes and add weapon attributes -->
+          100 <i class="icon ion-ios7-arrow-thin-right"></i> 150<br><br>
+          100 <i class="icon ion-ios7-arrow-thin-right"></i> 150<br><br>
+          100 <i class="icon ion-ios7-arrow-thin-right"></i> 150<br><br>
+          100 <i class="icon ion-ios7-arrow-thin-right"></i> 150<br><br>
+          500 Gold
+        </p>
+
+      </div>
+
+      <div class="item tabs tabs-secondary tabs-icon-left">
+        <a class="tab-item" href="#">
+          <i class="icon ion-pricetag"></i>
+          Buy
+        </a>
+      </div>
+
+    </div>
   </ion-content>
 </ion-view>

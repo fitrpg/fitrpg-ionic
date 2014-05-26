@@ -5,7 +5,7 @@
 
   <ion-content class="has-header">
     <div class="padding">
-       <div class="button-bar bar-positive">
+       <div class="button-bar bar-light">
        <!-- add ngclick filter to buttons and put a default filter to show only equipment -->
         <a class="button">Pending</a>
         <a class="button">Outcome</a>
@@ -18,8 +18,10 @@
       </div>
 
       <ion-list>
-        <ion-item ng-repeat="battle in battles" type="item-text-wrap">
-          {{battle.name}}
+        <ion-item class="item-avatar" ng-repeat="battle in battles" type="item-text-wrap">
+          <img src="venkman.jpg">
+          <h2>{{battle.name}}</h2>
+          <p>Level {{battle.level}} {{battle.charClass}}</p>
           <!-- add ngclick event to add battle to user database with status waiting -->
           <ion-option-button class="button-assertive">Cancel</ion-option-button>
         </ion-item>
@@ -30,8 +32,10 @@
       </div>
 
       <ion-list>
-        <ion-item ng-repeat="battle in battles" type="item-text-wrap">
-          {{battle.name}}
+        <ion-item class="item-avatar" ng-repeat="battle in battles" type="item-text-wrap">
+          <img src="venkman.jpg">
+          <h2>{{battle.name}}</h2>
+          <p>Level {{battle.level}} {{battle.charClass}}</p>
           <!-- add ngclick event to add battle to user database with status waiting -->
           <ion-option-button class="button-positive">Fight</ion-option-button>
           <ion-option-button class="button-assertive">Flee</ion-option-button>

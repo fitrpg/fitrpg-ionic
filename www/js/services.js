@@ -3,6 +3,42 @@ angular.module('starter.services', [])
 /**
  * A simple example service that returns some data.
  */
+.factory('User', function() {
+  // Might use a resource here that returns a JSON array
+
+  // Some fake testing data
+  var user =
+    {
+      id: 0,
+      username: 'FatChicken007',
+      profile: {
+        displayName: 'FatChicken007',
+        picture: '',
+      },
+      attributes: {
+        strength: 100,
+        endurance: 30,
+        vitality: 48,
+        dexterity: 75,
+        level: 10,
+        levelXp: 3500,
+        requiredLevelXp: 7500,
+        hp: 375,
+        maxHp: 450,
+        charClass: 'Warrior',
+        gold: 800,
+        skillPoints: 20,
+        weapon1: 'Broadsword',
+        weapon2: 'Shield',
+        armor1: 'Breastplate',
+        accessory1: 'Talisman',
+        accessory2: 'Stone of Jordan',
+      },
+    };
+
+  return user;
+})
+
 .factory('Inventory', function() {
   // Might use a resource here that returns a JSON array
 
@@ -55,9 +91,9 @@ angular.module('starter.services', [])
 
   // Some fake testing data
   var friends = [
-    { id: 0, name: 'Amira Anuar' },
-    { id: 1, name: 'Conor Fennell' },
-    { id: 2, name: 'Matt Gutierrez' },
+    { id: 0, name: 'Amira Anuar', level: 2, charClass: 'Amazon' },
+    { id: 1, name: 'Conor Fennell', level: 9, charClass: 'Mage' },
+    { id: 2, name: 'Matt Gutierrez', level: 5, charClass: 'Warrior' },
   ];
 
   return {
@@ -76,9 +112,9 @@ angular.module('starter.services', [])
 
   // Some fake testing data
   var battles = [
-    { id: 0, name: 'Amira Anuar' },
-    { id: 1, name: 'Conor Fennell' },
-    { id: 2, name: 'Matt Gutierrez' },
+    { id: 0, name: 'Amira Anuar', level: 2, charClass: 'Amazon' },
+    { id: 1, name: 'Conor Fennell', level: 9, charClass: 'Mage' },
+    { id: 2, name: 'Matt Gutierrez', level: 5, charClass: 'Warrior' },
   ];
 
   return {
@@ -97,9 +133,12 @@ angular.module('starter.services', [])
 
   // Some fake testing data
   var soloMissions = [
-    { id: 0, name: 'Amira Anuar' },
-    { id: 1, name: 'Conor Fennell' },
-    { id: 2, name: 'Matt Gutierrez' },
+    { id: 0, name: 'Andariel', type: 'Boss', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
+    { id: 1, name: 'Duriel', type: 'boss' },
+    { id: 2, name: 'Mephisto', type: 'boss' },
+    { id: 3, name: '5k Steps', type: 'quest' },
+    { id: 4, name: '10k Steps', type: 'quest' },
+    { id: 5, name: '15k Steps', type: 'quest' },
   ];
 
   return {
@@ -118,9 +157,9 @@ angular.module('starter.services', [])
 
   // Some fake testing data
   var versusMissions = [
-    { id: 0, name: 'Amira Anuar' },
-    { id: 1, name: 'Conor Fennell' },
-    { id: 2, name: 'Matt Gutierrez' },
+    { id: 0, name: '5k Steps', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', friends:['Amira','Conor']  },
+    { id: 1, name: '10k Steps' },
+    { id: 2, name: '15k Steps' },
   ];
 
   return {
@@ -139,9 +178,9 @@ angular.module('starter.services', [])
 
   // Some fake testing data
   var leaderboard = [
-    { id: 0, name: 'Amira Anuar' },
-    { id: 1, name: 'Conor Fennell' },
-    { id: 2, name: 'Matt Gutierrez' },
+    { id: 0, name: 'Amira Anuar', level: 2, charClass: 'Amazon' },
+    { id: 1, name: 'Conor Fennell', level: 9, charClass: 'Mage' },
+    { id: 2, name: 'Matt Gutierrez', level: 5, charClass: 'Warrior' },
   ];
 
   return {
