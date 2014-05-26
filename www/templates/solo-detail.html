@@ -4,11 +4,35 @@
   The FriendsCtrl pulls data from the Friends service (service.js)
   The Friends service returns an array of friend data
 -->
-<ion-view title="{{soloMission.name}}">
+<ion-view title="{{soloMission.type}}">
   <ion-content has-header="true" padding="true">
-  YOLO
-  <button class="button button-block button-positive">
-    Buy
-  </button>
+    <div class="list card">
+
+      <div class="item item-avatar">
+        <img src="mcfly.jpg">
+        <h2>{{soloMission.name}}</h2>
+        <p>Type: {{soloMission.type}}</p>
+      </div>
+
+      <div class="item item-body">
+        <p>
+          {{soloMission.description}}
+        </p>
+        <p>Difficulty:
+          <i class="ion-star"></i>
+          <i class="ion-star"></i>
+          <i class="ion-star"></i>
+          <i class="ion-star"></i>
+        </p>
+      </div>
+
+      <div class="item tabs tabs-secondary tabs-icon-left">
+        <a class="tab-item" href="#">
+          <i class="icon ion-flag"></i>
+          Start Mission
+        </a>
+      </div>
+
+    </div>
   </ion-content>
 </ion-view>

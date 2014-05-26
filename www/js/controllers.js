@@ -1,6 +1,10 @@
 angular.module('starter.controllers', [])
 
 .controller('DashCtrl', function($scope) {
+  $scope.XP = 200;
+  $scope.currentXP = 40;
+  $scope.HP = 500;
+  $scope.currentHP = 350;
 })
 
 .controller('FriendsCtrl', function($scope, Friends) {
@@ -40,7 +44,7 @@ angular.module('starter.controllers', [])
 })
 
 .controller('SoloMissionDetailCtrl', function($scope, $stateParams, SoloMissions) {
-  $scope.soloMission = SoloMissions.get($stateParams.soloMissionId);
+  $scope.soloMission = SoloMissions.get($stateParams.missionId);
 })
 
 .controller('VersusMissionCtrl', function($scope, VersusMissions) {
@@ -48,7 +52,7 @@ angular.module('starter.controllers', [])
 })
 
 .controller('VersusMissionDetailCtrl', function($scope, $stateParams, VersusMissions) {
-  $scope.versusMission = VersusMissions.get($stateParams.versusMissionId);
+  $scope.versusMission = VersusMissions.get($stateParams.missionId);
 })
 
 .controller('LeaderboardCtrl', function($scope, Leaderboard) {

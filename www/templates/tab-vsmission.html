@@ -5,7 +5,7 @@
 
   <ion-content class="has-header">
     <div class="padding">
-       <div class="button-bar bar-positive">
+       <div class="button-bar bar-light">
        <!-- add ngclick filter to buttons and put a default filter to show only equipment -->
         <a class="button">New</a>
         <a class="button">Complete</a>
@@ -13,8 +13,31 @@
     </div>
 
     <div class="list">
-      <a class="item" ng-repeat="mission in versusMissions" type="item-text-wrap" href="#/app/solomission/{{mission.id}}">
-        {{mission.name}}
+      <div class="item item-divider">
+        Create
+      </div>
+      <a class="item item-icon-left item-icon-right" ng-repeat="mission in versusMissions" type="item-text-wrap" href="#/app/vsmission/{{mission.id}}">
+        <i class="icon ion-flash"></i>
+          {{mission.name}}
+        <i class="icon ion-ios7-arrow-right"></i>
+      </a>
+
+      <div class="item item-divider">
+        Join
+      </div>
+      <a class="item item-icon-left item-icon-right" ng-repeat="mission in versusMissions" type="item-text-wrap" href="#/app/vsmission/{{mission.id}}">
+        <i class="icon ion-flash"></i>
+          {{mission.name}}
+        <i class="icon ion-ios7-arrow-right"></i>
+      </a>
+
+      <div class="item item-divider">
+        Pending
+      </div>
+      <a class="item item-icon-left item-icon-right" ng-repeat="mission in versusMissions" type="item-text-wrap" href="#/app/vsmission/{{mission.id}}">
+        <i class="icon ion-flash"></i>
+          {{mission.name}}
+        <i class="icon ion-ios7-arrow-right"></i>
       </a>
     </div>
 

@@ -55,9 +55,9 @@ angular.module('starter.services', [])
 
   // Some fake testing data
   var friends = [
-    { id: 0, name: 'Amira Anuar' },
-    { id: 1, name: 'Conor Fennell' },
-    { id: 2, name: 'Matt Gutierrez' },
+    { id: 0, name: 'Amira Anuar', level: 2, charClass: 'Amazon' },
+    { id: 1, name: 'Conor Fennell', level: 9, charClass: 'Mage' },
+    { id: 2, name: 'Matt Gutierrez', level: 5, charClass: 'Warrior' },
   ];
 
   return {
@@ -76,9 +76,9 @@ angular.module('starter.services', [])
 
   // Some fake testing data
   var battles = [
-    { id: 0, name: 'Amira Anuar' },
-    { id: 1, name: 'Conor Fennell' },
-    { id: 2, name: 'Matt Gutierrez' },
+    { id: 0, name: 'Amira Anuar', level: 2, charClass: 'Amazon' },
+    { id: 1, name: 'Conor Fennell', level: 9, charClass: 'Mage' },
+    { id: 2, name: 'Matt Gutierrez', level: 5, charClass: 'Warrior' },
   ];
 
   return {
@@ -97,9 +97,12 @@ angular.module('starter.services', [])
 
   // Some fake testing data
   var soloMissions = [
-    { id: 0, name: 'Amira Anuar' },
-    { id: 1, name: 'Conor Fennell' },
-    { id: 2, name: 'Matt Gutierrez' },
+    { id: 0, name: 'Andariel', type: 'Boss', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
+    { id: 1, name: 'Duriel', type: 'boss' },
+    { id: 2, name: 'Mephisto', type: 'boss' },
+    { id: 3, name: '5k Steps', type: 'quest' },
+    { id: 4, name: '10k Steps', type: 'quest' },
+    { id: 5, name: '15k Steps', type: 'quest' },
   ];
 
   return {
@@ -118,9 +121,9 @@ angular.module('starter.services', [])
 
   // Some fake testing data
   var versusMissions = [
-    { id: 0, name: 'Amira Anuar' },
-    { id: 1, name: 'Conor Fennell' },
-    { id: 2, name: 'Matt Gutierrez' },
+    { id: 0, name: '5k Steps', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', friends:['Amira','Conor']  },
+    { id: 1, name: '10k Steps' },
+    { id: 2, name: '15k Steps' },
   ];
 
   return {
@@ -139,9 +142,9 @@ angular.module('starter.services', [])
 
   // Some fake testing data
   var leaderboard = [
-    { id: 0, name: 'Amira Anuar' },
-    { id: 1, name: 'Conor Fennell' },
-    { id: 2, name: 'Matt Gutierrez' },
+    { id: 0, name: 'Amira Anuar', level: 2, charClass: 'Amazon' },
+    { id: 1, name: 'Conor Fennell', level: 9, charClass: 'Mage' },
+    { id: 2, name: 'Matt Gutierrez', level: 5, charClass: 'Warrior' },
   ];
 
   return {

@@ -4,14 +4,40 @@
   The FriendsCtrl pulls data from the Friends service (service.js)
   The Friends service returns an array of friend data
 -->
-<ion-view title="{{versusMission.name}}">
+<ion-view title="Mission Details">
   <ion-content has-header="true" padding="true">
-  YOLO
-  <button class="button button-block button-positive">
-    Sell
-  </button>
-  <button class="button button-block button-positive">
-    Equip
-  </button>
+    <div class="list card">
+
+      <div class="item item-avatar">
+        <img src="mcfly.jpg">
+        <h2>{{versusMission.name}}</h2>
+      </div>
+
+      <div class="item item-body">
+        <p>
+          {{versusMission.description}}
+        </p>
+      </div>
+
+      <div class="item tabs tabs-secondary tabs-icon-left">
+        <a class="tab-item" href="#">
+          <i class="icon ion-person-stalker"></i>
+          Select Friends
+        </a>
+        <a class="tab-item" href="#">
+          <i class="icon ion-flag"></i>
+          Start Mission
+        </a>
+      </div>
+
+    </div>
+
+    <div class="list card">
+    <div class="item" ng-repeat="friend in versusMission.friends">
+      {{friend}}
+    </div>
+
+    </div>
+
   </ion-content>
 </ion-view>

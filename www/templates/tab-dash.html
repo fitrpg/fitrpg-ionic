@@ -1,4 +1,4 @@
-<ion-view title="Dashboard">
+<ion-view title="FitRPG">
   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
@@ -16,9 +16,7 @@
       </div>
       <div class="row">
         <div class="col">
-          <div id="xpbar">
-            <div></div>
-          </div>
+          <progressbar max="XP" value="currentXP"></progressbar>
         </div>
       </div>
       <div class="row">
@@ -31,13 +29,10 @@
       </div>
       <div class="row">
         <div class="col">
-          <div id="healthbar">
-            <div></div>
-          </div>
+          <progressbar max="HP" value="currentHP"></progressbar>
         </div>
       </div>
     </div>
-
 
     <ion-list>
       <ion-item type="item-text-wrap">
