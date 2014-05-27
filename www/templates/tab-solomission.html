@@ -19,7 +19,7 @@
 
       <!-- filter by boss fights -->
       <a class="item item-icon-left item-icon-right" ng-repeat="mission in soloMissions | filter: {type: 'boss'}" type="item-text-wrap" href="#/app/solomission/{{mission.id}}">
-        <i class="icon ion-flash"></i>
+        <i class="icon {{mission.icon}}"></i>
           {{mission.name}}
         <i class="icon ion-ios7-arrow-right"></i>
       </a>
@@ -30,7 +30,7 @@
 
       <!-- filter by quests -->
       <a class="item item-icon-left item-icon-right" ng-repeat="mission in soloMissions | filter: {type: 'quest'}" type="item-text-wrap" href="#/app/solomission/{{mission.id}}">
-        <i class="icon ion-flash"></i>
+        <i class="icon {{mission.icon}}"></i>
           {{mission.name}}
         <i class="icon ion-ios7-arrow-right"></i>
       </a>
