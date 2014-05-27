@@ -11,10 +11,10 @@
       <div class="item item-avatar">
         <img src="mcfly.jpg">
         <h2>{{shopItem.name}}</h2>
-        <p>Type: Weapon</p>
+        <p>Type: {{shopItem.type}}</p>
       </div>
 
-      <div class="item item-body">
+      <div class="item item-body" ng-hide="checkType()">
         <p class="pull-left">
           Strength<br><br>
           Vitality<br><br>
@@ -24,17 +24,33 @@
         </p>
         <p class="pull-right">
           <!-- Current attributes and add weapon attributes -->
-          100 <i class="icon ion-ios7-arrow-thin-right"></i> 150<br><br>
-          100 <i class="icon ion-ios7-arrow-thin-right"></i> 150<br><br>
-          100 <i class="icon ion-ios7-arrow-thin-right"></i> 150<br><br>
-          100 <i class="icon ion-ios7-arrow-thin-right"></i> 150<br><br>
-          500 Gold
+          {{ user.attributes.strength }} <i class="icon ion-ios7-arrow-thin-right"></i>
+          <span ng-class="addClass(shopItem.modifier.strength)">{{ user.attributes.strength + shopItem.modifier.strength }}</span>
+          <br><br>
+          {{ user.attributes.vitality }} <i class="icon ion-ios7-arrow-thin-right"></i>
+          <span ng-class="addClass(shopItem.modifier.vitality)">{{ user.attributes.vitality + shopItem.modifier.vitality }}</span>
+          <br><br>
+          {{ user.attributes.endurance }} <i class="icon ion-ios7-arrow-thin-right"></i>
+          <span ng-class="addClass(shopItem.modifier.endurance)">{{ user.attributes.endurance + shopItem.modifier.endurance }}</span>
+          <br><br>
+          {{ user.attributes.dexterity }} <i class="icon ion-ios7-arrow-thin-right"></i>
+          <span ng-class="addClass(shopItem.modifier.dexterity)">{{ user.attributes.dexterity + shopItem.modifier.dexterity }}</span>
+          <br><br>
+          {{ shopItem.buyPrice }} Gold
         </p>
 
       </div>
 
+
+      <div class="item item-body" ng-show="checkType()">
+        <p>{{ shopItem.description }}</p>
+        <p class="pull-left">Cost</p>
+        <p class="pull-right">{{ shopItem.buyPrice }} Gold</p>
+      </div>
+
+
       <div class="item tabs tabs-secondary tabs-icon-left">
-        <a class="tab-item" href="#">
+        <a class="tab-item" ng-click="buyItem()">
           <i class="icon ion-pricetag"></i>
           Buy
         </a>

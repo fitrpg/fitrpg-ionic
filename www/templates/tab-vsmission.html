@@ -7,12 +7,12 @@
     <div class="padding">
        <div class="button-bar bar-light">
        <!-- add ngclick filter to buttons and put a default filter to show only equipment -->
-        <a class="button">New</a>
-        <a class="button">Complete</a>
+        <a class="button" ng-click="new()">New</a>
+        <a class="button" ng-click="complete()">Complete</a>
       </div>
     </div>
 
-    <div class="list">
+    <div class="list" ng-hide="isComplete">
       <div class="item item-divider">
         Create
       </div>
@@ -25,7 +25,7 @@
       <div class="item item-divider">
         Join
       </div>
-      <a class="item item-icon-left item-icon-right" ng-repeat="mission in versusMissions" type="item-text-wrap" href="#/app/vsmission/{{mission.id}}">
+      <a class="item item-icon-left item-icon-right" ng-repeat="mission in versusMissions | filter: {status:join}" type="item-text-wrap" href="#/app/vsmission/{{mission.id}}">
         <i class="icon ion-flash"></i>
           {{mission.name}}
         <i class="icon ion-ios7-arrow-right"></i>
@@ -34,6 +34,14 @@
       <div class="item item-divider">
         Pending
       </div>
+      <a class="item item-icon-left item-icon-right" ng-repeat="mission in versusMissions | filter: {status:pending}" type="item-text-wrap" href="#/app/vsmission/{{mission.id}}">
+        <i class="icon ion-flash"></i>
+          {{mission.name}}
+        <i class="icon ion-ios7-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="list" ng-show="isComplete">
       <a class="item item-icon-left item-icon-right" ng-repeat="mission in versusMissions" type="item-text-wrap" href="#/app/vsmission/{{mission.id}}">
         <i class="icon ion-flash"></i>
           {{mission.name}}
