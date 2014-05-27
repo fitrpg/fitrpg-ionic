@@ -110,6 +110,16 @@ angular.module('starter', ['ionic', 'starter.controllers','app.auth' ,'starter.s
       }
     })
 
+    .state('app.addfriends', {
+      url: '/friends/add',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/tab-addfriends.html',
+          controller: 'AddFriendsCtrl'
+        }
+      }
+    })
+
     .state('app.battle', {
       url: '/battle',
       views: {

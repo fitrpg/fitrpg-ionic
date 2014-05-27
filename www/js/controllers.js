@@ -2,6 +2,41 @@ angular.module('starter.controllers', ['LocalStorageModule'])
 
 .controller('DashCtrl', function($scope, User) {
   $scope.user = User;
+  $scope.hasSkillPoints = function() {
+    if ($scope.user.attributes.skillPoints) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  $scope.applyAttributes = function(attr) {
+    $scope.user.attributes[attr]++;
+    $scope.user.attributes.skillPoints--;
+    if (attr === 'vitality') {
+      $scope.user.attributes.hp = util.updateHp($scope.user.attributes.hp,'warrior');
+      $scope.user.attributes.maxHp = util.updateHp($scope.user.attributes.maxHp,'warrior');
+    }
+    // update database
+  };
+
+  $scope.isEquipped = function(slot) {
+    if ($scope.user.attributes[slot] !== undefined) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  $scope.unequip = function(slot){
+    $scope.user.attributes[slot] = undefined;
+    // update database
+  };
+
+  $scope.equip = function(slot){
+    console.log(slot);
+    // send to inventory
+  };
 })
 
 .controller('FriendsCtrl', function($scope, Friends) {
@@ -12,8 +47,13 @@ angular.module('starter.controllers', ['LocalStorageModule'])
   $scope.friend = Friends.get($stateParams.friendId);
 })
 
+.controller('AddFriendsCtrl', function($scope, AddFriends) {
+  $scope.friends = AddFriends.all();
+})
+
 .controller('InventoryCtrl', function($scope, Inventory) {
   $scope.inventory = Inventory.all();
+  $scope.filter = 'weapon'
 })
 
 .controller('InventoryDetailCtrl', function($scope, $stateParams, Inventory) {
@@ -22,6 +62,7 @@ angular.module('starter.controllers', ['LocalStorageModule'])
 
 .controller('ShopCtrl', function($scope, Shop) {
   $scope.shop = Shop.all();
+  $scope.filter = 'weapon'
 })
 
 .controller('ShopDetailCtrl', function($scope, $stateParams, Shop) {

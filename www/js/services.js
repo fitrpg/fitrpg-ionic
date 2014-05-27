@@ -44,13 +44,26 @@ angular.module('starter.services', [])
 
   // Some fake testing data
   var inventory = [
-    { id: 0, name: 'Broadsword' },
-    { id: 1, name: 'Crystal Sword' },
-    { id: 2, name: 'Rune Blade' },
-    { id: 3, name: 'Potion' },
-    { id: 4, name: 'Hi-Potion' },
-    { id: 5, name: 'X-Potion' }
+    { id: 0, name: 'Broadsword', type: 'weapon' },
+    { id: 1, name: 'Crystal Sword', type: 'weapon' },
+    { id: 2, name: 'Rune Blade', type: 'weapon' },
+    { id: 3, name: 'Potion', type: 'potion' },
+    { id: 4, name: 'Hi-Potion', type: 'potion' },
+    { id: 5, name: 'X-Potion', type: 'potion' }
   ];
+
+  for (var i=0; i<inventory.length; i++) {
+    var item = inventory[i];
+    if (item.type === 'weapon') {
+      item['icon'] = 'icon-shield';
+    } else if (item.type === 'armor') {
+
+    } else if (item.type === 'accessory') {
+
+    } else if (item.type === 'potion') {
+      item['icon'] = 'icon-lab';
+    }
+  }
 
   return {
     all: function() {
@@ -68,12 +81,28 @@ angular.module('starter.services', [])
 
   // Some fake testing data
   var shop = [
-    { id: 0, name: 'Nail Bat' },
-    { id: 1, name: 'Leather Glove' },
-    { id: 2, name: 'Protect Vest' },
-    { id: 3, name: 'Talisman' },
-    { id: 4, name: 'Fury Ring' }
+    { id: 0, name: 'Nail Bat', type: 'weapon'  },
+    { id: 1, name: 'Leather Glove', type: 'weapon'  },
+    { id: 2, name: 'Protect Vest', type: 'weapon'  },
+    { id: 3, name: 'Talisman', type: 'weapon'  },
+    { id: 4, name: 'Fury Ring', type: 'weapon'  },
+    { id: 5, name: 'Potion', type: 'potion' },
+    { id: 6, name: 'Hi-Potion', type: 'potion' },
+    { id: 7, name: 'X-Potion', type: 'potion' }
   ];
+
+  for (var i=0; i<shop.length; i++) {
+    var item = shop[i];
+    if (item.type === 'weapon') {
+      item['icon'] = 'icon-shield';
+    } else if (item.type === 'armor') {
+
+    } else if (item.type === 'accessory') {
+
+    } else if (item.type === 'potion') {
+      item['icon'] = 'icon-lab';
+    }
+  }
 
   return {
     all: function() {
@@ -107,14 +136,35 @@ angular.module('starter.services', [])
   }
 })
 
+.factory('AddFriends', function() {
+  // Might use a resource here that returns a JSON array
+
+  // Some fake testing data
+  var friends = [
+    { id: 0, name: 'Amira Anuar', level: 2, charClass: 'Amazon' },
+    { id: 1, name: 'Conor Fennell', level: 9, charClass: 'Mage' },
+    { id: 2, name: 'Matt Gutierrez', level: 5, charClass: 'Warrior' },
+  ];
+
+  return {
+    all: function() {
+      return friends;
+    },
+    get: function(friendId) {
+      // Simple index lookup
+      return friends[friendId];
+    }
+  }
+})
+
 .factory('Battle', function() {
   // Might use a resource here that returns a JSON array
 
   // Some fake testing data
   var battles = [
-    { id: 0, name: 'Amira Anuar', level: 2, charClass: 'Amazon' },
-    { id: 1, name: 'Conor Fennell', level: 9, charClass: 'Mage' },
-    { id: 2, name: 'Matt Gutierrez', level: 5, charClass: 'Warrior' },
+    { id: 0, name: 'Amira Anuar', level: 2, charClass: 'Amazon', status: 'waiting' },
+    { id: 1, name: 'Conor Fennell', level: 9, charClass: 'Mage', status: 'request' },
+    { id: 2, name: 'Matt Gutierrez', level: 5, charClass: 'Warrior', status: 'waiting' },
   ];
 
   return {
@@ -133,13 +183,22 @@ angular.module('starter.services', [])
 
   // Some fake testing data
   var soloMissions = [
-    { id: 0, name: 'Andariel', type: 'Boss', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
+    { id: 0, name: 'Andariel', type: 'boss', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
     { id: 1, name: 'Duriel', type: 'boss' },
     { id: 2, name: 'Mephisto', type: 'boss' },
     { id: 3, name: '5k Steps', type: 'quest' },
     { id: 4, name: '10k Steps', type: 'quest' },
     { id: 5, name: '15k Steps', type: 'quest' },
   ];
+
+  for (var i=0; i<soloMissions.length; i++) {
+    var mission = soloMissions[i];
+    if (mission.type === 'boss') {
+      mission['icon'] = 'icon-wyvern';
+    } else if (mission.type === 'quest') {
+      mission['icon'] = 'icon-locked-fortress';
+    }
+  }
 
   return {
     all: function() {

@@ -18,7 +18,7 @@
       </div>
 
       <ion-list>
-        <ion-item class="item-avatar" ng-repeat="battle in battles" type="item-text-wrap">
+        <ion-item class="item-avatar" ng-repeat="battle in battles | filter: { status: 'waiting' }" type="item-text-wrap">
           <img src="venkman.jpg">
           <h2>{{battle.name}}</h2>
           <p>Level {{battle.level}} {{battle.charClass}}</p>
@@ -32,7 +32,7 @@
       </div>
 
       <ion-list>
-        <ion-item class="item-avatar" ng-repeat="battle in battles" type="item-text-wrap">
+        <ion-item class="item-avatar" ng-repeat="battle in battles | filter: { status: 'request' }" type="item-text-wrap">
           <img src="venkman.jpg">
           <h2>{{battle.name}}</h2>
           <p>Level {{battle.level}} {{battle.charClass}}</p>

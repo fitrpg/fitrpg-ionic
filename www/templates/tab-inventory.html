@@ -7,8 +7,8 @@
     <div class="padding">
        <div class="button-bar bar-light">
        <!-- add ngclick filter to buttons and put a default filter to show only equipment -->
-        <a class="button">Equipment</a>
-        <a class="button">Items</a>
+        <a class="button" ng-click="filter='weapon'">Equipment</a>
+        <a class="button" ng-click="filter='potion'">Items</a>
       </div>
     </div>
 
@@ -24,8 +24,8 @@
  -->
 
     <div class="list">
-      <a class="item item-icon-left item-icon-right" ng-repeat="item in inventory" href="#/app/inventory/{{item.id}}">
-        <i class="icon ion-flash"></i>
+      <a class="item item-icon-left item-icon-right" ng-repeat="item in inventory | filter:filter" href="#/app/inventory/{{item.id}}">
+        <i class="icon {{item.icon}}"></i>
         {{item.name}}
         <i class="icon ion-ios7-arrow-right"></i>
       </a>
