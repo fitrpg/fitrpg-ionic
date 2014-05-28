@@ -4,11 +4,17 @@ angular.module('app.auth', ['LocalStorageModule'])
 // every single page. Never shows a page unless the fitbit-token/jawbone-token is stored locally
 .controller('AuthenticationController', function ($scope, $state, $window, localStorageService) {
 
-  // Check our local storage for the proper credentials to ensure we are logged in
-  if (localStorageService.get('fitbit-token') || localStorageService.get('jawbone-token')) {
-    $scope.isAuthenticated = true;
+  $scope.Authenticated = false;
+  $scope.needsUsername = false;
+  $scope.needsAuthentication = false;
+
+  // Check our local storage for the proper credentials to ensure we are logged in, this means users can't get past app unless they select a username
+  if (localStorageService.get('username') && localStorageService.get('fitbit-token') || localStorageService.get('jawbone-token')) {
+    $scope.Authenticated = true;
+  } else if (localStorageService.get('fitbit-token') || localStorageService.get('jawbone-token')) {
+    $scope.needsUsername = true;
   } else {
-    $scope.isAuthenticated = false;
+    $scope.needsAuthentication = true;
   }
 
   $scope.logout = function () {
@@ -25,6 +31,13 @@ angular.module('app.auth', ['LocalStorageModule'])
   $scope.jawbonelogin = JawboneLoginService.login;
 
 })
+
+.controller('UsernameController', function ($scope, $state) {
+
+  //here we will need to capture the text the user enters, and check the db against it
+
+})
+
 
 .factory('JawboneLoginService', function ($window, $state, localStorageService) {
   var url = 'https://fitrpg.azurewebsites.net/jawbone/auth';
@@ -44,18 +57,17 @@ angular.module('app.auth', ['LocalStorageModule'])
           localStorageService.set('jawbone-token', token);
           localStorageService.set('userId', userId);
           loginWindow.close();
-          location.reload();
-          
-          // amira this doesn't work currently
-          // think about implementing json web tokens 
+          // location.reload();
+          return true;
         }
       });
     },
   };
 })
 
-.factory('FitbitLoginService', function ($window, $state, localStorageService) {
+.factory('FitbitLoginService', function ($window, $state, localStorageService, $location) {
   var url = 'http://fitrpg.azurewebsites.net/fitbit/auth';
+  var usernameUrl = 'http://fitrpg.azurewebsites.net/fitbit/getUsername';
   var loginWindow, token, hasToken, userId, hasUserId;
 
   return {
@@ -69,9 +81,8 @@ angular.module('app.auth', ['LocalStorageModule'])
           userId = event.url.substring(hasUserId + 8);
           localStorageService.set('fitbit-token', token);
           localStorageService.set('userId', userId);
-          // location.reload();
           loginWindow.close();
-          $state.go('login');
+          location.reload;          
           //eventually set the user id here too + unique app ID
         }
       });
