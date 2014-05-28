@@ -52,12 +52,12 @@ angular.module('starter', ['ionic', 'starter.controllers','app.auth' ,'starter.s
       templateUrl: "templates/menu.html"
     })
 
-    .state('app.dash', {
-      url: '/dash',
+    .state('app.character', {
+      url: '/character',
       views: {
         'menuContent': {
-          templateUrl: 'templates/tab-dash.html',
-          controller: 'DashCtrl'
+          templateUrl: 'templates/tab-character.html',
+          controller: 'CharacterCtrl'
         }
       }
     })
@@ -189,7 +189,6 @@ angular.module('starter', ['ionic', 'starter.controllers','app.auth' ,'starter.s
     })
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/dash');
+  $urlRouterProvider.otherwise('/app/character');
 
 });
-
