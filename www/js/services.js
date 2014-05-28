@@ -44,12 +44,12 @@ angular.module('starter.services', [])
 
   // Some fake testing data
   var inventory = [
-    { id: 0, name: 'Broadsword', type: 'weapon' },
-    { id: 1, name: 'Crystal Sword', type: 'weapon' },
-    { id: 2, name: 'Rune Blade', type: 'weapon' },
-    { id: 3, name: 'Potion', type: 'potion' },
-    { id: 4, name: 'Hi-Potion', type: 'potion' },
-    { id: 5, name: 'X-Potion', type: 'potion' }
+    { id: 0, name: 'Broadsword', type: 'weapon', modifier: {strength: 10, dexterity: 4, endurance: -3, vitality: 8}, salePrice: 200 },
+    { id: 1, name: 'Crystal Sword', type: 'weapon', modifier: {strength: 10, dexterity: 4, endurance: -3, vitality: 8}, salePrice: 200 },
+    { id: 2, name: 'Rune Blade', type: 'weapon', modifier: {strength: 10, dexterity: 4, endurance: -3, vitality: 8}, salePrice: 200 },
+    { id: 3, name: 'Potion', type: 'potion', salePrice: 200, description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua' },
+    { id: 4, name: 'Hi-Potion', type: 'potion', salePrice: 200 },
+    { id: 5, name: 'X-Potion', type: 'potion', salePrice: 200 }
   ];
 
   for (var i=0; i<inventory.length; i++) {
@@ -81,14 +81,14 @@ angular.module('starter.services', [])
 
   // Some fake testing data
   var shop = [
-    { id: 0, name: 'Nail Bat', type: 'weapon'  },
-    { id: 1, name: 'Leather Glove', type: 'weapon'  },
-    { id: 2, name: 'Protect Vest', type: 'weapon'  },
-    { id: 3, name: 'Talisman', type: 'weapon'  },
-    { id: 4, name: 'Fury Ring', type: 'weapon'  },
-    { id: 5, name: 'Potion', type: 'potion' },
-    { id: 6, name: 'Hi-Potion', type: 'potion' },
-    { id: 7, name: 'X-Potion', type: 'potion' }
+    { id: 0, name: 'Nail Bat', type: 'weapon', modifier: {strength: 10, dexterity: 4, endurance: -3, vitality: 8}, buyPrice: 200 },
+    { id: 1, name: 'Leather Glove', type: 'weapon', modifier: {strength: 10, dexterity: 4, endurance: -3, vitality: 8}, buyPrice: 200 },
+    { id: 2, name: 'Protect Vest', type: 'weapon', modifier: {strength: 10, dexterity: 4, endurance: -3, vitality: 8}, buyPrice: 200 },
+    { id: 3, name: 'Talisman', type: 'weapon', modifier: {strength: 10, dexterity: 4, endurance: -3, vitality: 8}, buyPrice: 200 },
+    { id: 4, name: 'Fury Ring', type: 'weapon', modifier: {strength: 10, dexterity: 4, endurance: -3, vitality: 8}, buyPrice: 200 },
+    { id: 5, name: 'Potion', type: 'potion', buyPrice: 200, description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua' },
+    { id: 6, name: 'Hi-Potion', type: 'potion', buyPrice: 200 },
+    { id: 7, name: 'X-Potion', type: 'potion', buyPrice: 200 }
   ];
 
   for (var i=0; i<shop.length; i++) {
@@ -183,12 +183,12 @@ angular.module('starter.services', [])
 
   // Some fake testing data
   var soloMissions = [
-    { id: 0, name: 'Andariel', type: 'boss', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
-    { id: 1, name: 'Duriel', type: 'boss' },
-    { id: 2, name: 'Mephisto', type: 'boss' },
-    { id: 3, name: '5k Steps', type: 'quest' },
-    { id: 4, name: '10k Steps', type: 'quest' },
-    { id: 5, name: '15k Steps', type: 'quest' },
+    { id: 0, name: 'Andariel', type: 'boss', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', level: 3, difficulty: 5 },
+    { id: 1, name: 'Duriel', type: 'boss', level: 3 },
+    { id: 2, name: 'Mephisto', type: 'boss', level: 3 },
+    { id: 3, name: '5k Steps', type: 'quest', level: 3 },
+    { id: 4, name: '10k Steps', type: 'quest', level: 3 },
+    { id: 5, name: '15k Steps', type: 'quest', level: 30 },
   ];
 
   for (var i=0; i<soloMissions.length; i++) {
@@ -216,7 +216,7 @@ angular.module('starter.services', [])
 
   // Some fake testing data
   var versusMissions = [
-    { id: 0, name: '5k Steps', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', friends:['Amira','Conor']  },
+    { id: 0, name: '5k Steps', description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', friends:['Amira Anuar','Conor Fennell'], size: 4 },
     { id: 1, name: '10k Steps' },
     { id: 2, name: '15k Steps' },
   ];
@@ -237,9 +237,9 @@ angular.module('starter.services', [])
 
   // Some fake testing data
   var leaderboard = [
-    { id: 0, name: 'Amira Anuar', level: 2, charClass: 'Amazon' },
-    { id: 1, name: 'Conor Fennell', level: 9, charClass: 'Mage' },
-    { id: 2, name: 'Matt Gutierrez', level: 5, charClass: 'Warrior' },
+    { id: 0, name: 'Joe Dou', level: 2, charClass: 'Amazon' },
+    { id: 1, name: 'Jimmy Tsao', level: 9, charClass: 'Mage' },
+    { id: 2, name: 'Andre', level: 5, charClass: 'Warrior' },
   ];
 
   return {

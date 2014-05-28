@@ -19,15 +19,16 @@
           {{soloMission.description}}
         </p>
         <p>Difficulty:
-          <i class="ion-star"></i>
-          <i class="ion-star"></i>
-          <i class="ion-star"></i>
-          <i class="ion-star"></i>
+          <i class="ion-star" ng-show="difficulty(1)"></i>
+          <i class="ion-star" ng-show="difficulty(2)"></i>
+          <i class="ion-star" ng-show="difficulty(3)"></i>
+          <i class="ion-star" ng-show="difficulty(4)"></i>
+          <i class="ion-star" ng-show="difficulty(5)"></i>
         </p>
       </div>
 
       <div class="item tabs tabs-secondary tabs-icon-left">
-        <a class="tab-item" href="#">
+        <a class="tab-item" ng-click="startMission()">
           <i class="icon ion-flag"></i>
           Start Mission
         </a>

@@ -11,17 +11,18 @@
     <div class="list list-inset">
       <label class="item item-input">
         <i class="icon ion-search placeholder-icon"></i>
-        <input type="text" placeholder="Search">
+        <input type="text" placeholder="Search" ng-model="searchText">
       </label>
     </div>
 
+
     <ion-list>
-      <ion-item class="item-avatar" ng-repeat="friend in friends | orderBy:'name'" type="item-text-wrap">
+      <ion-item class="item-avatar" ng-repeat="friend in friends | filter:searchText | orderBy:'name'" type="item-text-wrap">
         <img src="venkman.jpg">
         <h2>{{friend.name}}</h2>
         <p>Level {{friend.level}} {{friend.charClass}}</p>
         <!-- add ngclick event to add battle to user database with status waiting -->
-        <ion-option-button class="button-positive">Battle</ion-option-button>
+        <ion-option-button class="button-positive" ng-click="requestBattle(friend.name)">Battle</ion-option-button>
       </ion-item>
     </ion-list>
   </ion-content>

@@ -11,6 +11,7 @@
       <div class="item item-avatar">
         <img src="mcfly.jpg">
         <h2>{{versusMission.name}}</h2>
+        <p> Max Party: {{versusMission.size}}</p>
       </div>
 
       <div class="item item-body">
@@ -20,11 +21,11 @@
       </div>
 
       <div class="item tabs tabs-secondary tabs-icon-left">
-        <a class="tab-item" href="#">
+        <a class="tab-item" ng-click="selectFriends()">
           <i class="icon ion-person-stalker"></i>
           Select Friends
         </a>
-        <a class="tab-item" href="#">
+        <a class="tab-item" ng-click="requestMission()">
           <i class="icon ion-flag"></i>
           Start Mission
         </a>
@@ -32,9 +33,15 @@
 
     </div>
 
-    <div class="list card">
-    <div class="item" ng-repeat="friend in versusMission.friends">
-      {{friend}}
+    <div class="list card" ng-show="showFriends">
+    <div class="item item-icon-right" ng-repeat="friend in friends">
+      {{friend.name}}
+      <div ng-show="inParty(friend.name)">
+        <i class="icon ion-ios7-minus-outline" ng-click="removeFriend(friend.name)"></i>
+      </div>
+      <div ng-hide="inParty(friend.name)">
+        <i class="icon ion-ios7-plus-outline" ng-click="addFriend(friend.name)"></i>
+      </div>
     </div>
 
     </div>

@@ -12,10 +12,10 @@
     <div class="item item-avatar">
       <img src="mcfly.jpg">
       <h2>{{inventoryItem.name}}</h2>
-      <p>Type: Weapon</p>
+      <p>Type: {{inventoryItem.type}}</p>
     </div>
 
-    <div class="item item-body">
+    <div class="item item-body" ng-hide="checkType()">
       <p class="pull-left">
         Strength<br><br>
         Vitality<br><br>
@@ -25,37 +25,41 @@
       </p>
       <p class="pull-right">
         <!-- Current attributes and add weapon attributes -->
-        100 <i class="icon ion-ios7-arrow-thin-right"></i> 150<br><br>
-        100 <i class="icon ion-ios7-arrow-thin-right"></i> 150<br><br>
-        100 <i class="icon ion-ios7-arrow-thin-right"></i> 150<br><br>
-        100 <i class="icon ion-ios7-arrow-thin-right"></i> 150<br><br>
-        500 Gold
+        {{ user.attributes.strength }} <i class="icon ion-ios7-arrow-thin-right"></i>
+        <span ng-class="addClass(inventoryItem.modifier.strength)">{{ user.attributes.strength + inventoryItem.modifier.strength }}</span>
+        <br><br>
+        {{ user.attributes.vitality }} <i class="icon ion-ios7-arrow-thin-right"></i>
+        <span ng-class="addClass(inventoryItem.modifier.vitality)">{{ user.attributes.vitality + inventoryItem.modifier.vitality }}</span>
+        <br><br>
+        {{ user.attributes.endurance }} <i class="icon ion-ios7-arrow-thin-right"></i>
+        <span ng-class="addClass(inventoryItem.modifier.endurance)">{{ user.attributes.endurance + inventoryItem.modifier.endurance }}</span>
+        <br><br>
+        {{ user.attributes.dexterity }} <i class="icon ion-ios7-arrow-thin-right"></i>
+        <span ng-class="addClass(inventoryItem.modifier.dexterity)">{{ user.attributes.dexterity + inventoryItem.modifier.dexterity }}</span>
+        <br><br>
+        {{ inventoryItem.salePrice }} Gold
       </p>
-      <!-- <div class="row">
-        <div class="col">
-          <p>Strength</p>
-          <p>Endurance</p>
-          <p>Dexterity</p>
-          <p>Vitality</p>
-        </div>
-        <div class="col text-right">
-        <p>100 <i class="icon ion-ios7-arrow-thin-right"></i> 150</p>
-        <p>100 <i class="icon ion-ios7-arrow-thin-right"></i> 150</p>
-        <p>100 <i class="icon ion-ios7-arrow-thin-right"></i> 150</p>
-        <p>100 <i class="icon ion-ios7-arrow-thin-right"></i> 150</p>
-        </div>
-      </div> -->
 
     </div>
 
+    <div class="item item-body" ng-show="checkType()">
+      <p>{{ inventoryItem.description }}</p>
+      <p class="pull-left">Sell Price</p>
+      <p class="pull-right">{{ inventoryItem.salePrice }} Gold</p>
+    </div>
+
     <div class="item tabs tabs-secondary tabs-icon-left">
-      <a class="tab-item" href="#">
+      <a class="tab-item" ng-click="sellItem()">
         <i class="icon ion-pricetag"></i>
         Sell
       </a>
-      <a class="tab-item" href="#">
+      <a class="tab-item" ng-click="equipItem()" ng-hide="checkType()">
         <i class="icon ion-person-add"></i>
         Equip
+      </a>
+      <a class="tab-item" ng-click="useItem()" ng-show="checkType()">
+        <i class="icon ion-person-add"></i>
+        Use
       </a>
     </div>
 
