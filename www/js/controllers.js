@@ -1,7 +1,7 @@
 angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 
-.controller('DashCtrl', function($scope, User) {
-  $scope.user = User;
+.controller('CharacterCtrl', function($scope, User, localStorageService) {
+  $scope.user = User.get({id : localStorageService.get('user-id')});
   $scope.hasSkillPoints = function() {
     if ($scope.user.attributes.skillPoints) {
       return true;
@@ -40,7 +40,7 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 })
 
 .controller('FriendsCtrl', function($scope, Friends, User) {
-  // add DashCtrl or pull updated data from database
+  // add CharacterCtrl or pull updated data from database
   $scope.user = User;
   $scope.friends = Friends.all();
 
@@ -65,7 +65,7 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 })
 
 .controller('InventoryDetailCtrl', function($scope, $stateParams, Inventory, User) {
-  // add DashCtrl or pull updated data from database
+  // add CharacterCtrl or pull updated data from database
   $scope.user = User;
   $scope.inventoryItem = Inventory.get($stateParams.inventoryId);
 
@@ -122,7 +122,7 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 })
 
 .controller('ShopDetailCtrl', function($scope, $stateParams, Shop, User) {
-  // add DashCtrl or pull updated data from database
+  // add CharacterCtrl or pull updated data from database
   $scope.user = User;
   $scope.shopItem = Shop.get($stateParams.shopId);
 
@@ -365,7 +365,7 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 .controller('CreateCtrl', function($scope, $state) {
   $scope.dash = function() {
     console.log('Character Created Successfully');
-    $state.go('tab.dash');
+    $state.go('tab.character');
   };
 })
 
