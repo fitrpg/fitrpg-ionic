@@ -61,36 +61,37 @@ angular.module('starter.controllers', ['LocalStorageModule'])
 })
 
 .controller('ShopCtrl', function($scope, Shop) {
-  $scope.shop = Shop.all();
+  $scope.shop = Shop.query();
   $scope.filter = 'weapon'
 })
 
 .controller('ShopDetailCtrl', function($scope, $stateParams, Shop) {
-  $scope.shopItem = Shop.get($stateParams.shopId);
+  $scope.shopItem = Shop.get({id : $stateParams.shopId});
 })
 
 .controller('BattleCtrl', function($scope, Battle) {
-  $scope.battles = Battle.all();
+  $scope.battles = Battle.query();
 })
 
 .controller('BattleDetailCtrl', function($scope, $stateParams, Battle) {
-  $scope.battle = Battle.get($stateParams.battleId);
+  $scope.battle = Battle.get({id : $stateParams.battleId});
 })
 
 .controller('SoloMissionCtrl', function($scope, SoloMissions) {
-  $scope.soloMissions = SoloMissions.all();
+
+  $scope.soloMissions = SoloMissions.query();
 })
 
 .controller('SoloMissionDetailCtrl', function($scope, $stateParams, SoloMissions) {
-  $scope.soloMission = SoloMissions.get($stateParams.missionId);
+  $scope.soloMission = SoloMissions.get({id : $stateParams.missionId });
 })
 
 .controller('VersusMissionCtrl', function($scope, VersusMissions) {
-  $scope.versusMissions = VersusMissions.all();
+  $scope.versusMissions = VersusMissions.query();
 })
 
 .controller('VersusMissionDetailCtrl', function($scope, $stateParams, VersusMissions) {
-  $scope.versusMission = VersusMissions.get($stateParams.missionId);
+  $scope.versusMission = VersusMissions.get({id : $stateParams.missionId});
 })
 
 .controller('LeaderboardCtrl', function($scope, Leaderboard) {

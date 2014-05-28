@@ -18,6 +18,8 @@
     <script src="lib/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <!-- local storage module for sessions-->
     <script src="lib/angular-local-storage/angular-local-storage.min.js"></script>
+    <!-- restful resource module -->
+    <script src="lib/angular-resource/angular-resource.min.js"></script> 
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
@@ -33,11 +35,11 @@
     <div ng-controller="AuthenticationController">
 
       <!-- This is what we show if logged in, whatever page/state the app asks for-->
-      <div ng-show="isAuthenticated" >
+      <div ng-show="!isAuthenticated" >
         <ion-nav-view></ion-nav-view>
       </div>
      <!-- This is what we show if not logged in-->
-      <div ng-show="!isAuthenticated">
+      <div ng-show="isAuthenticated">
         <div ng-controller='LoginController'>
           <ion-header-bar class="bar-stable">
             <h1 class="title">Login </h1>

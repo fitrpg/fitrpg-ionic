@@ -192,4 +192,3 @@ angular.module('starter', ['ionic', 'starter.controllers','app.auth' ,'starter.s
   $urlRouterProvider.otherwise('/app/dash');
 
 });
-
