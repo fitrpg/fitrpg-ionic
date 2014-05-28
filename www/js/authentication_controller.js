@@ -43,8 +43,10 @@ angular.module('app.auth', ['LocalStorageModule'])
           userId = event.url.substring(hasUserId + 8)
           localStorageService.set('jawbone-token', token);
           localStorageService.set('userId', userId);
-          location.reload();
           loginWindow.close();
+          location.reload();
+          
+          // amira this doesn't work currently
           // think about implementing json web tokens 
         }
       });
@@ -67,8 +69,9 @@ angular.module('app.auth', ['LocalStorageModule'])
           userId = event.url.substring(hasUserId + 8);
           localStorageService.set('fitbit-token', token);
           localStorageService.set('userId', userId);
-          location.reload();
+          // location.reload();
           loginWindow.close();
+          $state.go('login');
           //eventually set the user id here too + unique app ID
         }
       });
