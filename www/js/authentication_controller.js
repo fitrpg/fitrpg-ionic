@@ -27,10 +27,8 @@ angular.module('app.auth', ['LocalStorageModule'])
 })
 
 .factory('JawboneLoginService', function ($window, $state, localStorageService) {
-  var url = 'https://fitbitrpg.azurewebsites.net/jawbone';
-  var loginWindow;
-  var token;
-  var hasToken;
+  var url = 'https://fitrpg.azurewebsites.net/jawbone/auth';
+  var loginWindow, token, hasToken, userId, hasUserId;
 
   return {
     login: function () {
@@ -39,12 +37,15 @@ angular.module('app.auth', ['LocalStorageModule'])
       loginWindow.addEventListener('loadstart', function (event) {
         console.log('gets to the event listener');
         hasToken = event.url.indexOf('?token=');
+        hasUserId = event.url.indexOf('&userid=');
         if (hasToken > -1) {
           token = event.url.substring(hasToken + 7);
+          userId = event.url.substring(hasUserId + 8)
+          localStorageService.set('jawbone-token', token);
+          localStorageService.set('userId', userId);
           location.reload();
           loginWindow.close();
-          localStorageService.set('jawbone-token', token);
-          //eventually set the user id here too + unique app ID
+          // think about implementing json web tokens 
         }
       });
     },
@@ -52,19 +53,20 @@ angular.module('app.auth', ['LocalStorageModule'])
 })
 
 .factory('FitbitLoginService', function ($window, $state, localStorageService) {
-  var url = 'http://fitbitrpg.azurewebsites.net/auth/fitbit';
-  var loginWindow;
-  var hasToken;
-  var token;
+  var url = 'http://fitrpg.azurewebsites.net/fitbit/auth';
+  var loginWindow, token, hasToken, userId, hasUserId;
 
   return {
     login: function () {
       loginWindow = $window.open(url, '_blank', 'location=no,toolbar=no');
       loginWindow.addEventListener('loadstart', function (event) {
         hasToken = event.url.indexOf('?oauth_token=');
-        if (hasToken > -1) {
+        hasUserId = event.url.indexOf('&userId=')
+        if (hasToken > -1 && hasUserId > -1) {
           token = event.url.substring(hasToken + 13);
+          userId = event.url.substring(hasUserId + 8);
           localStorageService.set('fitbit-token', token);
+          localStorageService.set('userId', userId);
           location.reload();
           loginWindow.close();
           //eventually set the user id here too + unique app ID
