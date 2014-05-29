@@ -4,16 +4,17 @@ angular.module('app.auth', ['LocalStorageModule'])
 // every single page. Never shows a page unless the fitbit-token/jawbone-token is stored locally
 .controller('AuthenticationController', function ($scope, $state, $window, localStorageService) {
 
-  $scope.Authenticated = false;
-  $scope.needsUsername = false;
-  $scope.needsAuthentication = false;
-
   // Check our local storage for the proper credentials to ensure we are logged in, this means users can't get past app unless they select a username
-  if (localStorageService.get('username') && localStorageService.get('fitbit-token') || localStorageService.get('jawbone-token')) {
-    $scope.Authenticated = true;
+  if (localStorageService.get('username')) {
+    if (localStorageService.get('fitbit-token') || localStorageService.get('jawbone-token')) {
+      console.log('first if');
+      $scope.Authenticated = true;
+    }
   } else if (localStorageService.get('fitbit-token') || localStorageService.get('jawbone-token')) {
+    console.log('second if');
     $scope.needsUsername = true;
   } else {
+    console.log('third if', localStorageService.get('fitbit-token'));
     $scope.needsAuthentication = true;
   }
 
@@ -32,9 +33,25 @@ angular.module('app.auth', ['LocalStorageModule'])
 
 })
 
-.controller('UsernameController', function ($scope, $state) {
+.controller('UsernameController', function ($window, $scope, $state, localStorageService) {
 
-  //here we will need to capture the text the user enters, and check the db against it
+  $scope.characterClasses = [{'name': 'RoadDestroyer','value': 'runner'},
+                             {'name': 'WeightCrusher', 'value': 'weightlifter'},
+                             {'name': 'Jack of All Skills', 'value': 'mixed'},
+                             {'name': 'Lay-z Sleeper', 'value': 'lazy'}];
+
+  $scope.selectedChar = $scope.characterClasses[0].name;
+  $scope.submitInfo = function(username, selectedChar) {
+    //event.preventDefault();
+    console.log('username', username);
+    localStorageService.set('username', username);
+    localStorageService.set('characterClass', selectedChar);
+    location.reload();
+    // submit a post request, grabbing the local cache stuff
+    // and update the username
+    // do a check to see if the username is existent already
+  }
+  
 
 })
 
@@ -56,9 +73,8 @@ angular.module('app.auth', ['LocalStorageModule'])
           userId = event.url.substring(hasUserId + 8)
           localStorageService.set('jawbone-token', token);
           localStorageService.set('userId', userId);
+          location.reload(); 
           loginWindow.close();
-          // location.reload();
-          return true;
         }
       });
     },
@@ -82,8 +98,8 @@ angular.module('app.auth', ['LocalStorageModule'])
           localStorageService.set('fitbit-token', token);
           localStorageService.set('userId', userId);
           loginWindow.close();
-          location.reload;          
-          //eventually set the user id here too + unique app ID
+          location.reload();          
+          //eventually set  unique app ID
         }
       });
     },
