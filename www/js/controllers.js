@@ -1,7 +1,10 @@
 angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 
 .controller('CharacterCtrl', function($scope, User, localStorageService) {
-  $scope.user = User.get({id : localStorageService.get('user-id')});
+  User.get({id : localStorageService.get('userId')}, function (user) {
+    $scope.user = user;
+  });
+
   $scope.hasSkillPoints = function() {
     if ($scope.user.attributes.skillPoints) {
       return true;
@@ -117,13 +120,13 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 })
 
 .controller('ShopCtrl', function($scope, Shop) {
-  $scope.shop = Shop.all();
+  Shop.query( function (items) {
+    $scope.shop = items;
+  });
   $scope.filter = 'weapon'
 })
 
 .controller('ShopDetailCtrl', function($scope, $stateParams, Shop, User) {
-  // add CharacterCtrl or pull updated data from database
-  $scope.user = User;
   $scope.shopItem = Shop.get($stateParams.shopId);
 
   $scope.addClass = function(attr) {
