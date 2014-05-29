@@ -22,6 +22,7 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
       $scope.user.attributes.maxHp = util.updateHp($scope.user.attributes.maxHp,'warrior');
     }
     // update database
+    User.update($scope.user);
   };
 
   $scope.isEquipped = function(slot) {
@@ -35,6 +36,7 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
   $scope.unequip = function(slot){
     $scope.user.attributes[slot] = undefined;
     // update database
+    User.update($scope.user);
   };
 
   $scope.equip = function(slot){
