@@ -24,6 +24,17 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+.username {
+  height: 46px;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 6px;
+  border-style: double;
+  border-color: black;
+}
+
 .icon-wyvern:before {
   content: "\e600";
 }
