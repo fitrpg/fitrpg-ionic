@@ -2,22 +2,36 @@ angular.module('starter.services', ['ngResource'])
 
 .constant('SERVER_URL', 'http://fitrpg.azurewebsites.net')
 
-.factory('User', ['$resource', function($resource, SERVER_URL) {
+.factory('authHttpInterceptor', [function() {
+ return {
+   'request': function(config) {
+     // do some API key setting
+     // Add json web token
+     return config;
+   }
+ };
+}])
+
+.config(['$httpProvider', function($httpProvider) {
+  $httpProvider.interceptors.push('authHttpInterceptor');
+}])
+
+.factory('User', ['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
   return $resource(SERVER_URL + '/users/:id', {id : '@id'});
 }])
 
-.factory('Shop', ['$resource', function($resource, SERVER_URL) {
+.factory('Shop', ['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
   return $resource(SERVER_URL + '/items/:id', {id : '@id'});
 }])
 
-.factory('Battle', ['$resource', function($resource, SERVER_URL) {
+.factory('Battle', ['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
   return $resource(SERVER_URL + '/battles/:id', {id : '@id'});
 }])
 
-.factory('SoloMissions',['$resource', function($resource, SERVER_URL) {
+.factory('SoloMissions',['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
   return $resource(SERVER_URL + '/solos/:id', {id : '@id'});
 }])
 
-.factory('VersusMissions',['$resource', function($resource, SERVER_URL) {
+.factory('VersusMissions',['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
   return $resource(SERVER_URL + '/groups/:id', {id : '@id'});
-}])
+}]);
