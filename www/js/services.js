@@ -17,7 +17,9 @@ angular.module('starter.services', ['ngResource'])
 }])
 
 .factory('User', ['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
-  return $resource(SERVER_URL + '/users/:id', {id : '@id'});
+  return $resource(SERVER_URL + '/users/:id', {id : '@id'}, {
+      update: { method: 'PUT' }
+  });
 }])
 
 .factory('Shop', ['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
