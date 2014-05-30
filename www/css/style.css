@@ -24,6 +24,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.refresh {
+  position: absolute;
+  right:13px;
+  font-size:19px;
+  color:gray;
+}
 
 .username {
   height: 46px;

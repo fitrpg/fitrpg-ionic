@@ -46,7 +46,7 @@ angular.module('app.auth', ['LocalStorageModule'])
     //event.preventDefault();
     console.log('username', username);
     localStorageService.set('username', username);
-    //location.reload();
+    //location.reload(); slow, try the below and see if that work
     location.href=location.pathname;
     // submit a post request, grabbing the local cache stuff
     // and update the username

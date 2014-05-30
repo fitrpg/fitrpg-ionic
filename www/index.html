@@ -36,9 +36,9 @@
     <div ng-controller="AuthenticationController">
 
       <!-- This is what we show if logged in, whatever page/state the app asks for-->
-      <div ng-show="Authenticated" >
+      <!-- <div ng-show="Authenticated" > -->
         <ion-nav-view></ion-nav-view>
-      </div>
+      <!-- </div> -->
      <!-- This is what we show if not logged in-->
       <div ng-show="needsAuthentication">
         <div ng-controller='LoginController'>
