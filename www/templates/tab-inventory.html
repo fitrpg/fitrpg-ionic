@@ -24,7 +24,7 @@
  -->
 
     <div class="list">
-      <a class="item item-icon-left item-icon-right" ng-repeat="item in inventory | filter:filter" href="#/app/inventory/{{item.id}}">
+      <a class="item item-icon-left item-icon-right" ng-repeat="item in user.inventory | filter:filter" href="#/app/inventory/{{item.id}}">
         <i class="icon {{item.icon}}"></i>
         {{item.name}}
         <i class="icon ion-ios7-arrow-right"></i>

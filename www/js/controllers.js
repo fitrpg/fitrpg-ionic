@@ -1,12 +1,12 @@
 angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 
-.controller('CharacterCtrl', function($scope, User, localStorageService) {
+.controller('CharacterCtrl', function($rootScope, $scope, User, localStorageService) {
+  $rootScope.user = {action : 'action'};
   User.get({id : localStorageService.get('userId')}, function (user) {
-    $scope.user = user;
+    $rootScope.user = user;
   });
-
   $scope.hasSkillPoints = function() {
-    if ($scope.user.attributes.skillPoints) {
+    if ($rootScope.user.attributes.skillPoints) {
       return true;
     } else {
       return false;
@@ -14,19 +14,19 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
   };
 
   $scope.applyAttributes = function(attr) {
-    $scope.user.attributes[attr]++;
-    $scope.user.attributes.skillPoints--;
+    $rootScope.user.attributes[attr]++;
+    $rootScope.user.attributes.skillPoints--;
     if (attr === 'vitality') {
       // change char class from warrior to user class
-      $scope.user.attributes.hp = util.updateHp($scope.user.attributes.hp,'warrior');
-      $scope.user.attributes.maxHp = util.updateHp($scope.user.attributes.maxHp,'warrior');
+      $rootScope.user.attributes.hp = util.updateHp($rootScope.user.attributes.hp,'warrior');
+      $rootScope.user.attributes.maxHp = util.updateHp($rootScope.user.attributes.maxHp,'warrior');
     }
     // update database
-    User.update($scope.user);
+    User.update($rootScope.user);
   };
 
   $scope.isEquipped = function(slot) {
-    if ($scope.user.attributes[slot] !== undefined) {
+    if ($rootScope.user.attributes[slot] !== undefined) {
       return true;
     } else {
       return false;
@@ -34,9 +34,9 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
   };
 
   $scope.unequip = function(slot){
-    $scope.user.attributes[slot] = undefined;
+    $rootScope.user.attributes[slot] = undefined;
     // update database
-    User.update($scope.user);
+    User.update($rootScope.user);
   };
 
   $scope.equip = function(slot){
@@ -44,10 +44,8 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
   };
 })
 
-.controller('FriendsCtrl', function($scope, Friends, User) {
-  // add CharacterCtrl or pull updated data from database
-  $scope.user = User;
-  $scope.friends = Friends.all();
+.controller('FriendsCtrl', function($scope, User) {
+// friends is accessed from $rootScope.user
 
   $scope.requestBattle = function(id) {
     // update $scope.battle to reflect status of pending with friend
@@ -60,24 +58,30 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 //   $scope.friend = Friends.get($stateParams.friendId);
 // })
 
-.controller('AddFriendsCtrl', function($scope, AddFriends) {
-  $scope.friends = AddFriends.all();
+.controller('AddFriendsCtrl', function($scope) {
+  // friends is accessed from $rootScope.user.friends in the template
 })
 
-.controller('InventoryCtrl', function($scope, Inventory) {
-  $scope.inventory = Inventory.all();
+.controller('InventoryCtrl', function($scope) {
+  // inventory is accessed from $rootScope.user.inventory in the template
   $scope.filter = 'weapon'
 })
 
-.controller('InventoryDetailCtrl', function($scope, $stateParams, Inventory, User) {
-  // add CharacterCtrl or pull updated data from database
-  $scope.user = User;
-  $scope.inventoryItem = Inventory.get($stateParams.inventoryId);
+.controller('InventoryDetailCtrl', function($scope, $stateParams, User) {
+  var item;
+  for(var i = 0; i < $scope.user.inventory.length; i++) {
+    if ($scope.user.inventory[i]._id === $stateParams.inventoryId) {
+      item = $scope.user.inventory[i];
+    }
+  }
+
+  $scope.inventoryItem = item;
 
   $scope.addClass = function(attr) {
     if (attr > 0) {
       return 'text-green';
     } else {
+
       return 'text-red';
     }
   };
@@ -85,6 +89,15 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
   $scope.sellItem = function() {
     $scope.user.attributes.gold = $scope.user.attributes.gold + $scope.inventoryItem.salePrice;
     // remove from inventory
+    var index;
+    for(var i = 0; i < $scope.user.inventory.length; i++) {
+      if ($scope.user.inventory[i]._id === $stateParams.inventoryId) {
+        index = i;
+      }
+    }
+    $scope.user.inventory.splice(index, 1);
+    // save user
+    User.update($scope.user);
   };
 
   $scope.equipItem = function() {
@@ -105,11 +118,21 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
         }
       }
     }
+    User.update($scope.user);
   };
 
   $scope.useItem = function() {
     $scope.user.attributes.hp += $scope.inventoryItem.restore;
     // subtract quantity from inventory -> remove if quantity = 0
+    var index;
+    for(var i = 0; i < $scope.user.inventory.length; i++) {
+      if ($scope.user.inventory[i]._id === $stateParams.inventoryId) {
+        index = i;
+      }
+    }
+    $scope.user.inventory.splice(index, 1);
+
+    User.update($scope.user);
   }
 
   $scope.checkType = function() {
@@ -130,7 +153,6 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 
 .controller('ShopDetailCtrl', function($scope, $stateParams, Shop, User) {
   $scope.shopItem = Shop.get($stateParams.shopId);
-
   $scope.addClass = function(attr) {
     if (attr > 0) {
       return 'text-green';
@@ -142,6 +164,8 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
   $scope.buyItem = function() {
     $scope.user.attributes.gold = $scope.user.attributes.gold - $scope.shopItem.buyPrice;
     // add to inventory
+    $scope.user.inventory.add($scope.shopItem);
+    User.update($scope.user);
   };
 
   $scope.checkType = function() {
@@ -154,22 +178,62 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 })
 
 .controller('BattleCtrl', function($scope, Battle, User) {
-  $scope.user = User;
 
   $scope.cancelBattle = function(id) {
     // remove battle from $scope.user.battles
+    var indexOfBattle;
+    var battle;
+    for(var i = 0; i < $scope.user.missionsVersus.length; i++){
+      if ($scope.user.missionsVersus[i].id === id) {
+        indexOfBattle = i;
+        battle = $scope.user.missionsVersus[i];
+      }
+    }
+
+    $scope.user.battles.splice(indexOfbattle, 1);
     // update database for both players
+    User.update($scope.user);
+    User.get({id : battle.enemy}, function(user){
+      var index;
+      for(var i = 0; i < user.missionsVersus.length; i++){
+        if (user.missionsVersus[i].id === id) {
+          index = i;
+        }
+      }
+      user.missionsVersus.splice(index, 1);
+      User.update(user);
+    })
+
   };
 
   $scope.startBattle = function(id) {
+    // get the correct battle
+    var battle;
+    for(var i = 0; i < $scope.user.missionsVersus.length; i++){
+      if ($scope.user.missionsVersus[i].id === id) {
+        battle = $scope.user.missionsVersus[i];
+      }
+    }
     // get user attributes from database
-    // use game logic to determine winner of battle
-    // post battle results to database for both players
+    User.get({id : battle.enemy}, function(enemy){
+      var enemyBattle;
+      for(var i = 0; i < enemy.missionsVersus.length; i++){
+        if (enemy.missionsVersus[i].id === id) {
+          enemyBattle = enemy.missionsVersus[i];
+        }
+      }
+      // use game logic to determine winner of battle
+      // post battle results to database for both players
+      User.update(user);
+      User.update(enemy);
+    })
   };
 
   $scope.pending = function() {
     $scope.isPending = true;
-    $scope.battles = Battle.all();
+    Battle.query(function(battles){
+      $scope.battles = battles;
+    })
   };
 
   $scope.history = function(id) {
@@ -190,18 +254,21 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 // })
 
 .controller('SoloMissionCtrl', function($scope, SoloMissions, User) {
-  var user = User;
 
   $scope.new = function() {
     $scope.soloMissions = [];
-    var allSoloMissions = SoloMissions.all();
-    //need to filter missions that are complete or greater than current user level
-    for (var i=0; i<allSoloMissions.length; i++) {
-      var soloMission = allSoloMissions[i];
-      if (soloMission.level <= user.attributes.level) {
-        $scope.soloMissions.push(soloMission);
+    SoloMissions.query(function(solos){
+      var allSoloMissions = solos;
+      var soloMission;
+
+      //need to filter missions that are complete or greater than current user level
+      for (var i=0; i< allSoloMissions.length; i++) {
+        soloMission = allSoloMissions[i];
+        if (soloMission.level <= user.attributes.level) {
+          $scope.soloMissions.push(soloMission);
+        }
       }
-    }
+    })
   };
 
   $scope.complete = function() {
@@ -209,7 +276,7 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
     $scope.soloMissions = [];
   };
 
-  $scope.new();
+
 })
 
 .controller('SoloMissionDetailCtrl', function($scope, $stateParams, SoloMissions, $ionicPopup, $timeout, $q) {
@@ -265,27 +332,34 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
   };
 })
 
-.controller('VersusMissionCtrl', function($scope, VersusMissions, User) {
-  var user = User;
+.controller('VersusMissionCtrl', function($scope, VersusMissions) {
 
   $scope.new = function() {
     $scope.isComplete = false;
-    $scope.versusMissions = VersusMissions.all();
+    VersusMissions.query(function(versusMissions) {
+        $scope.versusMissions = versusMissions;
+    })
   };
 
   $scope.complete = function() {
     // completed missions in user database
     $scope.isComplete = true;
     $scope.versusMissions = [];
+
+    // update user in scope and database
   };
 
   $scope.new();
 
 })
 
-.controller('VersusMissionDetailCtrl', function($scope, $stateParams, VersusMissions, Friends) {
+.controller('VersusMissionDetailCtrl', function($scope, $stateParams, VersusMissions) {
   $scope.versusMission = VersusMissions.get($stateParams.missionId);
-  $scope.friends = Friends.all();
+  for(var i = 0; i < $scope.user.friends; i++){
+    User.get({id : $scope.user.friends[i]}, function(friend) {
+      $scope.friends.add(friend);
+    })
+  }
 
   $scope.selectFriends = function() {
     $scope.showFriends = true;
@@ -295,7 +369,6 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
     if ($scope.versusMission.friends.length < $scope.versusMission.size) {
       $scope.versusMission.friends.push(id);
     }
-    console.log($scope.versusMission.friends);
   };
 
   $scope.removeFriend = function(id) {
@@ -334,13 +407,18 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 })
 
 .controller('LeaderboardCtrl', function($scope, Leaderboard, Friends) {
-
   $scope.all = function() {
-    $scope.leaderboard = Leaderboard.all();
+    User.query(function(users) {
+      $scope.leaderboard = users;
+    })
   };
 
   $scope.friends = function() {
-    $scope.leaderboard = Friends.all();
+    for(var i = 0; i < $scope.user.friends; i++){
+      User.get({id : $scope.user.friends[i]}, function(user) {
+        $scope.leaderboard.add(user);
+      })
+    }
   };
 
   $scope.all();
