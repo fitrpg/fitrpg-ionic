@@ -1,10 +1,23 @@
 angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 
-.controller('CharacterCtrl', function($rootScope, $scope, User, localStorageService) {
+.controller('CharacterCtrl', function($rootScope, $window,$scope, User, Refresh, localStorageService) {
   $rootScope.user = {action : 'action'};
   User.get({id : localStorageService.get('userId')}, function (user) {
     $rootScope.user = user;
   });
+
+
+  $scope.refresh = function() {
+    var id = localStorageService.get('userId');
+    Refresh.get({id: id}, function() { // this will tell fitbit to get new data
+      User.get({id : id}, function (user) { // this will retrieve that new data
+        $rootScope.user = user;
+        $window.alert("Successfully retrieved data for", id);
+        location.href = location.pathname; //refresh page
+      });
+    });  
+  };
+
   $scope.hasSkillPoints = function() {
     if ($rootScope.user.attributes.skillPoints) {
       return true;
