@@ -7,16 +7,59 @@
     <div class="padding">
        <div class="button-bar bar-light">
        <!-- add ngclick filter to buttons and put a default filter to show only equipment -->
-        <a class="button" ng-click="filter='weapon'">Equipment</a>
-        <a class="button" ng-click="filter='potion'">Items</a>
+        <a class="button" ng-click="equipment()">Equipment</a>
+        <a class="button" ng-click="potion()">Items</a>
       </div>
     </div>
-    <div class="list">
-      <a class="item item-icon-left item-icon-right" ng-repeat="item in shop | filter:filter" href="#/app/store/{{item.id}}">
-        <i class="icon {{item.icon}}"></i>
-        {{item.name}}
-        <i class="icon ion-ios7-arrow-right"></i>
-      </a>
+
+    <div class="list" ng-show="isEquipment">
+      <div class="item item-divider">
+        Weapons
+      </div>
+
+      <div class="list">
+        <a class="item item-icon-left item-icon-right" ng-repeat="item in shop | filter: { type: 'weapon' } | orderBy: '-level'" href="#/app/store/{{item.id}}">
+          <i class="icon {{item.icon}}"></i>
+          {{item.name}}
+          <i class="icon ion-ios7-arrow-right"></i>
+        </a>
+      </div>
+
+      <div class="item item-divider">
+        Armor
+      </div>
+
+      <div class="list">
+        <a class="item item-icon-left item-icon-right" ng-repeat="item in shop | filter: { type: 'armor' } | orderBy: '-level'" href="#/app/store/{{item.id}}">
+          <i class="icon {{item.icon}}"></i>
+          {{item.name}}
+          <i class="icon ion-ios7-arrow-right"></i>
+        </a>
+      </div>
+
+      <div class="item item-divider">
+        Accessories
+      </div>
+
+      <div class="list">
+        <a class="item item-icon-left item-icon-right" ng-repeat="item in shop | filter: { type: 'accessory' } | orderBy: '-level'" href="#/app/store/{{item.id}}">
+          <i class="icon {{item.icon}}"></i>
+          {{item.name}}
+          <i class="icon ion-ios7-arrow-right"></i>
+        </a>
+      </div>
+
     </div>
+
+    <div class="list" ng-hide="isEquipment">
+      <div class="list">
+        <a class="item item-icon-left item-icon-right" ng-repeat="item in shop | filter: { type: 'potion' }" href="#/app/store/{{item.id}}">
+          <i class="icon {{item.icon}}"></i>
+          {{item.name}}
+          <i class="icon ion-ios7-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
   </ion-content>
 </ion-view>

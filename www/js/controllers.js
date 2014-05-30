@@ -157,14 +157,42 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 })
 
 .controller('ShopCtrl', function($scope, Shop) {
-  Shop.query( function (items) {
-    $scope.shop = items;
-  });
-  $scope.filter = 'weapon'
+  $scope.equipment = function() {
+    $scope.isEquipment = true;
+    $scope.shop = [];
+    Shop.query( function (items) {
+      var userLvl = $rootScope.user.attributes.level;
+
+      for (var i=0, i<items.length; i++) {
+        var item = items[i];
+        if (userLvl >= item.level) {
+          $scope.shop.push(item);
+        }
+      }
+
+    });
+  };
+
+  $scope.potion = function(id) {
+    // get data from battle history database
+    // replace $scope.battles with results
+    $scope.isEquipment = false;
+    $scope.shop = [];
+    Shop.query( function (items) {
+      for (var i=0; i<items.length; i++) {
+        var item = items[i];
+        if (item.type === 'potion') {
+          $scope.shop.push(item)
+        }
+      }
+    });
+  };
+
+  $scope.equipment();
 })
 
-.controller('ShopDetailCtrl', function($scope, $stateParams, Shop, User) {
-  $scope.shopItem = Shop.get($stateParams.shopId);
+.controller('ShopDetailCtrl', function($scope, $stateParams, Shop) {
+  $scope.shopItem = Shop.get({id : $stateParams.shopId});
   $scope.addClass = function(attr) {
     if (attr > 0) {
       return 'text-green';
@@ -174,10 +202,10 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
   };
 
   $scope.buyItem = function() {
-    $scope.user.attributes.gold = $scope.user.attributes.gold - $scope.shopItem.buyPrice;
+    $rootScope.user.attributes.gold = $rootScope.user.attributes.gold - $scope.shopItem.cost;
     // add to inventory
-    $scope.user.inventory.add($scope.shopItem);
-    User.update($scope.user);
+    $rootScope.user.inventory.add($scope.shopItem); // should this be a reference to the item id as opposed to the entire item object?
+    User.update($rootScope.user);
   };
 
   $scope.checkType = function() {
