@@ -17,7 +17,7 @@
 
 
     <ion-list>
-      <ion-item class="item-avatar" ng-repeat="friend in friends | filter:searchText | orderBy:'name'" type="item-text-wrap">
+      <ion-item class="item-avatar" ng-repeat="friend in user.friends | filter:searchText | orderBy:'name'" type="item-text-wrap">
         <img src="venkman.jpg">
         <h2>{{friend.name}}</h2>
         <p>Level {{friend.level}} {{friend.charClass}}</p>
