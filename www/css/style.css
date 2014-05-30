@@ -24,11 +24,21 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.refresh {
+ion-item.refresh.item {
+   border-style:none;
+   width: 15px;
+   right:14px;
+   position:absolute;
+   background-color: #EEEEEE;
+   margin-bottom:20px;
+} 
+
+i.ion-refresh.refresh {
   position: absolute;
   right:13px;
   font-size:19px;
   color:gray;
+  top: 0px;
 }
 
 .username {

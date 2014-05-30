@@ -16,6 +16,10 @@ angular.module('starter.services', ['ngResource'])
   $httpProvider.interceptors.push('authHttpInterceptor');
 }])
 
+.factory('Refresh', ['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
+  return $resource(SERVER_URL + '/fitbit/refresh/:id', {id: '@id'});
+}])
+
 .factory('User', ['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
   return $resource(SERVER_URL + '/users/:id', {id : '@id'}, {
       update: { method: 'PUT' }
