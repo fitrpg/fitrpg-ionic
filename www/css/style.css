@@ -83,3 +83,8 @@
   color: green;
   font-weight: bold;
 }
+
+.donut {
+  margin: 0 auto;
+  width: 200px;
+}

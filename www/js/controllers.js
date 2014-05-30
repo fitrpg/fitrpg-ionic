@@ -179,6 +179,8 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
     $scope.battles = [];
   };
 
+  $scope.historyData = [20,45,3]; //win,loss,tie get rid of hard coded data
+
   $scope.pending();
 })
 

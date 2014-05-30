@@ -46,6 +46,9 @@
     </div>
 
     <div class="list" ng-hide="isPending">
+      <div class="donut">
+        <donut-chart chart-data="historyData"></donut-chart>
+      </div>
       <ion-list>
         <ion-item class="item-avatar" ng-repeat="battle in battles" type="item-text-wrap">
           <img src="venkman.jpg">
