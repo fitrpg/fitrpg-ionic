@@ -12,7 +12,7 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
     Refresh.get({id: id}, function() { // this will tell fitbit to get new data
       User.get({id : id}, function (user) { // this will retrieve that new data
         $rootScope.user = user;
-        $window.alert("Successfully retrieved data for: ". user);
+        $window.alert("Successfully retrieved data for", id);
         location.href = location.pathname; //refresh page
       });
     });  
