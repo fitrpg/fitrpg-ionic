@@ -19,9 +19,10 @@ angular.module('app.auth', ['LocalStorageModule'])
   }
 
   $scope.logout = function () {
-    console.log('logging out');
     localStorageService.clearAll();
-    location.reload();
+    //location.reload();
+    location.href=location.pathname;
+
   };
 
 })
@@ -45,8 +46,8 @@ angular.module('app.auth', ['LocalStorageModule'])
     //event.preventDefault();
     console.log('username', username);
     localStorageService.set('username', username);
-    localStorageService.set('characterClass', selectedChar);
-    location.reload();
+    //location.reload();
+    location.href=location.pathname;
     // submit a post request, grabbing the local cache stuff
     // and update the username
     // do a check to see if the username is existent already
@@ -73,7 +74,8 @@ angular.module('app.auth', ['LocalStorageModule'])
           userId = event.url.substring(hasUserId + 8)
           localStorageService.set('jawbone-token', token);
           localStorageService.set('userId', userId);
-          location.reload(); 
+          location.href=location.pathname;
+          //location.reload(); 
           loginWindow.close();
         }
       });
@@ -98,7 +100,8 @@ angular.module('app.auth', ['LocalStorageModule'])
           localStorageService.set('fitbit-token', token);
           localStorageService.set('userId', userId);
           loginWindow.close();
-          location.reload();          
+          location.href=location.pathname;
+          //location.reload();          
           //eventually set  unique app ID
         }
       });
