@@ -1,6 +1,27 @@
 angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 
 .controller('CharacterCtrl', function($rootScope, $window,$scope, User, Refresh, localStorageService) {
+  // initialize $rootScope.user to eliminate console errors before authentication
+  $rootScope.user = {
+    attributes: {
+      gold: 0,
+      experience: 0,
+      vitality: 0,
+      strength: 0,
+      endurance: 0,
+      dexterity: 0,
+      level: 0,
+      skillPts: 0,
+    },
+    equipped: {
+      weapon1: '',
+      weapon2: '',
+      armor: '',
+      accessory1: '',
+      accessory2: '',
+    },
+    username: '',
+  };
   User.get({id : localStorageService.get('userId')}, function (user) {
     $rootScope.user = user;
     debugger;
@@ -19,7 +40,7 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
   };
 
   $scope.hasSkillPoints = function() {
-    if ($rootScope.user.attributes.skillPoints) {
+    if ($scope.user.attributes.skillPts) {
       return true;
     } else {
       return false;
@@ -27,19 +48,28 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
   };
 
   $scope.applyAttributes = function(attr) {
-    $rootScope.user.attributes[attr]++;
-    $rootScope.user.attributes.skillPoints--;
+    $scope.user.attributes[attr]++;
+    $scope.user.attributes.skillPts--;
     if (attr === 'vitality') {
       // change char class from warrior to user class
-      $rootScope.user.attributes.hp = util.updateHp($rootScope.user.attributes.hp,'warrior');
-      $rootScope.user.attributes.maxHp = util.updateHp($rootScope.user.attributes.maxHp,'warrior');
+      $scope.user.attributes.hp = util.updateHp($scope.user.attributes.hp,'warrior');
+      $scope.user.attributes.maxHp = util.updateHp($scope.user.attributes.maxHp,'warrior');
     }
     // update database
     User.update($rootScope.user);
   };
 
   $scope.isEquipped = function(slot) {
-    if ($rootScope.user.attributes[slot] !== undefined) {
+    if (!$scope.user.equipped) {
+      $scope.user.equipped = {
+        weapon1: '',
+        weapon2: '',
+        armor: '',
+        accessory1: '',
+        accessory2: ''
+      };
+    }
+    if ($scope.user.equipped[slot] !== '') {
       return true;
     } else {
       return false;
@@ -47,7 +77,8 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
   };
 
   $scope.unequip = function(slot){
-    $rootScope.user.attributes[slot] = undefined;
+    $scope.user.equipped[slot] = '';
+    // set equipped status for item to false
     // update database
     User.update($rootScope.user);
   };
@@ -76,15 +107,15 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 
 .controller('InventoryCtrl', function($scope, Shop) {
   // inventory is accessed from $rootScope.user.inventory in the template
-  var inventory = $rootScope.user.inventory;
+  var inventory = $scope.user.inventory;
   $scope.inventory = [];
 
   Shop.query( function (storeItems) {
-    for (var i=0, i<inventory.length; i++) {
+    for (var i=0; i<inventory.length; i++) {
       var itemId = inventory[i].storeId;
       for (var j=0; j<storeItems.length; j++) {
         var storeItem = storeItems[j];
-        if (storeItem.id === itemId){
+        if (storeItem['_id'] === itemId){
           storeItem['inventoryId'] = inventory[i].id;
           $scope.inventory.push(storeItem);
         }
@@ -104,19 +135,21 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 
 })
 
-.controller('InventoryDetailCtrl', function($scope, $stateParams, Shop, $ionicPopup, $q) {
+.controller('InventoryDetailCtrl', function($scope, $state, $stateParams, Shop, User, $ionicPopup, $q) {
   var item;
   var index;
-  var inventory = $rootScope.user.inventory;
+  var inventory = $scope.user.inventory;
 
   for (var i=0; i<inventory.length; i++) {
-    if (inventory[i].id === $stateParams.inventoryId) {
+    if (inventory[i].id.toString() === $stateParams.inventoryId.toString()) {
       index = i;
       item = inventory[index];
     }
   }
 
-  $scope.inventoryItem = Shop.get({id : item.storeId});
+  $scope.inventoryItem = Shop.get({id : item.storeId}, function(){
+    $scope.inventoryItem.type = util.capitalize($scope.inventoryItem.type);
+  });
 
   $scope.addClass = function(attr) {
     if (attr > 0) {
@@ -127,90 +160,91 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
     }
   };
 
-  var showAlert = function(title, body, button) {
-    var alertPopup = $ionicPopup.alert({
-      title: title,
-      template: body,
-      okText: button
-    });
-    alertPopup.then(function(res) {
-      $state.go('app.character');
-    });
-  };
-
   $scope.sellItem = function() {
-    $rootScope.user.attributes.gold = $rootScope.user.attributes.gold + $scope.inventoryItem.sellPrice;
-    if ($scope.inventoryItem.type !== 'potion') {
-      // remove from inventory
-      $rootScope.user.inventory.splice(index, 1);
-    } else {
-      if (item.quantity > 1) {
-        item.quantity -= 1;
-      } else if (item.quantity === 1) {
-        $rootScope.user.inventory.splice(index, 1);
+    if (item.equipped === false) {
+      $scope.user.attributes.gold = $scope.user.attributes.gold + $scope.inventoryItem.sellPrice;
+      if ($scope.inventoryItem.type.toLowerCase() !== 'potion') {
+        // remove from inventory
+        $scope.user.inventory.splice(index, 1);
+      } else {
+        if (item.quantity > 1) {
+          item.quantity -= 1;
+        } else if (item.quantity === 1) {
+          $scope.user.inventory.splice(index, 1);
+        }
       }
+      // save user
+      User.update($scope.user);
+      util.showAlert($ionicPopup, 'Item Sold','You received ' + $scope.inventoryItem.sellPrice + ' gold for your item.', 'OK', function(){
+        $state.go('app.character');
+      });
+    } else {
+      util.showAlert($ionicPopup, 'Item Equipped','You must unequip your item before you can sell it.', 'OK', function(){});
     }
-    // save user
-    User.update($rootScope.user);
-    showAlert('Item Sold','You received ' + $scope.inventoryItem.sellPrice + ' gold for your item.', 'OK');
   };
 
   $scope.equipItem = function() {
     if (item.equipped === false) {
-      if ($scope.inventoryItem.type === 'weapon') {
+      if ($scope.inventoryItem.type.toLowerCase() === 'weapon') {
         if ($scope.inventoryItem.size === 1) {
-          if ($rootScope.user.attributes.weapon1 === undefined) {
-            $rootScope.user.attributes.weapon1 = item.id;
+          if ($scope.user.equipped.weapon1 === '') {
+            $scope.user.equipped.weapon1 = $scope.inventoryItem.name;
             item.equipped = true;
-          } else if ($rootScope.user.attributes.weapon2 === undefined) {
-            $rootScope.user.attributes.weapon2 = item.id;
+          } else if ($scope.user.equipped.weapon2 === '') {
+            $scope.user.equipped.weapon2 = $scope.inventoryItem.name;
             item.equipped = true;
           }
         } else if ($scope.inventoryItem.size === 2) {
-          if ($rootScope.user.attributes.weapon1 === undefined && $rootScope.user.attributes.weapon2 === undefined) {
-            $rootScope.user.attributes.weapon1 = item.id;
-            $rootScope.user.attributes.weapon2 = item.id;
+          if ($scope.user.equipped.weapon1 === '' && $scope.user.equipped.weapon2 === '') {
+            $scope.user.equipped.weapon1 = $scope.inventoryItem.name;
+            $scope.user.equipped.weapon2 = $scope.inventoryItem.name;
             item.equipped = true;
           }
         }
-      } else if ($scope.inventoryItem.type === 'armor') {
-        if ($rootScope.user.attributes.armor === undefined) {
-          $rootScope.user.attributes.armor = item.id;
+      } else if ($scope.inventoryItem.type.toLowerCase() === 'armor') {
+        if ($scope.user.equipped.armor === '') {
+          $scope.user.equipped.armor = $scope.inventoryItem.name;
           item.equipped = true;
         }
-      } else if ($scope.inventoryItem.type === 'accessory') {
-        if ($rootScope.user.attributes.accessory1 === undefined) {
-          $rootScope.user.attributes.accessory1 = item.id;
+      } else if ($scope.inventoryItem.type.toLowerCase() === 'accessory') {
+        if ($scope.user.equipped.accessory1 === '') {
+          $scope.user.equipped.accessory1 = $scope.inventoryItem.name;
           item.equipped = true;
-        } else if ($rootScope.user.attributes.accessory2 === undefined) {
-          $rootScope.user.attributes.accessory2 = item.id;
+        } else if ($scope.user.equipped.accessory2 === '') {
+          $scope.user.equipped.accessory2 = $scope.inventoryItem.name;
           item.equipped = true;
         }
       }
-      User.update($rootScope.user);
-      showAlert('Item Equipped','You are ready to wage war against the forces of evil.', 'OK')
+      User.update($scope.user);
+      util.showAlert($ionicPopup, 'Item Equipped','You are ready to wage war against the forces of evil.', 'OK', function() {
+        $state.go('app.character');
+      })
     } else {
-      showAlert('Item Already Equipped','You are already using this item. Select a different item to equip.', 'OK')
+      util.showAlert($ionicPopup, 'Item Already Equipped','You are already using this item. Select a different item to equip.', 'OK', function() {
+        $state.go('app.character');
+      })
     }
   };
 
   $scope.useItem = function() {
     if (item.quantity > 0) {
-      $rootScope.user.attributes.hp += $scope.inventoryItem.hp;
+      $scope.user.attributes.hp += $scope.inventoryItem.hp;
       // subtract quantity from inventory -> remove if quantity = 0
       item.quantity -= 1;
     }
 
     if (item.quantity === 0) {
-      $rootScope.user.inventory.splice(index, 1);
+      $scope.user.inventory.splice(index, 1);
     }
 
-    User.update($rootScope.user);
-    showAlert('HP Recovered','Your HP is recovering!', 'OK')
+    User.update($scope.user);
+    util.showAlert($ionicPopup, 'HP Recovered','Your HP is recovering!', 'OK', function() {
+      $state.go('app.character');
+    })
   }
 
   $scope.checkType = function() {
-    if ($scope.inventoryItem.type === 'potion') {
+    if ($scope.inventoryItem.type.toLowerCase() === 'potion') {
       return true;
     } else {
       return false;
@@ -218,45 +252,39 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
   }
 })
 
-.controller('ShopCtrl', function($scope, Shop) {
-  $scope.equipment = function() {
-    $scope.isEquipment = true;
+.controller('ShopCtrl', function($rootScope, $scope, Shop) {
+  $scope.getData = function() {
     $scope.shop = [];
     Shop.query( function (items) {
-      var userLvl = $rootScope.user.attributes.level;
-
-      for (var i=0, i<items.length; i++) {
+      var userLvl = $scope.user.attributes.level;
+      for (var i=0; i<items.length; i++) {
         var item = items[i];
         if (userLvl >= item.level) {
           $scope.shop.push(item);
         }
       }
-
     });
+  };
+
+  $scope.equipment = function() {
+    $scope.isEquipment = true;
   };
 
   $scope.potion = function(id) {
-    // get data from battle history database
-    // replace $scope.battles with results
     $scope.isEquipment = false;
-    $scope.shop = [];
-    Shop.query( function (items) {
-      for (var i=0; i<items.length; i++) {
-        var item = items[i];
-        if (item.type === 'potion') {
-          $scope.shop.push(item)
-        }
-      }
-    });
   };
 
+  $scope.getData();
   $scope.equipment();
 })
 
-.controller('ShopDetailCtrl', function($scope, $stateParams, Shop) {
-  $scope.shopItem = Shop.get({id : $stateParams.shopId});
+.controller('ShopDetailCtrl', function($scope, $stateParams, Shop, User, $ionicPopup, $q) {
+  $scope.shopItem = Shop.get({id : $stateParams.shopId}, function(item){
+    $scope.shopItem.type = util.capitalize($scope.shopItem.type);
+  });
+
   $scope.addClass = function(attr) {
-    if (attr > 0) {
+    if (attr >= 0) {
       return 'text-green';
     } else {
       return 'text-red';
@@ -264,35 +292,40 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
   };
 
   $scope.buyItem = function() {
-    $rootScope.user.attributes.gold = $rootScope.user.attributes.gold - $scope.shopItem.cost;
-    // add to inventory
-    var found = false;
-    var inventoryId = 0;
-    if ($rootscope.user.inventory.length > 0) {
-      inventoryId = $rootscope.user.inventory[$rootscope.user.inventory.length-1].id+1;
-    }
+    if ($scope.user.attributes.gold >= $scope.shopItem.cost) {
+      $scope.user.attributes.gold = $scope.user.attributes.gold - $scope.shopItem.cost;
+      // add to inventory
+      var found = false;
+      var inventoryId = 0;
+      if ($scope.user.inventory.length > 0) {
+        inventoryId = $scope.user.inventory[$scope.user.inventory.length-1].id+1;
+      }
 
-    if ($scope.shopItem.type === 'potion') {
-      var inventory = $rootscope.user.inventory;
-      for (var i=0; i<inventory.length; i++) {
-        var item = inventory[i];
-        if (item.storeId === $scope.shopItem.id) {
-          found = true;
-          item.quantity++;
+      if ($scope.shopItem.type.toLowerCase() === 'potion') {
+        var inventory = $scope.user.inventory;
+        for (var i=0; i<inventory.length; i++) {
+          var item = inventory[i];
+          if (item.storeId === $scope.shopItem['_id']) {
+            found = true;
+            item.quantity++;
+          }
         }
-      }
 
-      if (!found) {
-        $rootScope.user.inventory.add({id: inventoryId, quantity: 1, equipped: false, storeId:$scope.shopItem.id});
+        if (!found) {
+          $scope.user.inventory.push({id: inventoryId, quantity: 1, equipped: false, storeId:$scope.shopItem['_id']});
+        }
+      } else {
+        $scope.user.inventory.push({id: inventoryId, quantity: 1, equipped: false, storeId:$scope.shopItem['_id']});
       }
+      User.update($scope.user);
+      util.showAlert($ionicPopup, 'Item Purchased', 'Go to your inventory to equip or use your item.', 'OK', function() {});
     } else {
-      $rootScope.user.inventory.add({id: inventoryId, quantity: 1, equipped: false, storeId:$scope.shopItem.id});
+      util.showAlert($ionicPopup, 'Insufficient Gold', 'You need more gold. Fight some bosses or go on quests to earn gold.', 'OK', function() {});
     }
-    User.update($rootScope.user);
   };
 
   $scope.checkType = function() {
-    if ($scope.shopItem.type === 'potion') {
+    if ($scope.shopItem.type.toLowerCase() === 'potion') {
       return true;
     } else {
       return false;

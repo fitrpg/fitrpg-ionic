@@ -62,4 +62,19 @@ var util = {
 
   },
 
+  capitalize: function(string) {
+    return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();
+  },
+
+  showAlert: function(controller, title, body, button, callback) {
+    var alertPopup = controller.alert({
+      title: title,
+      template: body,
+      okText: button
+    });
+    alertPopup.then(function(res) {
+      callback();
+    });
+  },
+
 };

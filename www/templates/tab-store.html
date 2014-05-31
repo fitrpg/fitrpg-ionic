@@ -18,7 +18,7 @@
       </div>
 
       <div class="list">
-        <a class="item item-icon-left item-icon-right" ng-repeat="item in shop | filter: { type: 'weapon' } | orderBy: '-level'" href="#/app/store/{{item.id}}">
+        <a class="item item-icon-left item-icon-right" ng-repeat="item in shop | filter: { type: 'weapon' } | orderBy: '-level'" href="#/app/store/{{item['_id']}}">
           <i class="icon {{item.icon}}"></i>
           {{item.name}}
           <i class="icon ion-ios7-arrow-right"></i>
@@ -30,7 +30,7 @@
       </div>
 
       <div class="list">
-        <a class="item item-icon-left item-icon-right" ng-repeat="item in shop | filter: { type: 'armor' } | orderBy: '-level'" href="#/app/store/{{item.id}}">
+        <a class="item item-icon-left item-icon-right" ng-repeat="item in shop | filter: { type: 'armor' } | orderBy: '-level'" href="#/app/store/{{item['_id']}}">
           <i class="icon {{item.icon}}"></i>
           {{item.name}}
           <i class="icon ion-ios7-arrow-right"></i>
@@ -42,7 +42,7 @@
       </div>
 
       <div class="list">
-        <a class="item item-icon-left item-icon-right" ng-repeat="item in shop | filter: { type: 'accessory' } | orderBy: '-level'" href="#/app/store/{{item.id}}">
+        <a class="item item-icon-left item-icon-right" ng-repeat="item in shop | filter: { type: 'accessory' } | orderBy: '-level'" href="#/app/store/{{item['_id']}}">
           <i class="icon {{item.icon}}"></i>
           {{item.name}}
           <i class="icon ion-ios7-arrow-right"></i>
@@ -53,7 +53,7 @@
 
     <div class="list" ng-hide="isEquipment">
       <div class="list">
-        <a class="item item-icon-left item-icon-right" ng-repeat="item in shop | filter: { type: 'potion' }" href="#/app/store/{{item.id}}">
+        <a class="item item-icon-left item-icon-right" ng-repeat="item in shop | filter: { type: 'potion' }" href="#/app/store/{{item['_id']}}">
           <i class="icon {{item.icon}}"></i>
           {{item.name}}
           <i class="icon ion-ios7-arrow-right"></i>

@@ -37,7 +37,7 @@
         {{ user.attributes.dexterity }} <i class="icon ion-ios7-arrow-thin-right"></i>
         <span ng-class="addClass(inventoryItem.dexterity)">{{ user.attributes.dexterity + inventoryItem.dexterity }}</span>
         <br><br>
-        {{ inventoryItem.salePrice }} Gold
+        {{ inventoryItem.sellPrice }} Gold
       </p>
 
     </div>
@@ -45,7 +45,7 @@
     <div class="item item-body" ng-show="checkType()">
       <p>{{ inventoryItem.description }}</p>
       <p class="pull-left">Sell Price</p>
-      <p class="pull-right">{{ inventoryItem.salePrice }} Gold</p>
+      <p class="pull-right">{{ inventoryItem.sellPrice }} Gold</p>
     </div>
 
     <div class="item tabs tabs-secondary tabs-icon-left">
