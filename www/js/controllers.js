@@ -1,9 +1,9 @@
 angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 
 .controller('CharacterCtrl', function($rootScope, $window,$scope, User, Refresh, localStorageService) {
-  $rootScope.user = {action : 'action'};
   User.get({id : localStorageService.get('userId')}, function (user) {
     $rootScope.user = user;
+    debugger;
   });
 
 
@@ -15,7 +15,7 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
         $window.alert("Successfully retrieved data for", id);
         location.href = location.pathname; //refresh page
       });
-    });  
+    });
   };
 
   $scope.hasSkillPoints = function() {
@@ -53,7 +53,6 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
   };
 
   $scope.equip = function(slot){
-    console.log(slot);
   };
 })
 
@@ -447,7 +446,6 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 
 // .controller('LogoutCtrl', function($scope, $state, localStorageService, $window) {
 //   $scope.logout = function () {
-//     console.log('logging out');
 //     localStorageService.clearAll();
 //     $window.location.reload();
 //   };
@@ -455,14 +453,12 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 
 .controller('LoginCtrl', function($scope, $state) {
   $scope.login = function() {
-    console.log('Login Succesful');
     $state.go('create');
   };
 })
 
 .controller('CreateCtrl', function($scope, $state) {
   $scope.dash = function() {
-    console.log('Character Created Successfully');
     $state.go('tab.character');
   };
 })

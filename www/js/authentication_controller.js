@@ -7,14 +7,11 @@ angular.module('app.auth', ['LocalStorageModule'])
   // Check our local storage for the proper credentials to ensure we are logged in, this means users can't get past app unless they select a username
   if (localStorageService.get('username')) {
     if (localStorageService.get('fitbit-token') || localStorageService.get('jawbone-token')) {
-      console.log('first if');
       $scope.Authenticated = true;
     }
   } else if (localStorageService.get('fitbit-token') || localStorageService.get('jawbone-token')) {
-    console.log('second if');
     $scope.needsUsername = true;
   } else {
-    console.log('third if', localStorageService.get('fitbit-token'));
     $scope.needsAuthentication = true;
   }
 
@@ -44,7 +41,6 @@ angular.module('app.auth', ['LocalStorageModule'])
   $scope.selectedChar = $scope.characterClasses[0].name;
   $scope.submitInfo = function(username, selectedChar) {
     //event.preventDefault();
-    console.log('username', username);
     localStorageService.set('username', username);
     //location.reload(); slow, try the below and see if that work
     location.href=location.pathname;
@@ -52,7 +48,7 @@ angular.module('app.auth', ['LocalStorageModule'])
     // and update the username
     // do a check to see if the username is existent already
   }
-  
+
 
 })
 
@@ -64,9 +60,7 @@ angular.module('app.auth', ['LocalStorageModule'])
   return {
     login: function () {
       loginWindow = $window.open(url, '_blank', 'location=no,toolbar=no');
-      console.log('opens the window');
       loginWindow.addEventListener('loadstart', function (event) {
-        console.log('gets to the event listener');
         hasToken = event.url.indexOf('?token=');
         hasUserId = event.url.indexOf('&userid=');
         if (hasToken > -1) {
@@ -75,7 +69,7 @@ angular.module('app.auth', ['LocalStorageModule'])
           localStorageService.set('jawbone-token', token);
           localStorageService.set('userId', userId);
           location.href=location.pathname;
-          //location.reload(); 
+          //location.reload();
           loginWindow.close();
         }
       });
@@ -101,7 +95,7 @@ angular.module('app.auth', ['LocalStorageModule'])
           localStorageService.set('userId', userId);
           loginWindow.close();
           location.href=location.pathname;
-          //location.reload();          
+          //location.reload();
           //eventually set  unique app ID
         }
       });
