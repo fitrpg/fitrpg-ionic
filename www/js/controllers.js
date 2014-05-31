@@ -29,12 +29,13 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 
 
   $scope.refresh = function() {
-    var id = localStorageService.get('userId');
+    var id = '2Q2TVT';//localStorageService.get('userId');
     Refresh.get({id: id}, function() { // this will tell fitbit to get new data
       User.get({id : id}, function (user) { // this will retrieve that new data
         $rootScope.user = user;
-        $window.alert("Successfully retrieved data for", id);
-        location.href = location.pathname; //refresh page
+        // $window.alert("Successfully retrieved data for", id);
+        // location.href = location.pathname; //refresh page
+        $scope.$broadcast('scroll.refreshComplete');
       });
     });
   };
