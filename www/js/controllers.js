@@ -74,20 +74,49 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
   // friends is accessed from $rootScope.user.friends in the template
 })
 
-.controller('InventoryCtrl', function($scope) {
+.controller('InventoryCtrl', function($scope, Shop) {
   // inventory is accessed from $rootScope.user.inventory in the template
-  $scope.filter = 'weapon'
+  var inventory = $rootScope.user.inventory;
+  $scope.inventory = [];
+
+  Shop.query( function (storeItems) {
+    for (var i=0, i<inventory.length; i++) {
+      var itemId = inventory[i].storeId;
+      for (var j=0; j<storeItems.length; j++) {
+        var storeItem = storeItems[j];
+        if (storeItem.id === itemId){
+          storeItem['inventoryId'] = inventory[i].id;
+          $scope.inventory.push(storeItem);
+        }
+      }
+    }
+  });
+
+  $scope.equipment = function() {
+    $scope.isEquipment = true;
+  };
+
+  $scope.potion = function() {
+    $scope.isEquipment = false;
+  };
+
+  $scope.equipment();
+
 })
 
-.controller('InventoryDetailCtrl', function($scope, $stateParams, User) {
+.controller('InventoryDetailCtrl', function($scope, $stateParams, Shop, $ionicPopup, $q) {
   var item;
-  for(var i = 0; i < $scope.user.inventory.length; i++) {
-    if ($scope.user.inventory[i]._id === $stateParams.inventoryId) {
-      item = $scope.user.inventory[i];
+  var index;
+  var inventory = $rootScope.user.inventory;
+
+  for (var i=0; i<inventory.length; i++) {
+    if (inventory[i].id === $stateParams.inventoryId) {
+      index = i;
+      item = inventory[index];
     }
   }
 
-  $scope.inventoryItem = item;
+  $scope.inventoryItem = Shop.get({id : item.storeId});
 
   $scope.addClass = function(attr) {
     if (attr > 0) {
@@ -98,53 +127,86 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
     }
   };
 
+  var showAlert = function(title, body, button) {
+    var alertPopup = $ionicPopup.alert({
+      title: title,
+      template: body,
+      okText: button
+    });
+    alertPopup.then(function(res) {
+      $state.go('app.character');
+    });
+  };
+
   $scope.sellItem = function() {
-    $scope.user.attributes.gold = $scope.user.attributes.gold + $scope.inventoryItem.salePrice;
-    // remove from inventory
-    var index;
-    for(var i = 0; i < $scope.user.inventory.length; i++) {
-      if ($scope.user.inventory[i]._id === $stateParams.inventoryId) {
-        index = i;
+    $rootScope.user.attributes.gold = $rootScope.user.attributes.gold + $scope.inventoryItem.sellPrice;
+    if ($scope.inventoryItem.type !== 'potion') {
+      // remove from inventory
+      $rootScope.user.inventory.splice(index, 1);
+    } else {
+      if (item.quantity > 1) {
+        item.quantity -= 1;
+      } else if (item.quantity === 1) {
+        $rootScope.user.inventory.splice(index, 1);
       }
     }
-    $scope.user.inventory.splice(index, 1);
     // save user
-    User.update($scope.user);
+    User.update($rootScope.user);
+    showAlert('Item Sold','You received ' + $scope.inventoryItem.sellPrice + ' gold for your item.', 'OK');
   };
 
   $scope.equipItem = function() {
-    if ($scope.inventoryItem.type === 'weapon') {
-      if ($scope.inventoryItem.size === 1) {
-        if ($scope.user.attributes.weapon1 === undefined) {
-          $scope.user.attributes.weapon1 = $scope.inventoryItem.name;
-          // set item status to equipped
-        } else if ($scope.user.attributes.weapon2 === undefined) {
-          $scope.user.attributes.weapon2 = $scope.inventoryItem.name;
-          // set item status to equipped
+    if (item.equipped === false) {
+      if ($scope.inventoryItem.type === 'weapon') {
+        if ($scope.inventoryItem.size === 1) {
+          if ($rootScope.user.attributes.weapon1 === undefined) {
+            $rootScope.user.attributes.weapon1 = item.id;
+            item.equipped = true;
+          } else if ($rootScope.user.attributes.weapon2 === undefined) {
+            $rootScope.user.attributes.weapon2 = item.id;
+            item.equipped = true;
+          }
+        } else if ($scope.inventoryItem.size === 2) {
+          if ($rootScope.user.attributes.weapon1 === undefined && $rootScope.user.attributes.weapon2 === undefined) {
+            $rootScope.user.attributes.weapon1 = item.id;
+            $rootScope.user.attributes.weapon2 = item.id;
+            item.equipped = true;
+          }
         }
-      } else if ($scope.inventoryItem.size === 2) {
-        if ($scope.user.attributes.weapon1 === undefined && $scope.user.attributes.weapon2 === undefined) {
-          $scope.user.attributes.weapon1 = $scope.inventoryItem.name;
-          $scope.user.attributes.weapon2 = $scope.inventoryItem.name;
-          //set item status to equipped
+      } else if ($scope.inventoryItem.type === 'armor') {
+        if ($rootScope.user.attributes.armor === undefined) {
+          $rootScope.user.attributes.armor = item.id;
+          item.equipped = true;
+        }
+      } else if ($scope.inventoryItem.type === 'accessory') {
+        if ($rootScope.user.attributes.accessory1 === undefined) {
+          $rootScope.user.attributes.accessory1 = item.id;
+          item.equipped = true;
+        } else if ($rootScope.user.attributes.accessory2 === undefined) {
+          $rootScope.user.attributes.accessory2 = item.id;
+          item.equipped = true;
         }
       }
+      User.update($rootScope.user);
+      showAlert('Item Equipped','You are ready to wage war against the forces of evil.', 'OK')
+    } else {
+      showAlert('Item Already Equipped','You are already using this item. Select a different item to equip.', 'OK')
     }
-    User.update($scope.user);
   };
 
   $scope.useItem = function() {
-    $scope.user.attributes.hp += $scope.inventoryItem.restore;
-    // subtract quantity from inventory -> remove if quantity = 0
-    var index;
-    for(var i = 0; i < $scope.user.inventory.length; i++) {
-      if ($scope.user.inventory[i]._id === $stateParams.inventoryId) {
-        index = i;
-      }
+    if (item.quantity > 0) {
+      $rootScope.user.attributes.hp += $scope.inventoryItem.hp;
+      // subtract quantity from inventory -> remove if quantity = 0
+      item.quantity -= 1;
     }
-    $scope.user.inventory.splice(index, 1);
 
-    User.update($scope.user);
+    if (item.quantity === 0) {
+      $rootScope.user.inventory.splice(index, 1);
+    }
+
+    User.update($rootScope.user);
+    showAlert('HP Recovered','Your HP is recovering!', 'OK')
   }
 
   $scope.checkType = function() {
@@ -204,7 +266,28 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
   $scope.buyItem = function() {
     $rootScope.user.attributes.gold = $rootScope.user.attributes.gold - $scope.shopItem.cost;
     // add to inventory
-    $rootScope.user.inventory.add($scope.shopItem); // should this be a reference to the item id as opposed to the entire item object?
+    var found = false;
+    var inventoryId = 0;
+    if ($rootscope.user.inventory.length > 0) {
+      inventoryId = $rootscope.user.inventory[$rootscope.user.inventory.length-1].id+1;
+    }
+
+    if ($scope.shopItem.type === 'potion') {
+      var inventory = $rootscope.user.inventory;
+      for (var i=0; i<inventory.length; i++) {
+        var item = inventory[i];
+        if (item.storeId === $scope.shopItem.id) {
+          found = true;
+          item.quantity++;
+        }
+      }
+
+      if (!found) {
+        $rootScope.user.inventory.add({id: inventoryId, quantity: 1, equipped: false, storeId:$scope.shopItem.id});
+      }
+    } else {
+      $rootScope.user.inventory.add({id: inventoryId, quantity: 1, equipped: false, storeId:$scope.shopItem.id});
+    }
     User.update($rootScope.user);
   };
 
