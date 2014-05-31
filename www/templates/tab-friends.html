@@ -17,12 +17,12 @@
 
 
     <ion-list>
-      <ion-item class="item-avatar" ng-repeat="friend in user.friends | filter:searchText | orderBy:'name'" type="item-text-wrap">
+      <ion-item class="item-avatar" ng-repeat="friend in friends | filter:searchText | orderBy:'profile.displayName'" type="item-text-wrap">
         <img src="venkman.jpg">
-        <h2>{{friend.name}}</h2>
-        <p>Level {{friend.level}} {{friend.charClass}}</p>
+        <h2>{{friend.profile.displayName}}</h2>
+        <p>Level {{friend.attributes.level}} {{friend.character}}</p>
         <!-- add ngclick event to add battle to user database with status waiting -->
-        <ion-option-button class="button-positive" ng-click="requestBattle(friend.name)">Battle</ion-option-button>
+        <ion-option-button class="button-positive" ng-click="requestBattle(friend['_id'])">Battle</ion-option-button>
       </ion-item>
     </ion-list>
   </ion-content>

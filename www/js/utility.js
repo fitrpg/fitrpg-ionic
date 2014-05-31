@@ -13,17 +13,17 @@ var util = {
   },
 
   battle: function(player1, player2){
-    var player1 = player1.attributes;
-    var player2 = player2.attributes;
+    var player1Attr = player1.attributes;
+    var player2Attr = player2.attributes;
     var firstAttack = Math.random();
     var count = 0;
 
     var bonus = function(player) {
-      if (player.charClass === 'warrior') {
+      if (player.character === 'warrior') {
         player.strength *= 1.1;
-      } else if (player.charClass === 'amazon') {
+      } else if (player.character === 'amazon') {
         player.dexterity *= 1.4;
-      } else if (player.charClass === 'elf') {
+      } else if (player.character === 'elf') {
         player.endurance *= 1.1;
       }
     };
@@ -43,18 +43,18 @@ var util = {
       }
     };
 
-    while (player1.hp > 0 && player2.hp > 0) {
+    while (player1Attr.hp > 0 && player2Attr.hp > 0) {
       count++;
       if (firstAttack >= 0.5) {
-        attack(player1,player2);
-        attack(player2,player1);
+        attack(player1Attr,player2Attr);
+        attack(player2Attr,player1Attr);
       } else {
-        attack(player2,player1);
-        attack(player1,player2);
+        attack(player2Attr,player1Attr);
+        attack(player1Attr,player2Attr);
       }
     }
 
-    if (player1.hp >= player2.hp) {
+    if (player1Attr.hp >= player2Attr.hp) {
       return 'player 1 wins';
     } else {
       return 'player 2 wins';
