@@ -17,7 +17,6 @@ angular.module('app.auth', ['LocalStorageModule'])
 
   $scope.logout = function () {
     localStorageService.clearAll();
-    //location.reload();
     location.href=location.pathname;
 
   };
@@ -40,9 +39,12 @@ angular.module('app.auth', ['LocalStorageModule'])
 
   $scope.selectedChar = $scope.characterClasses[0].name;
   $scope.submitInfo = function(username, selectedChar) {
+<<<<<<< HEAD
     //event.preventDefault();
+=======
+    console.log('username', username);
+>>>>>>> Remove unnecessary console logs and comments
     localStorageService.set('username', username);
-    //location.reload(); slow, try the below and see if that work
     location.href=location.pathname;
     // submit a post request, grabbing the local cache stuff
     // and update the username
@@ -94,9 +96,8 @@ angular.module('app.auth', ['LocalStorageModule'])
           localStorageService.set('fitbit-token', token);
           localStorageService.set('userId', userId);
           loginWindow.close();
-          location.href=location.pathname;
-          //location.reload();
-          //eventually set  unique app ID
+          location.href=location.pathname;       
+          //eventually set  unique app ID with jwt?
         }
       });
     },
