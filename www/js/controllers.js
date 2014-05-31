@@ -88,7 +88,7 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
   };
 })
 
-.controller('FriendsCtrl', function($scope, User) {
+.controller('FriendsCtrl', function($scope, User, $ionicPopup, $q) {
   // friends is accessed from $rootScope.user
   $scope.friends = [];
   for (var i=0; i<$scope.user.friends.length; i++) {
@@ -112,6 +112,12 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
         User.update(friend);
       }
     }
+    var title = 'Request Sent';
+    var body = 'Your battle request has been sent. You can still equip new weapons or train more until the battle request is accepted.';
+
+    util.showAlert($ionicPopup, title, body, 'OK', function() {
+
+    });
 
   };
 })
