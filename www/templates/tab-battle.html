@@ -19,12 +19,12 @@
       </div>
 
       <ion-list>
-        <ion-item class="item-avatar" ng-repeat="battle in battles | filter: { status: 'waiting' }" type="item-text-wrap">
-          <img src="venkman.jpg">
-          <h2>{{battle.name}}</h2>
-          <p>Level {{battle.level}} {{battle.charClass}}</p>
+        <ion-item class="item-avatar" ng-repeat="battle in battles | filter: { status: 'pending' } track by $index" type="item-text-wrap">
+          <img ng-src="{{battle.userData.profile.avatar}}">
+          <h2>{{battle.userData.profile.displayName}}</h2>
+          <p>Level {{battle.userData.attributes.level}} {{battle.userData.character}}</p>
           <!-- change battle.name to unique identifier for battles -->
-          <ion-option-button class="button-assertive" ng-click="cancelBattle(battle.name)">Cancel</ion-option-button>
+          <ion-option-button class="button-assertive" ng-click="cancelBattle(battle.enemy)">Cancel</ion-option-button>
         </ion-item>
       </ion-list>
 
@@ -33,13 +33,13 @@
       </div>
 
       <ion-list>
-        <ion-item class="item-avatar" ng-repeat="battle in battles | filter: { status: 'request' }" type="item-text-wrap">
-          <img src="venkman.jpg">
-          <h2>{{battle.name}}</h2>
-          <p>Level {{battle.level}} {{battle.charClass}}</p>
+        <ion-item class="item-avatar" ng-repeat="battle in battles | filter: { status: 'request' }  track by $index" type="item-text-wrap">
+          <img ng-src="{{battle.userData.profile.avatar}}">
+          <h2>{{battle.userData.profile.displayName}}</h2>
+          <p>Level {{battle.userData.attributes.level}} {{battle.userData.character}}</p>
           <!-- change battle.name to unique identifier for battles -->
-          <ion-option-button class="button-positive" ng-click="startBattle(battle.name)">Fight</ion-option-button>
-          <ion-option-button class="button-assertive" ng-click="cancelBattle(battle.name)">Flee</ion-option-button>
+          <ion-option-button class="button-positive" ng-click="startBattle(battle.enemy)">Fight</ion-option-button>
+          <ion-option-button class="button-assertive" ng-click="cancelBattle(battle.enemy)">Flee</ion-option-button>
         </ion-item>
       </ion-list>
 
@@ -50,10 +50,10 @@
         <donut-chart chart-data="historyData"></donut-chart>
       </div>
       <ion-list>
-        <ion-item class="item-avatar" ng-repeat="battle in battles" type="item-text-wrap">
-          <img src="venkman.jpg">
-          <h2>{{battle.name}}</h2>
-          <p>Level {{battle.level}} {{battle.charClass}}</p>
+        <ion-item class="item-avatar" ng-repeat="battle in battles track by $index" type="item-text-wrap">
+          <img ng-src="{{battle.userData.profile.avatar}}">
+          <h2>{{battle.userData.displayName}}</h2>
+          <p>Level {{battle.userData.attributes.level}} {{battle.userData.character}}</p>
           <!-- change battle.name to unique identifier for battles -->
         </ion-item>
       </ion-list>

@@ -26,18 +26,18 @@
       <p class="pull-right">
         <!-- Current attributes and add weapon attributes -->
         {{ user.attributes.strength }} <i class="icon ion-ios7-arrow-thin-right"></i>
-        <span ng-class="addClass(inventoryItem.modifier.strength)">{{ user.attributes.strength + inventoryItem.modifier.strength }}</span>
+        <span ng-class="addClass(inventoryItem.strength)">{{ user.attributes.strength + inventoryItem.strength }}</span>
         <br><br>
         {{ user.attributes.vitality }} <i class="icon ion-ios7-arrow-thin-right"></i>
-        <span ng-class="addClass(inventoryItem.modifier.vitality)">{{ user.attributes.vitality + inventoryItem.modifier.vitality }}</span>
+        <span ng-class="addClass(inventoryItem.vitality)">{{ user.attributes.vitality + inventoryItem.vitality }}</span>
         <br><br>
         {{ user.attributes.endurance }} <i class="icon ion-ios7-arrow-thin-right"></i>
-        <span ng-class="addClass(inventoryItem.modifier.endurance)">{{ user.attributes.endurance + inventoryItem.modifier.endurance }}</span>
+        <span ng-class="addClass(inventoryItem.endurance)">{{ user.attributes.endurance + inventoryItem.endurance }}</span>
         <br><br>
         {{ user.attributes.dexterity }} <i class="icon ion-ios7-arrow-thin-right"></i>
-        <span ng-class="addClass(inventoryItem.modifier.dexterity)">{{ user.attributes.dexterity + inventoryItem.modifier.dexterity }}</span>
+        <span ng-class="addClass(inventoryItem.dexterity)">{{ user.attributes.dexterity + inventoryItem.dexterity }}</span>
         <br><br>
-        {{ inventoryItem.salePrice }} Gold
+        {{ inventoryItem.sellPrice }} Gold
       </p>
 
     </div>
@@ -45,7 +45,7 @@
     <div class="item item-body" ng-show="checkType()">
       <p>{{ inventoryItem.description }}</p>
       <p class="pull-left">Sell Price</p>
-      <p class="pull-right">{{ inventoryItem.salePrice }} Gold</p>
+      <p class="pull-right">{{ inventoryItem.sellPrice }} Gold</p>
     </div>
 
     <div class="item tabs tabs-secondary tabs-icon-left">
