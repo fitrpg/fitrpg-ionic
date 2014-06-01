@@ -27,6 +27,7 @@ angular.module('starter.services', ['ngResource'])
 }])
 
 .factory('User', ['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
+  console.log('running user fn');
   return $resource(SERVER_URL + '/users/:id', {id : '@id'}, {
       update: { method: 'PUT' }
   });

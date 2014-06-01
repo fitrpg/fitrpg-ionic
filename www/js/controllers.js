@@ -27,7 +27,7 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 
   $scope.refresh = function() {
     var id = localStorageService.get('userId');
-    Refresh.get({id: id}, function() { // this will tell the server to get new data from fitbit
+    Refresh.get({id: id}, function() { // this will tell fitbit to get new data
       User.get({id : id}, function (user) { // this will retrieve that new data
         $rootScope.user = user;
         calculateData($rootScope.user);

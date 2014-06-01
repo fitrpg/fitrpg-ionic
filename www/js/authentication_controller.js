@@ -1,4 +1,4 @@
-angular.module('app.auth', ['LocalStorageModule'])
+angular.module('app.auth', ['LocalStorageModule', 'ionic'])
 
 // Handles scope over the entire app to check if we are authenticated throughout
 // every single page. Never shows a page unless the fitbit-token/jawbone-token is stored locally
@@ -30,7 +30,7 @@ angular.module('app.auth', ['LocalStorageModule'])
 
 })
 
-.controller('UsernameController', function ($window, $scope, $state, localStorageService, User, CheckUsername) {
+.controller('UsernameController', function ($window, $rootScope, $scope, $state, localStorageService, User, CheckUsername) {
 
   $scope.characterClasses = [{'name': 'RoadDestroyer','value': 'runner'},
                              {'name': 'WeightCrusher', 'value': 'weightlifter'},
@@ -38,27 +38,33 @@ angular.module('app.auth', ['LocalStorageModule'])
                              {'name': 'Lay-z Sleeper', 'value': 'lazy'}];
 
   $scope.selectedChar = $scope.characterClasses[0].name;
+  
   $scope.submitInfo = function(username, selectedChar) {
-    localStorageService.set('username', username);
-    location.href=location.pathname;
-    // $window.alert('submitting info');
-    // CheckUsername.get({username:username}, function(exists) { //this will return true or false
-    //   $window.alert('exists', exists);
-    //   if (exists === username) {
-    //     $window.alert('you dont exist!');
-    //     localStorageService.set('username', username);
-    //     User.get({id:localStorageService.get('userId')}, function(user) {
-    //       $rootScope.user = user;
-    //       $rootScope.username = username;
-    //       User.update($rootScope.user);
-    //       $window.alert('updated');
-    //       location.href=location.pathname;
-    //     });
-    //   } else {
-    //     $window.alert('Sorry, that username already exists.');
-    //   }
-      
-    // });
+
+    var id = localStorageService.get('userId');
+    User.get({id : id}, function (user) { 
+      console.log(user);
+      $window.alert('submitting info.');
+
+      CheckUsername.get({username:username}, function(exists) { //this will return an object or null
+        console.log(exists);
+        if (exists.username === username) {
+          $window.alert('Sorry,... that username already exists.')
+        } else {
+          $window.alert('hi', user.username);
+          $window.alert('you dont exist!');
+          localStorageService.set('username', username);
+          user.username = username;
+          $window.alert('u',user.username);
+          $window.alert('u');
+          User.update(user);
+          $window.alert('updated');
+          location.href=location.pathname;
+        }
+      });
+    });
+
+   
   }
 
 
