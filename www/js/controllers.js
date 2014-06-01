@@ -1,38 +1,36 @@
 angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 
-.controller('CharacterCtrl', function($rootScope, $window,$scope, User, Refresh, localStorageService) {
+.controller('CharacterCtrl', function($rootScope, $window,$scope, $state, $ionicNavBarDelegate, User, Refresh, localStorageService) {
   // initialize $rootScope.user to eliminate console errors before authentication
   $rootScope.user = {
-    attributes: {
-      gold: 0,
-      experience: 0,
-      vitality: 0,
-      strength: 0,
-      endurance: 0,
-      dexterity: 0,
-      level: 0,
-      skillPts: 0,
-    },
-    equipped: {
-      weapon1: '',
-      weapon2: '',
-      armor: '',
-      accessory1: '',
-      accessory2: '',
-    },
-    username: '',
+    attributes: {},
+    equipped: {},
   };
+
+  $scope.calculatedData = {};
+
+  var calculateData = function(user) {
+    $scope.calculatedData.currentXp = util.currentLevelExp(user.attributes.level, user.attributes.experience);
+    $scope.calculatedData.requiredXp = util.nextLevelExp(user.attributes.level);
+    $scope.calculatedData.maxHp = util.vitalityToHp(user.attributes.vitality,'warrior');
+    $scope.calculatedData.strength = user.attributes.strength + user.fitbit.strength;
+    $scope.calculatedData.vitality = user.attributes.vitality + user.fitbit.vitality;
+    $scope.calculatedData.dexterity = user.attributes.dexterity + user.fitbit.dexterity;
+    $scope.calculatedData.endurance = user.attributes.endurance + user.fitbit.endurance;
+  }
+
   User.get({id : localStorageService.get('userId')}, function (user) {
     $rootScope.user = user;
-    debugger;
+    calculateData($rootScope.user);
   });
 
 
   $scope.refresh = function() {
-    var id = '2Q2TVT';//localStorageService.get('userId');
+    var id = localStorageService.get('userId');
     Refresh.get({id: id}, function() { // this will tell fitbit to get new data
       User.get({id : id}, function (user) { // this will retrieve that new data
         $rootScope.user = user;
+        calculateData($rootScope.user);
         // $window.alert("Successfully retrieved data for", id);
         // location.href = location.pathname; //refresh page
         $scope.$broadcast('scroll.refreshComplete');
@@ -53,8 +51,8 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
     $scope.user.attributes.skillPts--;
     if (attr === 'vitality') {
       // change char class from warrior to user class
-      $scope.user.attributes.hp = util.updateHp($scope.user.attributes.hp,'warrior');
-      $scope.user.attributes.maxHp = util.updateHp($scope.user.attributes.maxHp,'warrior');
+      // $scope.user.attributes.hp = util.vitalityToHp($scope.user.attributes.vitality,'warrior');
+      $scope.calculatedData.maxHp = util.vitalityToHp($scope.user.attributes.vitality,'warrior');
     }
     // update database
     User.update($rootScope.user);
@@ -86,6 +84,10 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
 
   $scope.equip = function(slot){
   };
+
+  $scope.navTo = function(location) {
+    $state.go('app.' + location);
+  };
 })
 
 .controller('FriendsCtrl', function($scope, User, $ionicPopup, $q) {
@@ -107,7 +109,6 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
     for (var i=0; i<$scope.friends.length; i++) {
       var friend = $scope.friends[i];
       if (friend['_id'] === friendId) {
-        console.log('friend found: ', friend);
         friend.missionsVersus.push({type:'battle',enemy:$scope.user['_id'],status:'request'})
         User.update(friend);
       }
@@ -267,15 +268,17 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
     util.showAlert($ionicPopup, 'HP Recovered','Your HP is recovering!', 'OK', function() {
       $state.go('app.character');
     })
-  }
+  };
 
   $scope.checkType = function() {
-    if ($scope.inventoryItem.type.toLowerCase() === 'potion') {
-      return true;
-    } else {
-      return false;
+    if ($scope.inventoryItem) {
+      if ($scope.inventoryItem.type.toLowerCase() === 'potion') {
+        return true;
+      } else {
+        return false;
+      }
     }
-  }
+  };
 })
 
 .controller('ShopCtrl', function($rootScope, $scope, Shop) {
@@ -387,9 +390,13 @@ angular.module('starter.controllers', ['LocalStorageModule','ionic'])
     var battle = battles[i];
     if (battle.enemy) {
       User.get({id: battle.enemy}, function(user) {
-        battle.userData = user;
-        $scope.battles.push(battle);
-      })
+        for (var j=0; j<battles.length; j++) {
+          if (user['_id'] === battles[j].enemy) {
+            battles[j].userData = user;
+            $scope.battles.push(battles[j]);
+          }
+        }
+      });
     }
   }
 

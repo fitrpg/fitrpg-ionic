@@ -18,7 +18,7 @@
 
     <ion-list>
       <ion-item class="item-avatar" ng-repeat="friend in friends | filter:searchText | orderBy:'profile.displayName'" type="item-text-wrap">
-        <img src="venkman.jpg">
+        <img ng-src="{{friend.profile.avatar}}">
         <h2>{{friend.profile.displayName}}</h2>
         <p>Level {{friend.attributes.level}} {{friend.character}}</p>
         <!-- add ngclick event to add battle to user database with status waiting -->

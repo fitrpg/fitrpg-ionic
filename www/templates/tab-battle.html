@@ -19,8 +19,8 @@
       </div>
 
       <ion-list>
-        <ion-item class="item-avatar" ng-repeat="battle in battles | filter: { status: 'pending' }" type="item-text-wrap">
-          <img src="venkman.jpg">
+        <ion-item class="item-avatar" ng-repeat="battle in battles | filter: { status: 'pending' } track by $index" type="item-text-wrap">
+          <img ng-src="{{battle.userData.profile.avatar}}">
           <h2>{{battle.userData.profile.displayName}}</h2>
           <p>Level {{battle.userData.attributes.level}} {{battle.userData.character}}</p>
           <!-- change battle.name to unique identifier for battles -->
@@ -33,8 +33,8 @@
       </div>
 
       <ion-list>
-        <ion-item class="item-avatar" ng-repeat="battle in battles | filter: { status: 'request' }" type="item-text-wrap">
-          <img src="venkman.jpg">
+        <ion-item class="item-avatar" ng-repeat="battle in battles | filter: { status: 'request' }  track by $index" type="item-text-wrap">
+          <img ng-src="{{battle.userData.profile.avatar}}">
           <h2>{{battle.userData.profile.displayName}}</h2>
           <p>Level {{battle.userData.attributes.level}} {{battle.userData.character}}</p>
           <!-- change battle.name to unique identifier for battles -->
@@ -50,8 +50,8 @@
         <donut-chart chart-data="historyData"></donut-chart>
       </div>
       <ion-list>
-        <ion-item class="item-avatar" ng-repeat="battle in battles" type="item-text-wrap">
-          <img src="venkman.jpg">
+        <ion-item class="item-avatar" ng-repeat="battle in battles track by $index" type="item-text-wrap">
+          <img ng-src="{{battle.userData.profile.avatar}}">
           <h2>{{battle.userData.displayName}}</h2>
           <p>Level {{battle.userData.attributes.level}} {{battle.userData.character}}</p>
           <!-- change battle.name to unique identifier for battles -->

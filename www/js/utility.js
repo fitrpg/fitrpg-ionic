@@ -1,12 +1,13 @@
 var util = {
-  updateHp: function(hp, charClass){
+  vitalityToHp: function(vitality, charClass){
+    var hp;
     // change character classes
     if (charClass === 'warrior') {
-      hp += 10;
+      hp = vitality * 10;
     } else if (charClass === 'amazon') {
-      hp += 15;
+      hp = vitality * 15;
     } else if (charClass === 'mage') {
-      hp += 20;
+      hp = vitality * 20;
     }
 
     return hp;
@@ -76,5 +77,14 @@ var util = {
       callback();
     });
   },
+
+  currentLevelExp: function(lvl,exp) {
+    return exp - (100*Math.pow(lvl-1,3) + 360*Math.pow(lvl-1,2) + 3500*(lvl-1));
+  },
+
+  nextLevelExp: function(lvl) {
+    return (100*Math.pow(lvl,3) + 360*Math.pow(lvl,2) + 3500*lvl) - (100*Math.pow(lvl-1,3) + 360*Math.pow(lvl-1,2) + 3500*(lvl-1));
+  },
+
 
 };

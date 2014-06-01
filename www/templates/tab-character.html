@@ -15,20 +15,20 @@
     <div class="list">
       <div class="card">
         <div class='item item-avatar'>
-          <img src="venkman.jpg">
-          <h3>{{user.username}}</h3>
-          <p>Level: {{user.attributes.level}} {{user.attributes.charClass}}</p>
+          <img ng-src="{{user.profile.avatar}}">
+          <h3>{{user.profile.displayName}}</h3>
+          <p>Level: {{user.attributes.level}} {{user.character}}</p>
         </div>
 
         <div class="item tabs tabs-secondary tabs-icon-left">
-          <a class="tab-item" href="#">
+          <div class="tab-item">
             <i class="icon ion-icecream"></i>
             Skill Points: {{user.attributes.skillPts}}
-          </a>
-          <a class="tab-item" href="#">
+          </div>
+          <div class="tab-item">
             <i class="icon icon-coin"></i>
             {{user.attributes.gold}}
-          </a>
+          </div>
         </div>
       </div>
 
@@ -38,18 +38,18 @@
             <div class="col">
               <p>
                 XP
-                <span class="pull-right">{{user.attributes.levelXp}} / {{user.attributes.requiredLevelXp}}</span>
+                <span class="pull-right">{{calculatedData.currentXp}} / {{calculatedData.requiredXp}}</span>
               </p>
-              <progressbar max="user.attributes.requiredLevelXp" value="user.attributes.levelXp"></progressbar>
+              <progressbar max="100" value="(calculatedData.currentXp*100)/calculatedData.requiredXp"></progressbar>
             </div>
           </div>
           <div class="row">
             <div class="col">
               <p>
                 HP
-                <span class="pull-right">{{user.attributes.hp}} / {{user.attributes.maxHp}}</span>
+                <span class="pull-right">{{user.attributes.HP}} / {{calculatedData.maxHp}}</span>
               </p>
-              <progressbar max="user.attributes.maxHp" value="user.attributes.hp"></progressbar>
+              <progressbar max="100" value="(user.attributes.HP*100)/calculatedData.maxHp"></progressbar>
             </div>
           </div>
         </div>
@@ -97,7 +97,7 @@
               <i class="icon ion-ios7-minus-outline" ng-click="unequip('weapon1')"></i>
             </div>
             <div ng-hide="isEquipped('weapon1')">
-              <a ng-href="#/app/inventory"><i class="icon ion-ios7-plus-outline"></i></a>
+              <i class="icon ion-ios7-plus-outline" ng-click="navTo('inventory')"></i>
             </div>
           </ion-item>
           <ion-item type="item-text-wrap" class="item-icon-right">
@@ -107,7 +107,7 @@
               <i class="icon ion-ios7-minus-outline" ng-click="unequip('weapon2')"></i>
             </div>
             <div ng-hide="isEquipped('weapon2')">
-              <a ng-href="#/app/inventory"><i class="icon ion-ios7-plus-outline"></i></a>
+              <i class="icon ion-ios7-plus-outline" ng-click="navTo('inventory')"></i>
             </div>
           </ion-item>
           <ion-item type="item-text-wrap" class="item-icon-right">
@@ -117,7 +117,7 @@
               <i class="icon ion-ios7-minus-outline" ng-click="unequip('armor')"></i>
             </div>
             <div ng-hide="isEquipped('armor')">
-              <a ng-href="#/app/inventory"><i class="icon ion-ios7-plus-outline"></i></a>
+              <i class="icon ion-ios7-plus-outline" ng-click="navTo('inventory')"></i>
             </div>
           </ion-item>
           <ion-item type="item-text-wrap" class="item-icon-right">
@@ -127,7 +127,7 @@
               <i class="icon ion-ios7-minus-outline" ng-click="unequip('accessory1')"></i>
             </div>
             <div ng-hide="isEquipped('accessory1')">
-              <a ng-href="#/app/inventory"><i class="icon ion-ios7-plus-outline"></i></a>
+              <i class="icon ion-ios7-plus-outline" ng-click="navTo('inventory')"></i>
             </div>
           </ion-item>
           <ion-item type="item-text-wrap" class="item-icon-right">
@@ -137,20 +137,20 @@
               <i class="icon ion-ios7-minus-outline" ng-click="unequip('accessory2')"></i>
             </div>
             <div ng-hide="isEquipped('accessory2')">
-              <a ng-href="#/app/inventory"><i class="icon ion-ios7-plus-outline"></i></a>
+              <i class="icon ion-ios7-plus-outline" ng-click="navTo('inventory')"></i>
             </div>
           </ion-item>
         </ion-list>
 
         <div class="item tabs tabs-secondary tabs-icon-left">
-          <a class="tab-item" href="#">
+          <div class="tab-item">
             <i class="icon icon-coin"></i>
             {{user.attributes.gold}}
-          </a>
-          <a class="tab-item" href="#/app/store">
+          </div>
+          <div class="tab-item" ng-click="navTo('store')">
             <i class="icon icon-anvil"></i>
             Shop
-          </a>
+          </div>
         </div>
 
 
