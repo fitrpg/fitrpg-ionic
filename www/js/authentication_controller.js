@@ -50,9 +50,9 @@ angular.module('app.auth', ['LocalStorageModule', 'ionic'])
     var id = localStorageService.get('userId');
     User.get({id : id}, function (user) { 
       $rootScope.user = user;
-      CheckUsername.get({username:username}, function (users) { //this will return an object or null
-        console.log(users);
-        if (username !== username) {
+      CheckUsername.get({username:username}, function (user) { //this will return an object or null
+        console.log(user);
+        if (user.username === username) {
           $window.alert('Sorry! That username already exists.')
          } else {
           localStorageService.set('username', username);
