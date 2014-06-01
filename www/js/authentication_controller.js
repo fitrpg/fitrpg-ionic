@@ -63,8 +63,6 @@ angular.module('app.auth', ['LocalStorageModule', 'ionic'])
         }
       });
     });
-
-   
   }
 
 
