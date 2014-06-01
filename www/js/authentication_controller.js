@@ -30,7 +30,7 @@ angular.module('app.auth', ['LocalStorageModule'])
 
 })
 
-.controller('UsernameController', function ($window, $scope, $state, localStorageService) {
+.controller('UsernameController', function ($window, $scope, $state, localStorageService, User, CheckUsername) {
 
   $scope.characterClasses = [{'name': 'RoadDestroyer','value': 'runner'},
                              {'name': 'WeightCrusher', 'value': 'weightlifter'},
@@ -39,16 +39,26 @@ angular.module('app.auth', ['LocalStorageModule'])
 
   $scope.selectedChar = $scope.characterClasses[0].name;
   $scope.submitInfo = function(username, selectedChar) {
-<<<<<<< HEAD
-    //event.preventDefault();
-=======
-    console.log('username', username);
->>>>>>> Remove unnecessary console logs and comments
     localStorageService.set('username', username);
     location.href=location.pathname;
-    // submit a post request, grabbing the local cache stuff
-    // and update the username
-    // do a check to see if the username is existent already
+    // $window.alert('submitting info');
+    // CheckUsername.get({username:username}, function(exists) { //this will return true or false
+    //   $window.alert('exists', exists);
+    //   if (exists === username) {
+    //     $window.alert('you dont exist!');
+    //     localStorageService.set('username', username);
+    //     User.get({id:localStorageService.get('userId')}, function(user) {
+    //       $rootScope.user = user;
+    //       $rootScope.username = username;
+    //       User.update($rootScope.user);
+    //       $window.alert('updated');
+    //       location.href=location.pathname;
+    //     });
+    //   } else {
+    //     $window.alert('Sorry, that username already exists.');
+    //   }
+      
+    // });
   }
 
 
