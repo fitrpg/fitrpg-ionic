@@ -64,8 +64,7 @@
         </ion-content>
         </div>
       </div>
-      <!-- This is what we show when we want the user to select a username
-      WILL CREATE NG MODEL FOR SELECT DROP DOWN TO ACCESS VARS-->
+      <!-- This is what we show when we want the user to select a username -->
       <div ng-show="needsUsername">
         <div ng-controller='UsernameController'>
           <ion-header-bar class="bar-stable">
@@ -78,7 +77,6 @@
           <select ng-model="selectedChar" ng-options="char.name for char in characterClasses">
           </select>
           <button type="button" ng-click="submitInfo(username,selectedChar)" class="button button-block">Submit</button>
-          for testing purposes: {{ username }}
           <button ng-click="logout()">Logout</button>
         </ion-content>
         </div>
