@@ -14,6 +14,9 @@ angular.module('starter.controllers')
     } else if (status === 'win') {
       type = 'success';
       msg = 'You win. You gained experience and gold.'
+    } else if (status === 'request') {
+      type = '';
+      msg = 'Someone wants to battle you.';
     }
     $scope.alerts.push({type: type, msg: msg});
   };
@@ -36,6 +39,7 @@ angular.module('starter.controllers')
     var listOfIndices = [];
     var alertWin = false;
     var alertLoss = false;
+    var alertRequest = false;
     for (var i=0; i<$rootScope.user.missionsVersus.length; i++) {
       var mission = $rootScope.user.missionsVersus[i];
       if (mission.type === 'battle') {
@@ -44,6 +48,9 @@ angular.module('starter.controllers')
           $scope.addAlert(mission.status);
         } else if (mission.status === 'loss' && !alertLoss) {
           alertLoss = true;
+          $scope.addAlert(mission.status);
+        } else if (mission.status === 'request' && !alertRequest) {
+          alertRequeset = true;
           $scope.addAlert(mission.status);
         }
 
