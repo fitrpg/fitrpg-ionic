@@ -1,9 +1,12 @@
-angular.module('app.auth', ['LocalStorageModule'])
+angular.module('app.auth', ['LocalStorageModule', 'ionic'])
 
 // Handles scope over the entire app to check if we are authenticated throughout
 // every single page. Never shows a page unless the fitbit-token/jawbone-token is stored locally
-.controller('AuthenticationController', function ($scope, $state, $window, localStorageService) {
+.controller('AuthenticationController', function ($cacheFactory,$scope, $state, $window, localStorageService) {
 
+  var $httpDefaultCache = $cacheFactory.get('$http');
+  console.log($httpDefaultCache);
+  $httpDefaultCache.removeAll();
   // Check our local storage for the proper credentials to ensure we are logged in, this means users can't get past app unless they select a username
   if (localStorageService.get('username')) {
     if (localStorageService.get('fitbit-token') || localStorageService.get('jawbone-token')) {
@@ -19,7 +22,6 @@ angular.module('app.auth', ['LocalStorageModule'])
 
   $scope.logout = function () {
     localStorageService.clearAll();
-    //location.reload();
     location.href=location.pathname;
 
   };
@@ -33,7 +35,7 @@ angular.module('app.auth', ['LocalStorageModule'])
 
 })
 
-.controller('UsernameController', function ($window, $scope, $state, localStorageService) {
+.controller('UsernameController', function ($cacheFactory, $window, $rootScope, $scope, $state, localStorageService, User, CheckUsername) {
 
   $scope.characterClasses = [{'name': 'RoadDestroyer','value': 'runner'},
                              {'name': 'WeightCrusher', 'value': 'weightlifter'},
@@ -41,14 +43,29 @@ angular.module('app.auth', ['LocalStorageModule'])
                              {'name': 'Lay-z Sleeper', 'value': 'lazy'}];
 
   $scope.selectedChar = $scope.characterClasses[0].name;
+
   $scope.submitInfo = function(username, selectedChar) {
-    //event.preventDefault();
-    localStorageService.set('username', username);
-    //location.reload(); slow, try the below and see if that work
-    location.href=location.pathname;
-    // submit a post request, grabbing the local cache stuff
-    // and update the username
-    // do a check to see if the username is existent already
+    // attempt to clear cache - may not work necessarily
+    var $httpDefaultCache = $cacheFactory.get('$http');
+    $httpDefaultCache.removeAll();
+    // end attempt
+    var id = localStorageService.get('userId');
+    User.get({id : id}, function (user) { 
+      $rootScope.user = user;
+      CheckUsername.get({username:username}, function (user) { //this will return an object or null
+        if (user.username === username) {
+          $window.alert('Sorry! That username already exists.')
+         } else {
+          localStorageService.set('username', username);
+          $rootScope.user.username = username;
+          $rootScope.user.character= selectedChar;
+          User.update($rootScope.user);
+          location.href=location.pathname;
+        }
+      });
+    });
+
+   
   }
 
 
@@ -96,9 +113,8 @@ angular.module('app.auth', ['LocalStorageModule'])
           localStorageService.set('fitbit-token', token);
           localStorageService.set('userId', userId);
           loginWindow.close();
-          location.href=location.pathname;
-          //location.reload();
-          //eventually set  unique app ID
+          location.href=location.pathname;       
+          //eventually set  unique app ID with jwt?
         }
       });
     },

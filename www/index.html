@@ -66,8 +66,24 @@
         </ion-content>
         </div>
       </div>
-      <!-- This is what we show when we want the user to select a username
-      WILL CREATE NG MODEL FOR SELECT DROP DOWN TO ACCESS VARS-->
+
+      <!-- This is what we show when we want the user to select a username -->
+      <div ng-show="needsUsername">
+        <div ng-controller='UsernameController'>
+          <ion-header-bar class="bar-stable">
+            <h1 class="title">Welcome to FitRPG!</h1>
+          </ion-header-bar>
+        <ion-content has-header="true" padding="true">
+          <h3>Choose your username:</h3>
+          <input class="username" ng-model="username"></input>
+          <h3>Select a character class:</h3>
+          <select ng-model="selectedChar" ng-options="char.name for char in characterClasses">
+          </select>
+          <button type="button" ng-click="submitInfo(username,selectedChar)" class="button button-block">Submit</button>
+          <button ng-click="logout()">Logout</button>
+        </ion-content>
+        </div>
+      </div>
 
 
     </div>
