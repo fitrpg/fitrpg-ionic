@@ -12,6 +12,8 @@
       on-refresh="refresh()">
     </ion-refresher>
 
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+
     <div class="list">
       <div class="card">
         <div class='item item-avatar'>
@@ -59,28 +61,28 @@
         <ion-list>
           <ion-item type="item-text-wrap" class="item-icon-right">
             Strength
-            <span class="pull-right">{{user.attributes.strength}}</span>
+            <span class="pull-right">{{calculatedData.strength}}</span>
             <div ng-show="hasSkillPoints()">
               <i class="icon ion-ios7-plus-outline" ng-click="applyAttributes('strength')"></i>
             </div>
           </ion-item>
           <ion-item type="item-text-wrap" class="item-icon-right">
             Vitality
-            <span class="pull-right">{{user.attributes.vitality}}</span>
+            <span class="pull-right">{{calculatedData.vitality}}</span>
             <div ng-show="hasSkillPoints()">
               <i class="icon ion-ios7-plus-outline" ng-click="applyAttributes('vitality')"></i>
             </div>
           </ion-item>
           <ion-item type="item-text-wrap" class="item-icon-right">
             Endurance
-            <span class="pull-right">{{user.attributes.endurance}}</span>
+            <span class="pull-right">{{calculatedData.endurance}}</span>
             <div ng-show="hasSkillPoints()">
               <i class="icon ion-ios7-plus-outline" ng-click="applyAttributes('endurance')"></i>
             </div>
           </ion-item>
           <ion-item type="item-text-wrap" class="item-icon-right">
             Dexterity
-            <span class="pull-right">{{user.attributes.dexterity}}</span>
+            <span class="pull-right">{{calculatedData.dexterity}}</span>
             <div ng-show="hasSkillPoints()">
               <i class="icon ion-ios7-plus-outline" ng-click="applyAttributes('dexterity')"></i>
             </div>

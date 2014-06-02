@@ -39,26 +39,35 @@ var util = {
           if (Math.random() < 0.05) {
             strength *= 2
           }
-          second.hp = second.hp - strength;
+          return second.HP - strength;
         }
       }
+      return second.HP;
     };
 
-    while (player1Attr.hp > 0 && player2Attr.hp > 0) {
+    while (player1Attr.HP > 0 && player2Attr.HP > 0) {
       count++;
       if (firstAttack >= 0.5) {
-        attack(player1Attr,player2Attr);
-        attack(player2Attr,player1Attr);
+        player2Attr.HP = attack(player1Attr,player2Attr);
+        if (player2Attr.HP > 0) {
+          player1Attr.HP = attack(player2Attr,player1Attr);
+        } else {
+          break;
+        }
       } else {
-        attack(player2Attr,player1Attr);
-        attack(player1Attr,player2Attr);
+        player1Attr.HP = attack(player2Attr,player1Attr);
+        if (player1Attr.HP > 0) {
+          player2Attr.HP = attack(player1Attr,player2Attr);
+        } else {
+          break;
+        }
       }
     }
 
-    if (player1Attr.hp >= player2Attr.hp) {
-      return 'player 1 wins';
+    if (player1Attr.HP > player2Attr.HP) {
+      return {result:'player 1', hp: player1Attr.HP};
     } else {
-      return 'player 2 wins';
+      return {result:'player 2', hp: player2Attr.HP};
     }
 
   },
@@ -86,5 +95,16 @@ var util = {
     return (100*Math.pow(lvl,3) + 360*Math.pow(lvl,2) + 3500*lvl) - (100*Math.pow(lvl-1,3) + 360*Math.pow(lvl-1,2) + 3500*(lvl-1));
   },
 
+  calcLevel: function(experience, currLvl) {
+    var level = currLvl || 1;
+    var total = experience;
+    var expToLevel = function(lvl) {
+      return 100*Math.pow(lvl,3) + 360*Math.pow(lvl,2) + 3500*lvl;
+    };
+    while (expToLevel(level) < total) {
+      level++;
+    }
+    return level;
+  },
 
 };
