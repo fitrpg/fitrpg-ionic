@@ -29,10 +29,16 @@ angular.module('starter', ['ionic', 'starter.controllers','app.auth' ,'starter.s
   // Each state's controller can be found in controllers.js
   $stateProvider
 
-    .state('login', {
-      url: '/login',
-      templateUrl: 'templates/login.html',
-      controller: 'LoginCtrl'
+    .state('select', {
+      url: '/select',
+      templateUrl: 'templates/select-class.html',
+      controller: 'SelectClassCtrl'
+    })
+
+    .state('username', {
+      url: '/username',
+      templateUrl: 'templates/username.html',
+      controller: 'UsernameCtrl'
     })
 
     .state('logout', {
@@ -189,6 +195,5 @@ angular.module('starter', ['ionic', 'starter.controllers','app.auth' ,'starter.s
     })
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/character');
-
+    $urlRouterProvider.otherwise('username');
 })

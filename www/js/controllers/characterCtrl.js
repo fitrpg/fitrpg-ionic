@@ -2,10 +2,6 @@ angular.module('starter.controllers')
 
 .controller('CharacterCtrl', function($rootScope, $window,$scope, $state, $ionicNavBarDelegate, User, Refresh, localStorageService) {
   // initialize $rootScope.user to eliminate console errors before authentication
-  $rootScope.user = {
-    attributes: {},
-    equipped: {},
-  };
 
   $scope.calculatedData = {};
 
@@ -19,16 +15,27 @@ angular.module('starter.controllers')
     $scope.calculatedData.endurance = user.attributes.endurance + user.fitbit.endurance;
   }
 
+  if($rootScope.user === undefined) {
+    $rootScope.user = {
+      attributes: {},
+      equipped: {},
+    };
+  } else {
+    calculateData($rootScope.user);
+  }
+
   var localUserId = localStorageService.get('userId'); //'2Q2TVT'; //
 
-  User.get({id : localUserId}, function (user) {
-    $rootScope.user = user;
-    calculateData($rootScope.user);
-  });
+  if ($rootScope.user.username === undefined) {
+    User.get({id : localUserId}, function (user) {
+      $rootScope.user = user;
+      calculateData($rootScope.user);
+    });
+  }
 
 
   $scope.refresh = function() {
-    var id = localStorageService.get('userId');//localUserId; //
+    var id = localUserId;//localUserId; //
     Refresh.get({id: id}, function() { // this will tell fitbit to get new data
       User.get({id : id}, function (user) { // this will retrieve that new data
         $rootScope.user = user;
