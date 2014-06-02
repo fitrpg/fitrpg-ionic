@@ -7,9 +7,11 @@ angular.module('app.auth', ['LocalStorageModule'])
   // Check our local storage for the proper credentials to ensure we are logged in, this means users can't get past app unless they select a username
   if (localStorageService.get('username')) {
     if (localStorageService.get('fitbit-token') || localStorageService.get('jawbone-token')) {
+      $state.transitionTo('app.character');
       $scope.Authenticated = true;
     }
   } else if (localStorageService.get('fitbit-token') || localStorageService.get('jawbone-token')) {
+    $state.transitionTo('app.character');
     $scope.needsUsername = true;
   } else {
     $scope.needsAuthentication = true;
