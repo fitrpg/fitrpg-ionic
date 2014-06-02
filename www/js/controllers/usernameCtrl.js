@@ -1,6 +1,6 @@
 angular.module('starter.controllers')
 
-.controller('UsernameCtrl',function($rootScope, $scope, $state, User, localStorageService, $cacheFactory) {
+.controller('UsernameCtrl',function($rootScope, $scope, $state, User, localStorageService, $cacheFactory, CheckUsername) {
 
   var localUserId = localStorageService.get('userId');
 
@@ -12,11 +12,11 @@ angular.module('starter.controllers')
     // end attempt
 
     User.get({id : localUserId}, function (user) {
+      $rootScope.user = user;
       CheckUsername.get({username:username}, function (user) { //this will return an object or null
         if (user.username === username) {
           $window.alert('Sorry! That username already exists.')
          } else {
-          $rootScope.user = user;
           $rootScope.user.username = username;
           localStorageService.set('username', username);
         }
