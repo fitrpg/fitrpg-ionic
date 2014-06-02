@@ -32,6 +32,7 @@ angular.module('starter.controllers')
           if (user['_id'] === battles[j].enemy) {
             battles[j].userData = user;
             $scope.battles.push(battles[j]);
+            console.log($scope.battles);
           }
         }
       });
@@ -115,6 +116,7 @@ angular.module('starter.controllers')
             enemyBattle = enemy.missionsVersus[i];
           }
         }
+
         // use game logic to determine winner of battle
         // post battle results to database for both players
 
@@ -141,7 +143,6 @@ angular.module('starter.controllers')
         };
 
         if (winner.result === 'player 1') {
-          console.log('player 1 wins');
           enemy.attributes.HP = 0;
           $scope.user.attributes.HP = winner.hp;
           $scope.user.attributes.gold += Math.floor(enemy.attributes.gold*0.1);
@@ -151,7 +152,6 @@ angular.module('starter.controllers')
           battle.status = 'win';
           enemyBattle.status = 'loss';
         } else if (winner.result === 'player 2') {
-          console.log('player 2 wins');
           $scope.user.attributes.HP = 0;
           enemy.attributes.HP = winner.hp;
           enemy.attributes.gold += Math.floor($scope.user.attributes.gold*0.1);

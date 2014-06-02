@@ -21,11 +21,11 @@ var util = {
 
     var bonus = function(player) {
       if (player.character === 'warrior') {
-        player.strength *= 1.1;
+        player.attributes.strength *= 1.1;
       } else if (player.character === 'amazon') {
-        player.dexterity *= 1.4;
+        player.attributes.dexterity *= 1.4;
       } else if (player.character === 'elf') {
-        player.endurance *= 1.1;
+        player.attributes.endurance *= 1.1;
       }
     };
 
@@ -33,11 +33,11 @@ var util = {
     bonus(player2);
 
     var attack = function(first,second) {
-      if (Math.floor(first.endurance/2%count) === 0) {
+      if (Math.floor(count%(first.endurance/2)) === 0) {
         if (Math.random() < 1/(1+second.dexterity/25)) {
           var strength = first.strength;
           if (Math.random() < 0.05) {
-            strength *= 2
+            strength *= 2;
           }
           return second.HP - strength;
         }
@@ -49,6 +49,7 @@ var util = {
       count++;
       if (firstAttack >= 0.5) {
         player2Attr.HP = attack(player1Attr,player2Attr);
+        console.log(player2Attr.HP);
         if (player2Attr.HP > 0) {
           player1Attr.HP = attack(player2Attr,player1Attr);
         } else {
