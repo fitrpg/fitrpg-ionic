@@ -12,6 +12,8 @@
       on-refresh="refresh()">
     </ion-refresher>
 
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+
     <div class="list">
       <div class="card">
         <div class='item item-avatar'>

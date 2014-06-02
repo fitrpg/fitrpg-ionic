@@ -5,6 +5,23 @@ angular.module('starter.controllers')
 
   $scope.calculatedData = {};
 
+  $scope.alerts = [];
+
+  $scope.addAlert = function(status) {
+    if (status === 'loss') {
+      type = 'danger';
+      msg = 'You suck. You lost experience and gold.'
+    } else if (status === 'win') {
+      type = 'success';
+      msg = 'You win. You gained experience and gold.'
+    }
+    $scope.alerts.push({type: type, msg: msg});
+  };
+
+  $scope.closeAlert = function(index) {
+    $scope.alerts.splice(index, 1);
+  };
+
   var calculateData = function(user) {
     $scope.calculatedData.currentXp = util.currentLevelExp(user.attributes.level, user.attributes.experience);
     $scope.calculatedData.requiredXp = util.nextLevelExp(user.attributes.level);
@@ -15,15 +32,53 @@ angular.module('starter.controllers')
     $scope.calculatedData.maxHp = util.vitalityToHp($scope.calculatedData.vitality,'warrior'); //change to $scope.user.character
   };
 
+  var alertBattleStatus = function() {
+    var listOfIndices = [];
+    var alertWin = false;
+    var alertLoss = false;
+    for (var i=0; i<$rootScope.user.missionsVersus.length; i++) {
+      var mission = $rootScope.user.missionsVersus[i];
+      if (mission.type === 'battle') {
+        if (mission.status === 'win' && !alertWin) {
+          alertWin = true;
+          $scope.addAlert(mission.status);
+        } else if (mission.status === 'loss' && !alertLoss) {
+          alertLoss = true;
+          $scope.addAlert(mission.status);
+        }
+
+        if (mission.status === 'win' || mission.status === 'loss') {
+          listOfIndices.push(i);
+        }
+      }
+    }
+
+    var removeMission = function(index,count) {
+      if (count < listOfIndices.length) {
+        $rootScope.user.missionsVersus.splice(index-count,1);
+        removeMission(listOfIndices[count+1],count+1);
+      }
+    };
+
+    if (listOfIndices.length > 0) {
+      removeMission(listOfIndices[0],0);
+    }
+
+  };
+
   var localUserId = '2Q2TVT'; //localStorageService.get('userId'); //
 
   User.get({id : localUserId}, function (user) {
     $rootScope.user = user;
     calculateData($rootScope.user);
+
     if ($rootScope.user.attributes.HP > $scope.calculatedData.maxHp) { //sets default hp of 500 to maxHp, should only happen on initial user creation
       $rootScope.user.attributes.HP = $scope.calculatedData.maxHp;
-      User.update($rootScope.user);
     }
+
+    alertBattleStatus();
+
+    User.update($rootScope.user);
   });
 
   $scope.refresh = function() {
@@ -32,6 +87,8 @@ angular.module('starter.controllers')
       User.get({id : id}, function (user) { // this will retrieve that new data
         $rootScope.user = user;
         calculateData($rootScope.user);
+        alertBattleStatus();
+        User.update($rootScope.user);
         // $window.alert("Successfully retrieved data for", id);
         // location.href = location.pathname; //refresh page
         $scope.$broadcast('scroll.refreshComplete');
