@@ -55,10 +55,12 @@
      <!-- This is what we show if not logged in-->
       <div ng-show="needsAuthentication">
         <div ng-controller='LoginController'>
-          <ion-header-bar class="bar-stable">
+          <div class="bar bar-header bar-assertive">
             <h1 class="title">Login </h1>
-          </ion-header-bar>
-        <ion-content has-header="true" padding="true">
+          </div>
+ 
+      <ion-content class="has-subheader has-header paddding" >
+
           <h2>Login with Fitbit</h2>
           <button ng-click='fitbitlogin()' class="button button-block button-positive">Fitbit</button>
           <h2>Login with Jawbone</h2>
@@ -66,25 +68,6 @@
         </ion-content>
         </div>
       </div>
-
-      <!-- This is what we show when we want the user to select a username -->
-      <div ng-show="needsUsername">
-        <div ng-controller='UsernameController'>
-          <ion-header-bar class="bar-stable">
-            <h1 class="title">Welcome to FitRPG!</h1>
-          </ion-header-bar>
-        <ion-content has-header="true" padding="true">
-          <h3>Choose your username:</h3>
-          <input class="username" ng-model="username"></input>
-          <h3>Select a character class:</h3>
-          <select ng-model="selectedChar" ng-options="char.name for char in characterClasses">
-          </select>
-          <button type="button" ng-click="submitInfo(username,selectedChar)" class="button button-block">Submit</button>
-          <button ng-click="logout()">Logout</button>
-        </ion-content>
-        </div>
-      </div>
-
 
     </div>
   </body>
