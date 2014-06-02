@@ -35,41 +35,6 @@ angular.module('app.auth', ['LocalStorageModule', 'ionic'])
 
 })
 
-.controller('UsernameController', function ($cacheFactory, $window, $rootScope, $scope, $state, localStorageService, User, CheckUsername) {
-
-  $scope.characterClasses = [{'name': 'RoadDestroyer','value': 'runner'},
-                             {'name': 'WeightCrusher', 'value': 'weightlifter'},
-                             {'name': 'Jack of All Skills', 'value': 'mixed'},
-                             {'name': 'Lay-z Sleeper', 'value': 'lazy'}];
-
-  $scope.selectedChar = $scope.characterClasses[0].name;
-
-  $scope.submitInfo = function(username, selectedChar) {
-    // attempt to clear cache - may not work necessarily
-    var $httpDefaultCache = $cacheFactory.get('$http');
-    $httpDefaultCache.removeAll();
-    // end attempt
-    var id = localStorageService.get('userId');
-    User.get({id : id}, function (user) { 
-      $rootScope.user = user;
-      CheckUsername.get({username:username}, function (user) { //this will return an object or null
-        if (user.username === username) {
-          $window.alert('Sorry! That username already exists.')
-         } else {
-          localStorageService.set('username', username);
-          $rootScope.user.username = username;
-          $rootScope.user.character= selectedChar;
-          User.update($rootScope.user);
-          location.href=location.pathname;
-        }
-      });
-    });
-
-   
-  }
-
-
-})
 
 
 .factory('JawboneLoginService', function ($window, $state, localStorageService) {
