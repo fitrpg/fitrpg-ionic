@@ -26,7 +26,7 @@ angular.module('starter.controllers')
   };
 
   var calculateData = function(user) {
-    $scope.calculatedData.currentXp = util.currentLevelExp(user.attributes.level, user.attributes.experience);
+    $scope.calculatedData.currentXp = Math.floor(util.currentLevelExp(user.attributes.level, user.fitbit.experience + user.attributes.experience));
     $scope.calculatedData.requiredXp = util.nextLevelExp(user.attributes.level);
     $scope.calculatedData.strength = user.attributes.strength + user.fitbit.strength;
     $scope.calculatedData.vitality = user.attributes.vitality + user.fitbit.vitality;

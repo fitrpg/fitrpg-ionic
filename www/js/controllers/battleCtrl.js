@@ -90,57 +90,102 @@ angular.module('starter.controllers')
   }
 
   $scope.startBattle = function(id) {
-    // get the correct battle
-    var battle;
-    var indexOfBattle;
-    for(var i = 0; i < $scope.user.missionsVersus.length; i++){
-      if ($scope.user.missionsVersus[i].type === 'battle' && $scope.user.missionsVersus[i].enemy === id) {
-        indexOfBattle = i;
-        battle = $scope.user.missionsVersus[i];
-      }
-    }
-    // get user attributes from database
-    User.get({id : id}, function(enemy){
-      var enemyBattle;
-      for(var i = 0; i < enemy.missionsVersus.length; i++){
-        if (enemy.missionsVersus[i].type === 'battle' && enemy.missionsVersus[i].enemy === $scope.user['_id']) {
-          enemyBattle = enemy.missionsVersus[i];
+    if ($scope.user.attributes.HP === 0) {
+      var title = 'Unfit for Battle';
+      var body = 'You don\'t look so good. You need to recover some of your health before you can battle again.';
+
+      util.showAlert($ionicPopup, title, body, 'OK', function() {});
+    } else {
+      console.log('get ready for battle!');
+      // get the correct battle
+      var battle;
+      var indexOfBattle;
+      for(var i = 0; i < $scope.user.missionsVersus.length; i++){
+        if ($scope.user.missionsVersus[i].type === 'battle' && $scope.user.missionsVersus[i].enemy === id) {
+          indexOfBattle = i;
+          battle = $scope.user.missionsVersus[i];
         }
       }
-      // use game logic to determine winner of battle
-      // post battle results to database for both players
-      if (util.battle($scope.user,enemy) === 'player 1 wins') {
-        battle.status = 'win';
-        enemyBattle.status = 'loss';
-      } else if (util.battle($scope.user,enemy) === 'player 2 wins') {
-        battle.status = 'loss';
-        enemyBattle.status = 'win';
-      } else {
-        battle.status = 'tie';
-        enemyBattle.status = 'tie';
-      }
 
-      util.showAlert($ionicPopup,'Challenge Accepted','Your duel to the death with '+ enemy.profile.displayName+ ' is in progress. Who will come out on top?', 'Results', function() {
-        battleResults(battle.status);
+      // get user attributes from database
+      User.get({id : id}, function(enemy){
+        var enemyBattle;
+        for(var i = 0; i < enemy.missionsVersus.length; i++){
+          if (enemy.missionsVersus[i].type === 'battle' && enemy.missionsVersus[i].enemy === $scope.user['_id']) {
+            enemyBattle = enemy.missionsVersus[i];
+          }
+        }
+        // use game logic to determine winner of battle
+        // post battle results to database for both players
+
+        var winner = util.battle($scope.user,enemy);
+
+        var updateExp = function(player1,player2,status) {
+          var player1Xp = player1.attributes.experience + player1.fitbit.experience;
+          var player2Xp = player2.attributes.experience + player2.fitbit.experience;
+          var player1AttrXp = player1.attributes.experience;
+          var player2AttrXp = player2.attributes.experience;
+          if (status === 'win') {
+            if (player2Xp >= player1Xp) {
+              return player1AttrXp += (player2Xp - player1Xp)*0.2;
+            } else {
+              return player1AttrXp += (player1Xp - player2Xp)*0.1;
+            }
+          } else if (status === 'loss') {
+            if (player2Xp >= player1Xp) {
+              return player1AttrXp += (player1Xp - player2Xp)*0.1;
+            } else {
+              return player1AttrXp += (player2Xp - player1Xp)*0.2;
+            }
+          }
+        };
+
+        if (winner.result === 'player 1') {
+          console.log('player 1 wins');
+          enemy.attributes.HP = 0;
+          $scope.user.attributes.HP = winner.hp;
+          $scope.user.attributes.gold += Math.floor(enemy.attributes.gold*0.1);
+          enemy.attributes.gold = Math.floor(enemy.attributes.gold *= 0.9);
+          $scope.user.attributes.experience = updateExp($scope.user,enemy,'win');
+          enemy.attributes.experience = updateExp(enemy,$scope.user,'loss');
+          battle.status = 'win';
+          enemyBattle.status = 'loss';
+        } else if (winner.result === 'player 2') {
+          console.log('player 2 wins');
+          $scope.user.attributes.HP = 0;
+          enemy.attributes.HP = winner.hp;
+          enemy.attributes.gold += Math.floor($scope.user.attributes.gold*0.1);
+          $scope.user.attributes.gold = Math.floor($scope.user.attributes.gold *= 0.9);
+          $scope.user.attributes.experience = updateExp($scope.user,enemy,'loss');
+          enemy.attributes.experience = updateExp(enemy,$scope.user,'win');
+          battle.status = 'loss';
+          enemyBattle.status = 'win';
+        }
+
+        $scope.user.attributes.level = util.calcLevel($scope.user.fitbit.experience + $scope.user.attributes.experience,$scope.user.attributes.level);
+
+        util.showAlert($ionicPopup,'Challenge Accepted','Your duel to the death with '+ enemy.profile.displayName+ ' is in progress. Who will come out on top?', 'Results', function() {
+          battleResults(battle.status);
+        });
+
+        $scope.user.missionsVersus.splice(indexOfBattle,1);
+
+        var index;
+        for (var i=0; i<$scope.battles.length; i++) {
+          var userBattle = $scope.battles[i];
+          if (userBattle.enemy === id) {
+            index = i;
+          }
+        }
+        $scope.battles.splice(index,1);
+
+        //push to battle history model
+
+        User.update($scope.user);
+        User.update(enemy);
+
       });
-
-      $scope.user.missionsVersus.splice(indexOfBattle,1);
-
-      var index;
-      for (var i=0; i<$scope.battles.length; i++) {
-        var userBattle = $scope.battles[i];
-        if (userBattle.enemy === id) {
-          index = i;
-        }
-      }
-      $scope.battles.splice(index,1);
-
-      //push to battle history model
-
-      User.update($scope.user);
-      User.update(enemy);
-
-    });
+    }
 
   };
 
