@@ -162,26 +162,22 @@ angular.module('starter.controllers')
           Battle.save(battle);
         }
 
-        if (winner.result === 'player 1') {
-          enemy.attributes.HP = 0;
-          $scope.user.attributes.HP = winner.hp;
-          $scope.user.attributes.gold += Math.floor(enemy.attributes.gold*0.1);
-          enemy.attributes.gold = Math.floor(enemy.attributes.gold *= 0.9);
-          $scope.user.attributes.experience = updateExp($scope.user,enemy,'win');
-          enemy.attributes.experience = updateExp(enemy,$scope.user,'loss');
+        var adjustAttr = function(playerWin,playerLose) {
+          playerLose.attributes.HP = 0;
+          playerWin.attributes.HP = winner.hp;
+          playerWin.attributes.gold += Math.floor(playerLose.attributes.gold*0.1);
+          playerLose.attributes.gold = Math.floor(playerLose.attributes.gold *= 0.9);
+          playerWin.attributes.experience = updateExp(playerWin,playerLose,'win');
+          playerLose.attributes.experience = updateExp(playerLose,playerWin,'loss');
           battle.status = 'win';
           enemyBattle.status = 'loss';
-          saveBattleResult($scope.user['_id'],enemy['_id']);
+          saveBattleResult(playerWin['_id'],playerLose['_id']);
+        };
+
+        if (winner.result === 'player 1') {
+          adjustAttr($scope.user,enemy);
         } else if (winner.result === 'player 2') {
-          $scope.user.attributes.HP = 0;
-          enemy.attributes.HP = winner.hp;
-          enemy.attributes.gold += Math.floor($scope.user.attributes.gold*0.1);
-          $scope.user.attributes.gold = Math.floor($scope.user.attributes.gold *= 0.9);
-          $scope.user.attributes.experience = updateExp($scope.user,enemy,'loss');
-          enemy.attributes.experience = updateExp(enemy,$scope.user,'win');
-          battle.status = 'loss';
-          enemyBattle.status = 'win';
-          saveBattleResult(enemy['_id'],$scope.user['_id']);
+          adjustAttr(enemy,$scope.user);
         }
 
         $scope.user.attributes.level = util.calcLevel($scope.user.fitbit.experience + $scope.user.attributes.experience,$scope.user.attributes.level);

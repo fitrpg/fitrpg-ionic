@@ -2,11 +2,11 @@ var util = {
   vitalityToHp: function(vitality, charClass){
     var hp;
     // change character classes
-    if (charClass === 'warrior') {
+    if (charClass === 'strength' || charClass === 'endurance') {
       hp = vitality * 10;
-    } else if (charClass === 'amazon') {
+    } else if (charClass === 'dexterity') {
       hp = vitality * 15;
-    } else if (charClass === 'mage') {
+    } else if (charClass === 'vitality') {
       hp = vitality * 20;
     }
 
@@ -14,14 +14,13 @@ var util = {
   },
 
   attack: function(first,second,count) {
-    //need to add fitbit and attr together;
     if (Math.floor(count%(first.endurance/2)) === 0) {
       if (Math.random() < 1/(1+second.dexterity/25)) {
         var strength = first.strength;
         if (Math.random() < 0.05) {
           strength *= 2;
         }
-        return second.HP - strength;
+        return second.HP - strength*first.attackBonus;
       }
     }
     return second.HP;
@@ -30,6 +29,20 @@ var util = {
   battleTurns: function(player1Attr, player2Attr) {
     var firstAttack = Math.random();
     var count = 0;
+    var characterBonus = function(player) {
+      if (player.characterClass === 'strength') {
+        player.strength *= 1.1;
+      } else if (player.characterClass === 'dexterity') {
+        player.dexterity *= 1.4;
+      } else if (player.characterClass === 'endurance') {
+        player.endurance *= 1.1;
+      } else if (player.characterClass === 'vitality') {
+        player.dexterity *= 1.2;
+      }
+    };
+
+    characterBonus(player1Attr);
+    characterBonus(player2Attr);
 
     while (player1Attr.HP > 0 && player2Attr.HP > 0) {
       count++;
@@ -51,22 +64,20 @@ var util = {
     }
   },
 
-  battle: function(player1, player2){
-    var player1Attr = player1.attributes;
-    var player2Attr = player2.attributes;
-
-    var bonus = function(player) {
-      if (player.character === 'warrior') {
-        player.attributes.strength *= 1.1;
-      } else if (player.character === 'amazon') {
-        player.attributes.dexterity *= 1.4;
-      } else if (player.character === 'elf') {
-        player.attributes.endurance *= 1.1;
-      }
+  playerAttr: function(player) {
+    return {
+      strength: player.attributes.strength + player.fitbit.strength,
+      endurance: player.attributes.endurance + player.fitbit.endurance,
+      dexterity: player.attributes.dexterity + player.fitbit.dexterity,
+      HP: player.attributes.HP,
+      attackBonus: player.fitbit.attackBonus,
     };
+  },
 
-    bonus(player1);
-    bonus(player2);
+  battle: function(player1, player2){
+    var player1Attr = this.playerAttr(player1);
+    var player2Attr = this.playerAttr(player2);
+
 
     this.battleTurns(player1Attr,player2Attr);
     console.log(player1Attr.HP, player2Attr.HP);
@@ -80,15 +91,19 @@ var util = {
   },
 
   bossBattle: function(player,boss) {
-    var playerAttr = player.attributes;
+    var player1 = this.playerAttr(player);
     var count = 0;
-    boss.HP = boss.vitality*30;
+    if (boss.difficulty !== null) {
+      boss.HP = boss.vitality*10*boss.difficulty;
+    } else {
+      boss.HP = boss.vitality*30;
+    }
 
-    this.battleTurns(playerAttr,boss);
-    console.log(playerAttr.HP,boss.HP);
+    this.battleTurns(player1,boss);
+    console.log(player1.HP,boss.HP);
 
-    if (playerAttr.HP > boss.HP) {
-      return {result:'player', hp: playerAttr.HP};
+    if (player1.HP > boss.HP) {
+      return {result:'player', hp: player1.HP};
     } else {
       return {result:'boss', hp: 0};
     }

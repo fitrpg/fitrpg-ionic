@@ -5,8 +5,6 @@ angular.module('starter.controllers')
 
   $scope.calculatedData = {};
 
-  $scope.alerts = [];
-
   $scope.addAlert = function(status) {
     if (status === 'loss') {
       type = 'danger';
@@ -32,10 +30,16 @@ angular.module('starter.controllers')
     $scope.calculatedData.vitality = user.attributes.vitality + user.fitbit.vitality;
     $scope.calculatedData.dexterity = user.attributes.dexterity + user.fitbit.dexterity;
     $scope.calculatedData.endurance = user.attributes.endurance + user.fitbit.endurance;
-    $scope.calculatedData.maxHp = util.vitalityToHp($scope.calculatedData.vitality,'warrior'); //change to $scope.user.character
+    $scope.calculatedData.maxHp = util.vitalityToHp($scope.calculatedData.vitality,'strength'); //change to $scope.user.characterClass
+    user.attributes.HP += user.fitbit.HPRecov;
+    user.fitbit.HPRecov = 0;
+    if (user.attributes.HP > $scope.calculatedData.maxHP) {
+      user.attributes.HP = $scope.calculatedData.maxHP;
+    }
   };
 
   var alertBattleStatus = function() {
+    $scope.alerts = [];
     var listOfIndices = [];
     var alertWin = false;
     var alertLoss = false;
@@ -50,7 +54,7 @@ angular.module('starter.controllers')
           alertLoss = true;
           $scope.addAlert(mission.status);
         } else if (mission.status === 'request' && !alertRequest) {
-          alertRequeset = true;
+          alertRequest = true;
           $scope.addAlert(mission.status);
         }
 
@@ -78,10 +82,6 @@ angular.module('starter.controllers')
   User.get({id : localUserId}, function (user) {
     $rootScope.user = user;
     calculateData($rootScope.user);
-
-    if ($rootScope.user.attributes.HP > $scope.calculatedData.maxHp) { //sets default hp of 500 to maxHp, should only happen on initial user creation
-      $rootScope.user.attributes.HP = $scope.calculatedData.maxHp;
-    }
 
     alertBattleStatus();
 

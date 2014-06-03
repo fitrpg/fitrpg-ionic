@@ -12,7 +12,7 @@
       on-refresh="refresh()">
     </ion-refresher>
 
-    <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}" ng-click="navTo('battle')" close="closeAlert($index)">{{alert.msg}}</alert>
 
     <div class="list">
       <div class="card">
