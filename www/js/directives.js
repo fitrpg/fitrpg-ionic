@@ -12,7 +12,7 @@ angular.module('starter.directives', [])
           radius = Math.min(width, height) / 2;
 
       var color = d3.scale.ordinal()
-          .range(["#1ba39c","#e74c3c","#abb7b7"]);
+          .range(["#4099FF","#ef4e3a"]);
 
       var arc = d3.svg.arc()
           .outerRadius(radius - 50)

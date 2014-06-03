@@ -32,7 +32,6 @@ angular.module('starter.controllers')
             if (user['_id'] === battles[j].enemy) {
               battles[j].userData = user;
               $scope.battles.push(battles[j]);
-              console.log($scope.battles);
             }
           }
           $scope.$broadcast('scroll.refreshComplete');
@@ -153,6 +152,16 @@ angular.module('starter.controllers')
           }
         };
 
+        var saveBattleResult = function(winnerId, loserId) {
+          var battle = {
+            winner : winnerId,
+            loser : loserId,
+            createdAt : new Date()
+          }
+
+          Battle.save(battle);
+        }
+
         if (winner.result === 'player 1') {
           enemy.attributes.HP = 0;
           $scope.user.attributes.HP = winner.hp;
@@ -162,6 +171,7 @@ angular.module('starter.controllers')
           enemy.attributes.experience = updateExp(enemy,$scope.user,'loss');
           battle.status = 'win';
           enemyBattle.status = 'loss';
+          saveBattleResult($scope.user['_id'],enemy['_id']);
         } else if (winner.result === 'player 2') {
           $scope.user.attributes.HP = 0;
           enemy.attributes.HP = winner.hp;
@@ -171,6 +181,7 @@ angular.module('starter.controllers')
           enemy.attributes.experience = updateExp(enemy,$scope.user,'win');
           battle.status = 'loss';
           enemyBattle.status = 'win';
+          saveBattleResult(enemy['_id'],$scope.user['_id']);
         }
 
         $scope.user.attributes.level = util.calcLevel($scope.user.fitbit.experience + $scope.user.attributes.experience,$scope.user.attributes.level);
@@ -202,19 +213,39 @@ angular.module('starter.controllers')
 
   $scope.pending = function() {
     $scope.isPending = true;
-
   };
 
-  $scope.history = function(id) {
-    // get data from battle history database
-    // replace $scope.battles with results
+  // $scope.historyData = [30, 20];
+  $scope.history = function() {
+    $scope.oldWinBattles = [];
+    $scope.oldLossBattles = [];
     $scope.isPending = false;
-    // Battle.query(function(battles){
-    //   $scope.battles = battles;
-    // });
-  };
+    var userId = $scope.user['_id']
+    Battle.query({winner: userId}, function(battlesWon){
+     Battle.query({loser: userId}, function(battlesLost){
+        $scope.wins = battlesWon.length;
+        $scope.losses = battlesLost.length;
+        // var total = wins + losses;
 
-  $scope.historyData = [20,45,3]; //win,loss,tie get rid of hard coded data
+        // $scope.historyData = [wins, losses];
+
+        var oldBattles = battlesWon.concat(battlesLost);
+        for (var i=0; i<battlesWon.length; i++) {
+          var enemy = battlesWon[i].loser;
+          User.get({id: enemy}, function(user) {
+            $scope.oldWinBattles.push(user);
+          });
+        }
+        for (var i=0; i<battlesLost.length; i++) {
+          var enemy = battlesLost[i].winner;
+          User.get({id: enemy}, function(user) {
+            $scope.oldLossBattles.push(user);
+          });
+        }
+
+      });
+    });
+  };
 
   $scope.pending();
 })
