@@ -2,11 +2,11 @@ var util = {
   vitalityToHp: function(vitality, charClass){
     var hp;
     // change character classes
-    if (charClass === 'warrior') {
+    if (charClass === 'strength' || charClass === 'endurance') {
       hp = vitality * 10;
-    } else if (charClass === 'amazon') {
+    } else if (charClass === 'dexterity') {
       hp = vitality * 15;
-    } else if (charClass === 'mage') {
+    } else if (charClass === 'vitality') {
       hp = vitality * 20;
     }
 
@@ -20,7 +20,7 @@ var util = {
         if (Math.random() < 0.05) {
           strength *= 2;
         }
-        return second.HP - strength;
+        return second.HP - strength*first.attackBonus;
       }
     }
     return second.HP;
@@ -29,6 +29,20 @@ var util = {
   battleTurns: function(player1Attr, player2Attr) {
     var firstAttack = Math.random();
     var count = 0;
+    var characterBonus = function(player) {
+      if (player.characterClass === 'strength') {
+        player.strength *= 1.1;
+      } else if (player.characterClass === 'dexterity') {
+        player.dexterity *= 1.4;
+      } else if (player.characterClass === 'endurance') {
+        player.endurance *= 1.1;
+      } else if (player.characterClass === 'vitality') {
+        player.dexterity *= 1.2;
+      }
+    };
+
+    characterBonus(player1Attr);
+    characterBonus(player2Attr);
 
     while (player1Attr.HP > 0 && player2Attr.HP > 0) {
       count++;
@@ -56,6 +70,7 @@ var util = {
       endurance: player.attributes.endurance + player.fitbit.endurance,
       dexterity: player.attributes.dexterity + player.fitbit.dexterity,
       HP: player.attributes.HP,
+      attackBonus: player.fitbit.attackBonus,
     };
   },
 
@@ -63,18 +78,6 @@ var util = {
     var player1Attr = this.playerAttr(player1);
     var player2Attr = this.playerAttr(player2);
 
-    var bonus = function(player) {
-      if (player.character === 'warrior') {
-        player.attributes.strength *= 1.1;
-      } else if (player.character === 'amazon') {
-        player.attributes.dexterity *= 1.4;
-      } else if (player.character === 'elf') {
-        player.attributes.endurance *= 1.1;
-      }
-    };
-
-    bonus(player1);
-    bonus(player2);
 
     this.battleTurns(player1Attr,player2Attr);
     console.log(player1Attr.HP, player2Attr.HP);
