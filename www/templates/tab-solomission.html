@@ -29,9 +29,9 @@
       </div>
 
       <!-- filter by quests -->
-      <a class="item item-icon-left item-icon-right" ng-repeat="mission in soloMissions | filter: {type: 'quest'}" type="item-text-wrap" href="#/app/solomission/{{mission['id']}}">
-        <i class="icon {{mission.icon}}"></i>
-          {{mission.title}}
+      <a class="item item-icon-left item-icon-right" ng-repeat="quest in quests" type="item-text-wrap" href="#/app/solomission/{{quest.id}}">
+        <i class="icon {{quest.icon}}"></i>
+          {{quest.title}} ({{quest.gold}} gold pieces)
         <i class="icon ion-ios7-arrow-right"></i>
       </a>
 

@@ -1,9 +1,10 @@
 angular.module('starter.controllers')
 
-.controller('SoloMissionCtrl', function($scope, SoloMissions, User) {
+.controller('SoloMissionCtrl', function($scope, SoloMissions, Quests, User) {
 
   $scope.new = function() {
     $scope.soloMissions = [];
+    $scope.quests = [];
     SoloMissions.query(function(solos){
       var allSoloMissions = solos;
       var soloMission;
@@ -15,7 +16,14 @@ angular.module('starter.controllers')
           $scope.soloMissions.push(soloMission);
         }
       }
-    })
+    });
+
+    Quests.query(function(quests){
+      $scope.quests = quests;
+      // eventually filter and not show the ones
+      // that they've completed in the last week
+    });
+
   };
 
   $scope.complete = function() {
@@ -26,9 +34,9 @@ angular.module('starter.controllers')
   $scope.new();
 })
 
-.controller('SoloMissionDetailCtrl', function($scope, $stateParams, SoloMissions, $ionicPopup, User) {
-  $scope.soloMission = SoloMissions.get({id: $stateParams.missionId});
-
+.controller('SoloMissionDetailCtrl', function($scope, $stateParams, SoloMissions, Quests, $ionicPopup, User) {
+  $scope.soloMission = SoloMissions.get($stateParams.missionId);
+  $scope.quest = Quests.get($stateParams.QuestsId)
   $scope.difficulty = function(num) {
     if ( num <= $scope.soloMission.difficulty ) {
       return true;

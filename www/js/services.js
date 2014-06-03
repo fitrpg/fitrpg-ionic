@@ -43,6 +43,10 @@ angular.module('starter.services', ['ngResource'])
   return $resource(SERVER_URL + '/solos/:id', {id : '@id'});
 }])
 
+.factory('Quests',['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
+  return $resource(SERVER_URL + '/quests/:id', {id : '@id'});
+}])
+
 .factory('VersusMissions',['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
   return $resource(SERVER_URL + '/groups/:id', {id : '@id'});
 }]);
