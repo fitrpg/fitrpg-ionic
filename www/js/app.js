@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers','app.auth' ,'starter.services', 'starter.directives', 'ui.bootstrap'])
+angular.module('starter', ['ionic', 'starter.controllers','app.auth' 'angular-datepicker','starter.services', 'starter.directives', 'ui.bootstrap'])
 
 .run(function($rootScope,$ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -151,6 +151,15 @@ angular.module('starter', ['ionic', 'starter.controllers','app.auth' ,'starter.s
         'menuContent': {
           templateUrl: 'templates/solo-detail.html',
           controller: 'SoloMissionDetailCtrl'
+        }
+      }
+    })
+    .state('app.quest-detail', {
+      url: '/quest/:missionId',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/quest-detail.html',
+          controller: 'QuestDetailCtrl'
         }
       }
     })

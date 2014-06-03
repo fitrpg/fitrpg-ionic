@@ -1,9 +1,3 @@
-<!--
-  This template loads for the 'tab.friend-detail' state (app.js)
-  'firend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
-  The FriendsCtrl pulls data from the Friends service (service.js)
-  The Friends service returns an array of friend data
--->
 <ion-view title="Quests">
   <ion-content has-header="true" padding="true">
     <div class="list card">
@@ -17,6 +11,12 @@
         <p>
           {{quest.description}}
         </p>
+        <p>
+          Time Limit: {{quest.numDays}} day(s)
+        </p>
+        <p>
+          Reward: {{quest.gold}} gold pieces
+        </p>
         <p>Difficulty:
           <i class="ion-star" ng-show="difficulty(1)"></i>
           <i class="ion-star" ng-show="difficulty(2)"></i>
@@ -26,8 +26,11 @@
         </p>
       </div>
 
+      <input type="text" pick-a-date="date" placeholder="Select Date" /> {{ date }}
+      <input type="text" pick-a-time="time" placeholder="Select Time" /> {{ time }}
+
       <div class="item tabs tabs-secondary tabs-icon-left">
-        <a class="tab-item" ng-click="startMission()">
+        <a class="tab-item" ng-click="startQuest()">
           <i class="icon ion-flag"></i>
           Start Quest
         </a>
