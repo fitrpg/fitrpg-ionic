@@ -146,7 +146,7 @@ angular.module('starter.controllers')
 
   $scope.useItem = function() {
     var totalVitality = $scope.user.attributes.vitality + $scope.user.fitbit.vitality;
-    var maxHp = util.vitalityToHp(totalVitality,'warrior'); //change to $scope.user.character
+    var maxHp = util.vitalityToHp(totalVitality,'strength'); //change to $scope.user.characterClass
     if (item.quantity > 0) {
       $scope.user.attributes.HP += $scope.inventoryItem.hp;
       if ($scope.user.attributes.HP > maxHp) {

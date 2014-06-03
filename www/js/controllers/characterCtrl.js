@@ -30,7 +30,7 @@ angular.module('starter.controllers')
     $scope.calculatedData.vitality = user.attributes.vitality + user.fitbit.vitality;
     $scope.calculatedData.dexterity = user.attributes.dexterity + user.fitbit.dexterity;
     $scope.calculatedData.endurance = user.attributes.endurance + user.fitbit.endurance;
-    $scope.calculatedData.maxHp = util.vitalityToHp($scope.calculatedData.vitality,'warrior'); //change to $scope.user.character
+    $scope.calculatedData.maxHp = util.vitalityToHp($scope.calculatedData.vitality,'strength'); //change to $scope.user.characterClass
     user.attributes.HP += user.fitbit.HPRecov;
     user.fitbit.HPRecov = 0;
     if (user.attributes.HP > $scope.calculatedData.maxHP) {
