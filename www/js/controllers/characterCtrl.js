@@ -104,7 +104,7 @@ angular.module('starter.controllers')
   };
 
   $scope.hasSkillPoints = function() {
-    if ($rootScope.user.attributes.skillPts) {
+    if ($rootScope.user && $rootScope.user.attributes.skillPts) {
       return true;
     } else {
       return false;
@@ -124,7 +124,7 @@ angular.module('starter.controllers')
   };
 
   $scope.isEquipped = function(slot) {
-    if ($rootScope.user.equipped[slot] && $rootScope.user.equipped[slot].inventoryId !== null) {
+    if ($rootScope.user && $rootScope.user.equipped[slot].inventoryId !== null) {
       return true;
     } else {
       return false;
