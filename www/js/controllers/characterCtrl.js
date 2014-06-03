@@ -33,6 +33,11 @@ angular.module('starter.controllers')
     $scope.calculatedData.dexterity = user.attributes.dexterity + user.fitbit.dexterity;
     $scope.calculatedData.endurance = user.attributes.endurance + user.fitbit.endurance;
     $scope.calculatedData.maxHp = util.vitalityToHp($scope.calculatedData.vitality,'warrior'); //change to $scope.user.character
+    user.attributes.HP += user.fitbit.HPRecov;
+    user.fitbit.HPRecov = 0;
+    if (user.attributes.HP > $scope.calculatedData.maxHP) {
+      user.attributes.HP = $scope.calculatedData.maxHP;
+    }
   };
 
   var alertBattleStatus = function() {
@@ -78,10 +83,6 @@ angular.module('starter.controllers')
   User.get({id : localUserId}, function (user) {
     $rootScope.user = user;
     calculateData($rootScope.user);
-
-    if ($rootScope.user.attributes.HP > $scope.calculatedData.maxHp) { //sets default hp of 500 to maxHp, should only happen on initial user creation
-      $rootScope.user.attributes.HP = $scope.calculatedData.maxHp;
-    }
 
     alertBattleStatus();
 
