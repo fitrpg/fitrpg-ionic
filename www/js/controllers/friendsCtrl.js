@@ -11,31 +11,42 @@ angular.module('starter.controllers')
   }
 
   $scope.requestBattle = function(friendId) {
+    var title;
+    var body;
     if ($scope.user.attributes.HP === 0) {
-      var title = 'Unfit for Battle';
-      var body = 'You don\'t look so good. You need to recover some of your health before you can battle again.';
-
-      util.showAlert($ionicPopup, title, body, 'OK', function() {});
+      title = 'Unfit for Battle';
+      body = 'You don\'t look so good. You need to recover some of your health before you can battle again.';
     } else {
-      // update $scope.battle to reflect status of pending with friend
-      $scope.user.missionsVersus.push({type:'battle',enemy:friendId,status:'pending'});
-      // post to database to update friends battle status
-      User.update($scope.user);
+      var battleExists = false;
 
-      for (var i=0; i<$scope.friends.length; i++) {
-        var friend = $scope.friends[i];
-        if (friend['_id'] === friendId) {
-          friend.missionsVersus.push({type:'battle',enemy:$scope.user['_id'],status:'request'})
-          User.update(friend);
+      for (var i=0; i<$scope.user.missionsVersus.length; i++) {
+        var mission = $scope.user.missionsVersus[i];
+        if (mission.enemy === friendId) {
+          battleExists = true;
         }
       }
-      var title = 'Request Sent';
-      var body = 'Your battle request has been sent. You can still equip new weapons or train more until the battle request is accepted.';
 
-      util.showAlert($ionicPopup, title, body, 'OK', function() {
+      if (!battleExists) {
+        // update $scope.battle to reflect status of pending with friend
+        $scope.user.missionsVersus.push({type:'battle',enemy:friendId,status:'pending'});
+        // post to database to update friends battle status
+        User.update($scope.user);
 
-      });
+        for (var i=0; i<$scope.friends.length; i++) {
+          var friend = $scope.friends[i];
+          if (friend['_id'] === friendId) {
+            friend.missionsVersus.push({type:'battle',enemy:$scope.user['_id'],status:'request'})
+            User.update(friend);
+          }
+        }
+        title = 'Request Sent';
+        body = 'Your battle request has been sent. You can still equip new weapons or train more until the battle request is accepted.';
+      } else {
+        title = 'Battle Pending';
+        body = 'You are already have a request to do battle with this friend.';
+      }
     }
+    util.showAlert($ionicPopup, title, body, 'OK', function() {});
   };
 })
 
