@@ -5,8 +5,6 @@ angular.module('starter.controllers')
 
   $scope.calculatedData = {};
 
-  $scope.alerts = [];
-
   $scope.addAlert = function(status) {
     if (status === 'loss') {
       type = 'danger';
@@ -41,6 +39,7 @@ angular.module('starter.controllers')
   };
 
   var alertBattleStatus = function() {
+    $scope.alerts = [];
     var listOfIndices = [];
     var alertWin = false;
     var alertLoss = false;
@@ -55,7 +54,7 @@ angular.module('starter.controllers')
           alertLoss = true;
           $scope.addAlert(mission.status);
         } else if (mission.status === 'request' && !alertRequest) {
-          alertRequeset = true;
+          alertRequest = true;
           $scope.addAlert(mission.status);
         }
 
