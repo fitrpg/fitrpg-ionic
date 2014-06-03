@@ -6,7 +6,9 @@ angular.module('starter.controllers')
   for (var i=0; i<$scope.user.friends.length; i++) {
     var friend = $scope.user.friends[i];
     User.get({id: friend}, function(user){
-      $scope.friends.push(user);
+      if (user['_id']) {
+        $scope.friends.push(user);
+      }
     });
   }
 
