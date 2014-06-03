@@ -50,13 +50,13 @@
     <div ng-controller="AuthenticationController">
 
       <!-- This is what we show if logged in, whatever page/state the app asks for-->
-      <div ng-show="Authenticated || needsUsername" >
+      <div ng-show="Authenticated" >
         <ion-nav-view></ion-nav-view>
       </div>
      <!-- This is what we show if not logged in-->
       <div ng-show="needsAuthentication">
         <div ng-controller='LoginController'>
- 
+
           <ion-content class="paddding dashboard">
             <div align="center"><br><br>
             <h2 class="title">welcome to fitrpg!</h2>

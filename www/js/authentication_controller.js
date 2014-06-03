@@ -2,11 +2,7 @@ angular.module('app.auth', ['LocalStorageModule', 'ionic'])
 
 // Handles scope over the entire app to check if we are authenticated throughout
 // every single page. Never shows a page unless the fitbit-token/jawbone-token is stored locally
-.controller('AuthenticationController', function ($cacheFactory,$scope, $state, $window, localStorageService) {
-
-  var $httpDefaultCache = $cacheFactory.get('$http');
-  console.log($httpDefaultCache);
-  $httpDefaultCache.removeAll();
+.controller('AuthenticationController', function ($scope, $state, $ionicLoading, User, localStorageService) {
   // Check our local storage for the proper credentials to ensure we are logged in, this means users can't get past app unless they select a username
   if (localStorageService.get('username')) {
     if (localStorageService.get('fitbit-token') || localStorageService.get('jawbone-token')) {
@@ -14,8 +10,26 @@ angular.module('app.auth', ['LocalStorageModule', 'ionic'])
       $scope.Authenticated = true;
     }
   } else if (localStorageService.get('fitbit-token') || localStorageService.get('jawbone-token')) {
-    $state.transitionTo('app.character');
-    $scope.needsUsername = true;
+
+    $scope.loadingIndicator = $ionicLoading.show({
+       content: 'Loading Data',
+       animation: 'fade-in',
+       showBackdrop: false,
+       maxWidth: 200,
+       showDelay: 500
+    });
+
+    User.get({id : localStorageService.get('userId') }, function(user) {
+      if (user.username === undefined) {
+        $scope.loadingIndicator.hide();
+        $state.transitionTo('username');
+        $scope.Authenticated = true;
+      } else {
+        $scope.loadingIndicator.hide();
+        $state.transitionTo('app.character');
+        $scope.Authenticated = true;
+      }
+    });
   } else {
     $scope.needsAuthentication = true;
   }
@@ -78,7 +92,7 @@ angular.module('app.auth', ['LocalStorageModule', 'ionic'])
           localStorageService.set('fitbit-token', token);
           localStorageService.set('userId', userId);
           loginWindow.close();
-          location.href=location.pathname;       
+          location.href=location.pathname;
           //eventually set  unique app ID with jwt?
         }
       });
