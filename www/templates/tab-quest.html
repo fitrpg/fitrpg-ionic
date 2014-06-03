@@ -1,4 +1,4 @@
-<ion-view title="Solo Missions">
+<ion-view title="Quests">
   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
@@ -6,7 +6,6 @@
   <ion-content class="has-header">
     <div class="padding">
        <div class="button-bar bar-light">
-       <!-- add ngclick filter to buttons and put a default filter to show only equipment -->
         <a class="button" ng-click="new()">New</a>
         <a class="button" ng-click="complete()">Complete</a>
       </div>
@@ -18,9 +17,9 @@
       </div>
 
       <!-- filter by boss fights -->
-      <a class="item item-icon-left item-icon-right" ng-repeat="mission in soloMissions | filter: {type: 'boss'} | orderBy: '-level'" type="item-text-wrap" href="#/app/solomission/{{mission['_id']}}">
+      <a class="item item-icon-left item-icon-right" ng-repeat="mission in soloMissions | filter: {type: 'boss'}" type="item-text-wrap" href="#/app/solomission/{{mission.id}}">
         <i class="icon {{mission.icon}}"></i>
-          {{mission.title}}
+          {{mission.name}}
         <i class="icon ion-ios7-arrow-right"></i>
       </a>
 
@@ -29,7 +28,7 @@
       </div>
 
       <!-- filter by quests -->
-      <a class="item item-icon-left item-icon-right" ng-repeat="quest in quests" type="item-text-wrap" href="#/app/quest/{{quest['_id']}}">
+      <a class="item item-icon-left item-icon-right" ng-repeat="quest in quests" type="item-text-wrap" href="#/app/solomission/{{quest.id}}">
         <i class="icon {{quest.icon}}"></i>
           {{quest.title}} ({{quest.gold}} gold pieces)
         <i class="icon ion-ios7-arrow-right"></i>

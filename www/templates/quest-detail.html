@@ -1,30 +1,38 @@
-<ion-view title="{{soloMission.type}}">
+<ion-view title="Quests">
   <ion-content has-header="true" padding="true">
     <div class="list card">
 
       <div class="item item-avatar">
         <img src="mcfly.jpg">
-        <h2>{{soloMission.title}}</h2>
-        <p>Type: {{soloMission.type}}</p>
+        <h2>{{quest.title}}</h2>
       </div>
 
       <div class="item item-body">
         <p>
-          {{soloMission.description}}
+          {{quest.description}}
         </p>
-        <!-- <p>Difficulty:
+        <p>
+          Time Limit: {{quest.numDays}} day(s)
+        </p>
+        <p>
+          Reward: {{quest.gold}} gold pieces
+        </p>
+        <p>Difficulty:
           <i class="ion-star" ng-show="difficulty(1)"></i>
           <i class="ion-star" ng-show="difficulty(2)"></i>
           <i class="ion-star" ng-show="difficulty(3)"></i>
           <i class="ion-star" ng-show="difficulty(4)"></i>
           <i class="ion-star" ng-show="difficulty(5)"></i>
-        </p> -->
+        </p>
       </div>
 
+      <input type="text" pick-a-date="date" placeholder="Select Date" /> {{ date }}
+      <input type="text" pick-a-time="time" placeholder="Select Time" /> {{ time }}
+
       <div class="item tabs tabs-secondary tabs-icon-left">
-        <a class="tab-item" ng-click="startMission()">
+        <a class="tab-item" ng-click="startQuest()">
           <i class="icon ion-flag"></i>
-          Start Mission
+          Start Quest
         </a>
       </div>
 
