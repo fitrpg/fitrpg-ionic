@@ -3,41 +3,52 @@ angular.module('starter.controllers')
 .controller('BattleCtrl', function($scope, Battle, User, $ionicPopup, $q) {
 
   var userMissions = [];
-
-  // make a copy of the $scope.user.missionsVersus
-  for (var i=0; i<$scope.user.missionsVersus.length; i++) {
-    userMissions[i] = {};
-    for (var key in $scope.user.missionsVersus[i]) {
-      userMissions[i][key] = $scope.user.missionsVersus[i][key];
-    }
-  }
-
   var battles = [];
   $scope.battles = [];
 
-  // push into new array only missionsVersus with 'battle' type
-  for (var i=0; i<userMissions.length; i++) {
-    var mission = userMissions[i];
-    if (mission.type === 'battle') {
-      battles.push(mission);
+  var listOfBattles = function() {
+    // make a copy of the $scope.user.missionsVersus
+    for (var i=0; i<$scope.user.missionsVersus.length; i++) {
+      userMissions[i] = {};
+      for (var key in $scope.user.missionsVersus[i]) {
+        userMissions[i][key] = $scope.user.missionsVersus[i][key];
+      }
+    }
+
+    // push into new array only missionsVersus with 'battle' type
+    for (var i=0; i<userMissions.length; i++) {
+      var mission = userMissions[i];
+      if (mission.type === 'battle') {
+        battles.push(mission);
+      }
+    }
+
+    // get user data (profileName, level, etc.) for each battle to display on front end
+    for (var i=0; i<battles.length; i++) {
+      var battle = battles[i];
+      if (battle.enemy) {
+        User.get({id: battle.enemy}, function(user) {
+          for (var j=0; j<battles.length; j++) {
+            if (user['_id'] === battles[j].enemy) {
+              battles[j].userData = user;
+              $scope.battles.push(battles[j]);
+              console.log($scope.battles);
+            }
+          }
+          $scope.$broadcast('scroll.refreshComplete');
+        });
+      }
     }
   }
 
-  // get user data (profileName, level, etc.) for each battle to display on front end
-  for (var i=0; i<battles.length; i++) {
-    var battle = battles[i];
-    if (battle.enemy) {
-      User.get({id: battle.enemy}, function(user) {
-        for (var j=0; j<battles.length; j++) {
-          if (user['_id'] === battles[j].enemy) {
-            battles[j].userData = user;
-            $scope.battles.push(battles[j]);
-            console.log($scope.battles);
-          }
-        }
-      });
-    }
-  }
+  $scope.refresh = function() {
+    userMissions = [];
+    battles = [];
+    $scope.battles = [];
+    listOfBattles();
+  };
+
+  $scope.refresh();
 
   $scope.cancelBattle = function(id) {
     // remove battle from $scope.user.battles

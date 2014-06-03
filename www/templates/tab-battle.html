@@ -4,6 +4,11 @@
   </ion-nav-buttons>
 
   <ion-content class="has-header">
+    <ion-refresher
+      pulling-text="Pull to refresh..."
+      on-refresh="refresh()">
+    </ion-refresher>
+
     <div class="padding">
        <div class="button-bar bar-light">
         <!-- data is from users battle array -->
