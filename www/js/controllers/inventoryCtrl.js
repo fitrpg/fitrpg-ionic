@@ -56,6 +56,7 @@ angular.module('starter.controllers')
   };
 
   $scope.sellItem = function() {
+    var title, body, callback;
     if (item.equipped === false) {
       $scope.user.attributes.gold = $scope.user.attributes.gold + $scope.inventoryItem.sellPrice;
       if ($scope.inventoryItem.type.toLowerCase() !== 'potion') {
@@ -70,12 +71,18 @@ angular.module('starter.controllers')
       }
       // save user
       User.update($scope.user);
-      util.showAlert($ionicPopup, 'Item Sold','You received ' + $scope.inventoryItem.sellPrice + ' gold for your item.', 'OK', function(){
+      title = 'Item Sold';
+      body = 'You received ' + $scope.inventoryItem.sellPrice + ' gold for your item.';
+      callback = function() {
         $state.go('app.character');
-      });
+      }
     } else {
-      util.showAlert($ionicPopup, 'Item Equipped','You must unequip your item before you can sell it.', 'OK', function(){});
+      title = 'Item Equipped';
+      body = 'You must unequip your item before you can sell it.';
+      callback = function(){};
     }
+
+    util.showAlert($ionicPopup, title, body, 'OK', callback);
   };
 
   var setEquippedItem = function(slot, inventoryItem, name) {
