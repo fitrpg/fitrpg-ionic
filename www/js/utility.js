@@ -13,56 +13,63 @@ var util = {
     return hp;
   },
 
-  battle: function(player1, player2){
-    var player1Attr = player1.attributes;
-    var player2Attr = player2.attributes;
+  attack: function(first,second,count) {
+    //need to add fitbit and attr together;
+    if (Math.floor(count%(first.endurance/2)) === 0) {
+      if (Math.random() < 1/(1+second.dexterity/25)) {
+        var strength = first.strength;
+        if (Math.random() < 0.05) {
+          strength *= 2;
+        }
+        return second.HP - strength;
+      }
+    }
+    return second.HP;
+  },
+
+  battleTurns: function(player1Attr, player2Attr) {
     var firstAttack = Math.random();
     var count = 0;
 
+    while (player1Attr.HP > 0 && player2Attr.HP > 0) {
+      count++;
+      if (firstAttack >= 0.5) {
+        player2Attr.HP = this.attack(player1Attr,player2Attr,count);
+        if (player2Attr.HP > 0) {
+          player1Attr.HP = this.attack(player2Attr,player1Attr,count);
+        } else {
+          break;
+        }
+      } else {
+        player1Attr.HP = this.attack(player2Attr,player1Attr,count);
+        if (player1Attr.HP > 0) {
+          player2Attr.HP = this.attack(player1Attr,player2Attr,count);
+        } else {
+          break;
+        }
+      }
+    }
+  },
+
+  battle: function(player1, player2){
+    var player1Attr = player1.attributes;
+    var player2Attr = player2.attributes;
+
     var bonus = function(player) {
       if (player.character === 'warrior') {
-        player.strength *= 1.1;
+        player.attributes.strength *= 1.1;
       } else if (player.character === 'amazon') {
-        player.dexterity *= 1.4;
+        player.attributes.dexterity *= 1.4;
       } else if (player.character === 'elf') {
-        player.endurance *= 1.1;
+        player.attributes.endurance *= 1.1;
       }
     };
 
     bonus(player1);
     bonus(player2);
 
-    var attack = function(first,second) {
-      if (Math.floor(first.endurance/2%count) === 0) {
-        if (Math.random() < 1/(1+second.dexterity/25)) {
-          var strength = first.strength;
-          if (Math.random() < 0.05) {
-            strength *= 2
-          }
-          return second.HP - strength;
-        }
-      }
-      return second.HP;
-    };
-
-    while (player1Attr.HP > 0 && player2Attr.HP > 0) {
-      count++;
-      if (firstAttack >= 0.5) {
-        player2Attr.HP = attack(player1Attr,player2Attr);
-        if (player2Attr.HP > 0) {
-          player1Attr.HP = attack(player2Attr,player1Attr);
-        } else {
-          break;
-        }
-      } else {
-        player1Attr.HP = attack(player2Attr,player1Attr);
-        if (player1Attr.HP > 0) {
-          player2Attr.HP = attack(player1Attr,player2Attr);
-        } else {
-          break;
-        }
-      }
-    }
+    this.battleTurns(player1Attr,player2Attr);
+    console.log(player1Attr.HP, player2Attr.HP);
 
     if (player1Attr.HP > player2Attr.HP) {
       return {result:'player 1', hp: player1Attr.HP};
@@ -70,6 +77,21 @@ var util = {
       return {result:'player 2', hp: player2Attr.HP};
     }
 
+  },
+
+  bossBattle: function(player,boss) {
+    var playerAttr = player.attributes;
+    var count = 0;
+    boss.HP = boss.vitality*30;
+
+    this.battleTurns(playerAttr,boss);
+    console.log(playerAttr.HP,boss.HP);
+
+    if (playerAttr.HP > boss.HP) {
+      return {result:'player', hp: playerAttr.HP};
+    } else {
+      return {result:'boss', hp: 0};
+    }
   },
 
   capitalize: function(string) {

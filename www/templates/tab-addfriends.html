@@ -11,10 +11,11 @@
     </div>
 
     <ion-list>
-      <ion-item class="item-avatar" ng-repeat="friend in user.friends | orderBy:'name'" type="item-text-wrap">
-        <img src="venkman.jpg">
-        <h2>{{friend.name}}</h2>
-        <p>Level {{friend.level}} {{friend.charClass}}</p>
+      <ion-item class="item-avatar" ng-repeat="friend in friends | filter:searchText | orderBy:'profile.displayName'" type="item-text-wrap">
+        <img ng-src="{{friend.profile.avatar}}">
+        <h2>{{friend.profile.displayName}}</h2>
+        <p>Level {{friend.attributes.level}} {{friend.character}}</p>
+        <ion-option-button class="button-positive" ng-click="addFriend(friend['_id'])">Add</ion-option-button>
       </ion-item>
     </ion-list>
   </ion-content>

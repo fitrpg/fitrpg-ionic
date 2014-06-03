@@ -18,9 +18,9 @@
       </div>
 
       <!-- filter by boss fights -->
-      <a class="item item-icon-left item-icon-right" ng-repeat="mission in soloMissions | filter: {type: 'boss'}" type="item-text-wrap" href="#/app/solomission/{{mission.id}}">
+      <a class="item item-icon-left item-icon-right" ng-repeat="mission in soloMissions | filter: {type: 'boss'} | orderBy: '-level'" type="item-text-wrap" href="#/app/solomission/{{mission['_id']}}">
         <i class="icon {{mission.icon}}"></i>
-          {{mission.name}}
+          {{mission.title}}
         <i class="icon ion-ios7-arrow-right"></i>
       </a>
 
@@ -29,9 +29,9 @@
       </div>
 
       <!-- filter by quests -->
-      <a class="item item-icon-left item-icon-right" ng-repeat="mission in soloMissions | filter: {type: 'quest'}" type="item-text-wrap" href="#/app/solomission/{{mission.id}}">
+      <a class="item item-icon-left item-icon-right" ng-repeat="mission in soloMissions | filter: {type: 'quest'}" type="item-text-wrap" href="#/app/solomission/{{mission['id']}}">
         <i class="icon {{mission.icon}}"></i>
-          {{mission.name}}
+          {{mission.title}}
         <i class="icon ion-ios7-arrow-right"></i>
       </a>
 

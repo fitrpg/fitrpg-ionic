@@ -39,6 +39,33 @@ angular.module('starter.controllers')
   };
 })
 
-.controller('AddFriendsCtrl', function($scope) {
+.controller('AddFriendsCtrl', function($scope, User, $ionicPopup) {
   // friends is accessed from $rootScope.user.friends in the template
+  $scope.friends = [];
+  User.query(function(users){
+    for (var i=0; i<users.length; i++) {
+      if ($scope.user['_id'] !== users[i]['_id']) {
+        $scope.friends.push(users[i]);
+      }
+    }
+  });
+
+  $scope.addFriend = function(id) {
+    var friendExists = false;
+    for (var i=0; i<$scope.user.friends.length; i++) {
+      var friend = $scope.user.friends[i];
+      if (friend === id) {
+        friendExists = true;
+      }
+    }
+    if (!friendExists) {
+      $scope.user.friends.push(id);
+      title = 'Friend Added';
+      body = 'Your friend has been added.';
+    } else {
+      title = 'Alread Friends'
+      body = 'You are already friends.'
+    }
+    util.showAlert($ionicPopup,title,body,'OK',function(){});
+  }
 })

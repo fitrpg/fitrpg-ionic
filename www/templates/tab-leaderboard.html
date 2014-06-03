@@ -13,10 +13,10 @@
     </div>
 
     <ion-list>
-      <ion-item class="item-avatar" ng-repeat="leader in leaderboard | orderBy:'-level'" type="item-text-wrap">
-        <img src="venkman.jpg">
-        <h2>{{leader.name}}</h2>
-        <p>Level {{leader.level}} {{leader.charClass}}</p>
+      <ion-item class="item-avatar" ng-repeat="leader in leaderboard | orderBy:'-attributes.level'" type="item-text-wrap">
+        <img ng-src="{{leader.profile.avatar}}">
+        <h2>{{leader.profile.displayName}}</h2>
+        <p>Level {{leader.attributes.level}} {{leader.character}}</p>
       </ion-item>
     </ion-list>
   </ion-content>
