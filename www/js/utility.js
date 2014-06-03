@@ -14,7 +14,6 @@ var util = {
   },
 
   attack: function(first,second,count) {
-    //need to add fitbit and attr together;
     if (Math.floor(count%(first.endurance/2)) === 0) {
       if (Math.random() < 1/(1+second.dexterity/25)) {
         var strength = first.strength;
@@ -51,9 +50,18 @@ var util = {
     }
   },
 
+  playerAttr: function(player) {
+    return {
+      strength: player.attributes.strength + player.fitbit.strength,
+      endurance: player.attributes.endurance + player.fitbit.endurance,
+      dexterity: player.attributes.dexterity + player.fitbit.dexterity,
+      HP: player.attributes.HP,
+    };
+  },
+
   battle: function(player1, player2){
-    var player1Attr = player1.attributes;
-    var player2Attr = player2.attributes;
+    var player1Attr = this.playerAttr(player1);
+    var player2Attr = this.playerAttr(player2);
 
     var bonus = function(player) {
       if (player.character === 'warrior') {
@@ -80,15 +88,19 @@ var util = {
   },
 
   bossBattle: function(player,boss) {
-    var playerAttr = player.attributes;
+    var player1 = this.playerAttr(player);
     var count = 0;
-    boss.HP = boss.vitality*30;
+    if (boss.difficulty !== null) {
+      boss.HP = boss.vitality*10*boss.difficulty;
+    } else {
+      boss.HP = boss.vitality*30;
+    }
 
-    this.battleTurns(playerAttr,boss);
-    console.log(playerAttr.HP,boss.HP);
+    this.battleTurns(player1,boss);
+    console.log(player1.HP,boss.HP);
 
-    if (playerAttr.HP > boss.HP) {
-      return {result:'player', hp: playerAttr.HP};
+    if (player1.HP > boss.HP) {
+      return {result:'player', hp: player1.HP};
     } else {
       return {result:'boss', hp: 0};
     }
