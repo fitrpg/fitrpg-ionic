@@ -11,21 +11,21 @@ angular.module('app.auth', ['LocalStorageModule', 'ionic'])
     }
   } else if (localStorageService.get('fitbit-token') || localStorageService.get('jawbone-token')) {
 
-    $scope.loadingIndicator = $ionicLoading.show({
-       content: 'Loading Data',
+    $ionicLoading.show({
+       template: '<p>loading...</p><i class="icon ion-loading-c"></i>',
        animation: 'fade-in',
        showBackdrop: false,
        maxWidth: 200,
-       showDelay: 500
+       showDelay: 100
     });
 
     User.get({id : localStorageService.get('userId') }, function(user) {
       if (user.username === undefined) {
-        $scope.loadingIndicator.hide();
+        $ionicLoading.hide();
         $state.transitionTo('username');
         $scope.Authenticated = true;
       } else {
-        $scope.loadingIndicator.hide();
+        $ionicLoading.hide();
         $state.transitionTo('app.character');
         $scope.Authenticated = true;
       }
@@ -57,7 +57,7 @@ angular.module('app.auth', ['LocalStorageModule', 'ionic'])
 
   return {
     login: function () {
-      loginWindow = $window.open(url, '_blank', 'location=no,toolbar=no');
+      loginWindow = $window.open(url, '_blank', 'location=no,toolbar=no,hidden=yes');
       loginWindow.addEventListener('loadstart', function (event) {
         hasToken = event.url.indexOf('?token=');
         hasUserId = event.url.indexOf('&userid=');
@@ -75,14 +75,28 @@ angular.module('app.auth', ['LocalStorageModule', 'ionic'])
   };
 })
 
-.factory('FitbitLoginService', function ($window, $state, localStorageService, $location) {
+.factory('FitbitLoginService', function ($window, $state, $ionicLoading, localStorageService, $location) {
   var url = 'http://fitrpg.azurewebsites.net/fitbit/auth';
   var usernameUrl = 'http://fitrpg.azurewebsites.net/fitbit/getUsername';
   var loginWindow, token, hasToken, userId, hasUserId;
 
   return {
     login: function () {
-      loginWindow = $window.open(url, '_blank', 'location=no,toolbar=no');
+      loginWindow = $window.open(url, '_blank', 'location=no,toolbar=no,hidden=yes');
+      $ionicLoading.show({
+         template: '<p>Contacting Fitbit...</p><i class="icon ion-loading-c"></i>',
+         animation: 'fade-in',
+         showBackdrop: false,
+         maxWidth: 200,
+         showDelay: 200
+      });
+
+      loginWindow.addEventListener("loadstop", function(e) {
+          $ionicLoading.hide();
+          loginWindow.show();
+      });
+
+
       loginWindow.addEventListener('loadstart', function (event) {
         hasToken = event.url.indexOf('?oauth_token=');
         hasUserId = event.url.indexOf('&userId=')
