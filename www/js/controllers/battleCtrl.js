@@ -30,6 +30,12 @@ angular.module('starter.controllers')
     }
 
     // get user data (profileName, level, etc.) for each battle to display on front end
+    console.log(battles.length);
+    if (battles.length === 0) {
+      clearTimeout(loading);
+      $ionicLoading.hide();
+    }
+
     for (var i=0; i<battles.length; i++) {
       var battle = battles[i];
       if (battle.enemy) {
@@ -105,8 +111,8 @@ angular.module('starter.controllers')
     }
     util.showAlert($ionicPopup, title, body, 'Continue', function() {
 
-    })
-  }
+    });
+  };
 
   $scope.startBattle = function(id) {
     if ($scope.user.attributes.HP === 0) {
