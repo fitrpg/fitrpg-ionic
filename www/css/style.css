@@ -1,3 +1,122 @@
+/*#f3796a*/
+/*#adaeae*/
+
+/* MAIN CHARACTER SCREEN */
+.bar-custom {
+  background-color: #fff;
+  border-bottom: 2px solid #f3796a;
+}
+
+.icon-gray {
+  color: #adaeae;
+}
+
+.bar .title {
+  color: #f3796a;
+  text-align: left;
+}
+
+.item-main {
+  background-color: #f3796a;
+  padding-left: 85px;
+}
+
+.item-main h3 {
+  font-weight: bold;
+  color: #fff;
+}
+
+.item-main p {
+  color: #fff;
+  font-size: 12px;
+}
+
+.item-main > img:first-child {
+  top: 0;
+  left: 0;
+  max-width: 70px;
+  max-height: 100%;
+  border-radius: 0;
+}
+
+.tab-main-left {
+  text-align: left;
+  padding-left: 20px;
+}
+
+.tab-main-right {
+  text-align: right;
+  padding-right: 20px;
+}
+
+.title-red {
+  font-size: 20px;
+  color: #f3796a;
+}
+
+.small-text {
+  font-size: 10px;
+}
+
+.medium-text {
+  font-size: 11px;
+}
+
+.main-attributes {
+  text-align: center;
+}
+
+.main-attributes h1 {
+  font-size: 20px;
+  color: #777;
+  margin-bottom: 0px;
+}
+
+.main-attributes p {
+  font-size: 11px;
+}
+
+.progress-bar {
+  background-color: #f3796a;
+}
+
+.card-title {
+  background-color: #f3796a;
+  font-weight: bold;
+  color: #fff;
+}
+
+.list-heading {
+  color: #777;
+  border-top: none;
+  border-bottom: none;
+}
+
+.list-heading h1 {
+  font-size: 14px;
+  font-weight: normal;
+  color: #777;
+  padding-left: 10px;
+  padding-bottom: 5px;
+  border-bottom: thin solid #eee;
+}
+
+.list-heading p {
+  font-size: 11px;
+  padding-left: 15px;
+}
+
+.button-custom {
+  background-color: #f3796a;
+  text-align: center;
+  color: #fff;
+  border: 0;
+  font-size: 20px;
+}
+
+
+/* END CHARACTER SCREEN */
+
 .loginbox {
   position:absolute;
   width: 100%;
