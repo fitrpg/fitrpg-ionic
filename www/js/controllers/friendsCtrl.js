@@ -1,14 +1,22 @@
 angular.module('starter.controllers')
 
-.controller('FriendsCtrl', function($scope, User, $ionicPopup, $q) {
+.controller('FriendsCtrl', function($scope, User, $ionicLoading, $ionicPopup, $q) {
   // friends is accessed from $rootScope.user
   $scope.friends = [];
+  var loading = setTimeout(function(){
+    $ionicLoading.show({
+      template: '<p>Loading...</p><i class="icon ion-loading-c"></i>'
+    });
+  }, 500);
+
   for (var i=0; i<$scope.user.friends.length; i++) {
     var friend = $scope.user.friends[i];
     User.get({id: friend}, function(user){
       if (user['_id']) {
         $scope.friends.push(user);
       }
+      clearTimeout(loading);
+      $ionicLoading.hide();
     });
   }
 

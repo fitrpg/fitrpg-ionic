@@ -1,6 +1,12 @@
 angular.module('starter.controllers')
 
-.controller('ShopCtrl', function($rootScope, $scope, Shop) {
+.controller('ShopCtrl', function($rootScope, $scope, Shop, $ionicLoading) {
+  var loading = setTimeout(function(){
+    $ionicLoading.show({
+      template: '<p>Loading...</p><i class="icon ion-loading-c"></i>'
+    });
+  }, 500);
+
   $scope.getData = function() {
     $scope.shop = [];
     Shop.query( function (items) {
@@ -11,6 +17,8 @@ angular.module('starter.controllers')
           $scope.shop.push(item);
         }
       }
+      clearTimeout(loading);
+      $ionicLoading.hide();
     });
   };
 

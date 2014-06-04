@@ -1,6 +1,12 @@
 angular.module('starter.controllers')
 
-.controller('SoloMissionCtrl', function($scope, SoloMissions, Quests, User) {
+.controller('SoloMissionCtrl', function($scope, $ionicLoading, SoloMissions, Quests, User) {
+
+  var loading = setTimeout(function(){
+    $ionicLoading.show({
+      template: '<p>Loading...</p><i class="icon ion-loading-c"></i>'
+    });
+  }, 500);
 
   $scope.new = function() {
     $scope.soloMissions = [];
@@ -25,6 +31,8 @@ angular.module('starter.controllers')
           }
         }
       }
+      clearTimeout(loading);
+      $ionicLoading.hide();
     });
 
     Quests.query(function(quests){

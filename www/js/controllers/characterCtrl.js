@@ -1,7 +1,12 @@
 angular.module('starter.controllers')
 
-.controller('CharacterCtrl', function($rootScope, $window, $scope, $state, $ionicNavBarDelegate, User, Shop, Refresh, localStorageService) {
+.controller('CharacterCtrl', function($rootScope, $window, $scope, $state, $ionicNavBarDelegate, $ionicLoading, User, Shop, Refresh, localStorageService) {
   // initialize $rootScope.user to eliminate console errors before authentication
+  var loading = setTimeout(function(){
+    $ionicLoading.show({
+      template: '<p>Loading...</p><i class="icon ion-loading-c"></i>'
+    });
+  }, 500);
 
   $scope.calculatedData = {};
 
@@ -86,6 +91,8 @@ angular.module('starter.controllers')
     alertBattleStatus();
 
     User.update($rootScope.user);
+    clearTimeout(loading);
+    $ionicLoading.hide();
   });
 
   $scope.refresh = function() {
