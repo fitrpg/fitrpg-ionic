@@ -1,10 +1,18 @@
 angular.module('starter.controllers')
 
-.controller('LeaderboardCtrl', function($scope, User) {
+.controller('LeaderboardCtrl', function($scope, $ionicLoading, User) {
+  var loading = setTimeout(function(){
+    $ionicLoading.show({
+      template: '<p>Loading...</p><i class="icon ion-loading-c"></i>'
+    });
+  }, 500);
+
   $scope.all = function() {
     $scope.leaderboard = [];
     User.query(function(users) {
       $scope.leaderboard = users;
+      clearTimeout(loading);
+      $ionicLoading.hide();
     })
   };
 

@@ -1,10 +1,16 @@
 angular.module('starter.controllers')
 
-.controller('BattleCtrl', function($scope, Battle, User, $ionicPopup, $q) {
+.controller('BattleCtrl', function($scope, Battle, User, $ionicLoading, $ionicPopup, $q) {
 
   var userMissions = [];
   var battles = [];
   $scope.battles = [];
+
+  var loading = setTimeout(function(){
+    $ionicLoading.show({
+      template: '<p>Loading...</p><i class="icon ion-loading-c"></i>'
+    });
+  }, 500);
 
   var listOfBattles = function() {
     // make a copy of the $scope.user.missionsVersus
@@ -34,6 +40,8 @@ angular.module('starter.controllers')
               $scope.battles.push(battles[j]);
             }
           }
+          clearTimeout(loading);
+          $ionicLoading.hide();
           $scope.$broadcast('scroll.refreshComplete');
         });
       }

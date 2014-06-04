@@ -1,6 +1,12 @@
 angular.module('starter.controllers')
 
-.controller('SoloMissionCtrl', function($scope, SoloMissions, Quests, User) {
+.controller('SoloMissionCtrl', function($scope, $ionicLoading, SoloMissions, Quests, User) {
+
+  var loading = setTimeout(function(){
+    $ionicLoading.show({
+      template: '<p>Loading...</p><i class="icon ion-loading-c"></i>'
+    });
+  }, 500);
 
   $scope.new = function() {
     $scope.soloMissions = [];
@@ -11,11 +17,22 @@ angular.module('starter.controllers')
 
       //need to filter missions that are complete or greater than current user level
       for (var i=0; i< allSoloMissions.length; i++) {
+        var battleComplete = false;
         soloMission = allSoloMissions[i];
-        if (soloMission.level <= $scope.user.attributes.level) {
-          $scope.soloMissions.push(soloMission);
+        if (soloMission.level <= $scope.user.attributes.level && ($scope.user.attributes.level-6) < (soloMission.level)) {
+          for (var j=0; j<$scope.user.battles.length; j++) {
+            var completedBattle = $scope.user.battles[j];
+            if (completedBattle['_id'] === soloMission['_id']) {
+              battleComplete = true;
+            }
+          }
+          if (!battleComplete) {
+            $scope.soloMissions.push(soloMission);
+          }
         }
       }
+      clearTimeout(loading);
+      $ionicLoading.hide();
     });
 
     Quests.query(function(quests){
@@ -29,6 +46,13 @@ angular.module('starter.controllers')
   $scope.complete = function() {
     // completed missions in user database
     $scope.soloMissions = [];
+    for (var i=0; i<$scope.user.battles.length; i++) {
+      var completedBattle = $scope.user.battles[i];
+      SoloMissions.get({id: completedBattle['_id']}, function(battle) {
+        $scope.soloMissions.push(battle);
+      });
+    }
+
   };
 
   $scope.new();
@@ -59,6 +83,7 @@ angular.module('starter.controllers')
           if (winner.result === 'player') {
             $scope.user.attributes.experience += $scope.soloMission.experience;
             $scope.user.attributes.gold += $scope.soloMission.gold;
+            $scope.user.battles.push($scope.soloMission['_id']);
             body = 'You\'ve crushed evil. Go find more bad guys to defeat!';
           } else {
             body = 'You were defeated. You may want to train more before doing battle.';
@@ -98,7 +123,7 @@ angular.module('starter.controllers')
   };
 
   // When user presses the button to stat a quest, they then have to select a time range
-  // based off the days 
+  // based off the days
   // They have the option to start the quest that same day, which means whatever they've done
   // since midnight
 //   $scope.startQuest = function() {
@@ -113,7 +138,7 @@ angular.module('starter.controllers')
 
 
 //   }
-    
+
 //   Date.prototype.yyyymmdd = function() {
 //   var yyyy = this.getFullYear().toString();
 //   var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based

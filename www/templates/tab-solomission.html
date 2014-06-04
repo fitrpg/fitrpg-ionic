@@ -18,11 +18,20 @@
       </div>
 
       <!-- filter by boss fights -->
-      <a class="item item-icon-left item-icon-right" ng-repeat="mission in soloMissions | filter: {type: 'boss'} | orderBy: '-level'" type="item-text-wrap" href="#/app/solomission/{{mission['_id']}}">
+<!--       <a class="item item-icon-left item-icon-right" ng-repeat="mission in soloMissions | filter: {type: 'boss'} | orderBy: '-level'" type="item-text-wrap" href="#/app/solomission/{{mission['_id']}}">
         <i class="icon {{mission.icon}}"></i>
           {{mission.title}}
         <i class="icon ion-ios7-arrow-right"></i>
-      </a>
+      </a> -->
+
+      <ion-list>
+        <ion-item class="item-avatar item-icon-right" ng-repeat="mission in soloMissions | filter: {type: 'boss'} | orderBy: '-level'" type="item-text-wrap" href="#/app/solomission/{{mission['_id']}}">
+          <img ng-src="{{friend.profile.avatar}}">
+          <h2>{{mission.title}}</h2>
+          <p>Level {{mission.level}}</p>
+          <i class="icon ion-ios7-information-outline"></i>
+        </ion-item>
+      </ion-list>
 
       <div class="item item-divider">
         Quests

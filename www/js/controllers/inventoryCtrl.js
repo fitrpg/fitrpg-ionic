@@ -1,9 +1,16 @@
 angular.module('starter.controllers')
 
-.controller('InventoryCtrl', function($scope, Shop) {
+
+.controller('InventoryCtrl', function($scope, Shop, $ionicLoading) {
   // inventory is accessed from $rootScope.user.inventory in the template
   var inventory = $scope.user.inventory;
   $scope.inventory = [];
+
+  var loading = setTimeout(function(){
+    $ionicLoading.show({
+      template: '<p>Loading...</p><i class="icon ion-loading-c"></i>'
+    });
+  }, 500);
 
   Shop.query( function (storeItems) {
     for (var i=0; i<inventory.length; i++) {
@@ -16,6 +23,8 @@ angular.module('starter.controllers')
         }
       }
     }
+    clearTimeout(loading);
+    $ionicLoading.hide();
   });
 
   $scope.equipment = function() {
