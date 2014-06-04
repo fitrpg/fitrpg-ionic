@@ -31,6 +31,18 @@ angular.module('starter.services', ['ngResource'])
   });
 }])
 
+// get fitbit data based off of a date range
+.factory('DatesData', ['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
+  return $resource(SERVER_URL + '/fitbit/daterange/:id/:type/:activity/:startDate/:endDate', 
+      {id: '@id', type: '@type', activity: '@activity', startDate: '@startDate', endDate: '@endDate'} );
+}])
+
+// get fitbit data based off of a time range
+.factory('TimesData', ['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
+  return $resource(SERVER_URL + '/fitbit/timerange/:id/:activity/:startDate/:endDate/:startTime/:endTime', 
+      {id: '@id', activity: '@activity', startDate: '@startDate', endDate: '@endDate', startTime: '@startTime', endTime: '@endTime'} );
+}])
+
 .factory('Shop', ['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
   return $resource(SERVER_URL + '/items/:id', {id : '@id'});
 }])

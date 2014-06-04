@@ -124,6 +124,23 @@ var util = {
     });
   },
 
+  showPrompt: function(controller,title,body,okText,cancelText,callbackTrue,callbackFalse) {
+    var confirmPopup = controller.confirm({
+      title: title,
+      template: body,
+      okText: okText,
+      cancelText : cancelText
+    });
+    confirmPopup.then(function(res) {
+      if(res) {
+        callbackTrue(); 
+      } 
+      // else {
+      //   callbackFalse();
+      // }
+    });
+  },
+
   currentLevelExp: function(lvl,exp) {
     return exp - (100*Math.pow(lvl-1,3) + 360*Math.pow(lvl-1,2) + 3500*(lvl-1));
   },
