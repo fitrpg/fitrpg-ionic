@@ -114,11 +114,16 @@ angular.module('starter.controllers')
       (function(i) { //immediately invoked function to retain the value of the iterable j
         var quest = $scope.user.quests[i];
         if (quest.status === 'active') {
+          console.log('quest is active');
           var completeDate = parseInt(Date.parse(quest.completionTime)); //convert date to matched format
           // check short quests - will have to do better checking of sleep quests later
+          console.log("Today:", today);
+          console.log("CompleteDate:" , completeDate);
           if (today >= completeDate) {
+            console.log("Gets past if statement.");
             if (quest.numDays < 1) {
               TimesData.get(quest.getObj, function(result) {
+                console.log("My result", result);
                 var total = result.total;
                 if (total >= quest.winGoal) {
                   $scope.user.quests[i].status = 'success';
@@ -132,6 +137,7 @@ angular.module('starter.controllers')
               });
             } else if (quest.numDays > 0 ) { //multiday quests
               DatesData.get(quest.getObj, function(result) {
+                console.log("Dates res", result);
                 var total = result.total;
                 if (total >= quest.winGoal) {
                   $scope.user.quests[i].status = 'success';
@@ -227,8 +233,6 @@ angular.module('starter.controllers')
         activity  : $scope.quest.activity,
         startDate : start.yyyymmdd(),
         endDate   : end.yyyymmdd(),
-        gold      : gold,
-        shortDesc : desc
       };
 
       // Generate the quest object to be saved to the user's quests array
@@ -239,7 +243,9 @@ angular.module('starter.controllers')
         completionTime: end,
         getObj: resourceAttr,
         status: 'active',
-        winGoal: winGoal
+        winGoal: winGoal,
+        gold      : gold,
+        shortDesc : desc
       };
 
       if (numDays >= 1 ) {
