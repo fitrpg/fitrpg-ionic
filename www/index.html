@@ -57,21 +57,22 @@
      <!-- This is what we show if not logged in-->
       <div ng-show="needsAuthentication">
         <div ng-controller='LoginController'>
+          <ion-content class="padding dashboard" id="login">
 
-          <ion-content class="paddding dashboard">
-            <div align="center"><br><br>
-            <h2 class="title">welcome to fitrpg!</h2>
+            <div class="login-text">
+              <div class="login-title">FitRPG</div>
+              <div class="login-top-tag">Get more out of your</div>
+              <div class="login-bottom-tag">healthy lifestyle</div>
             </div>
+
+
             <div class="loginbox">
-              <img src="./img/fitbitbutton.png" alt="Login with Fitbit" class="loginbutton" ng-click='fitbitlogin()'></img><br><br><br>
-              <img src="./img/jawbonebutton.png" alt="Login with Jawbone" class="loginbutton" ng-click='jawbonelogin()'></img>
+              <img src="./img/fitbit.png" alt="Login with Fitbit" class="loginbutton" ng-click='fitbitlogin()'></img>
             </div>
 
-        </ion-content>
-
+          </ion-content>
         </div>
       </div>
-
     </div>
   </body>
 </html>
