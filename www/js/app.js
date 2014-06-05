@@ -135,27 +135,8 @@ angular.module('starter', ['ionic', 'starter.controllers','app.auth','starter.se
         }
       }
     })
-
-    .state('app.solomission', {
-      url: '/solomission',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/tab-solomission.html',
-          controller: 'SoloMissionCtrl'
-        }
-      }
-    })
-    .state('app.solomission-detail', {
-      url: '/solomission/:missionId',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/solo-detail.html',
-          controller: 'SoloMissionDetailCtrl'
-        }
-      }
-    })
     .state('app.quest-detail', {
-      url: '/quest/:missionId',
+      url: '/quest/:questId',
       views: {
         'menuContent': {
           templateUrl: 'templates/quest-detail.html',
@@ -164,12 +145,12 @@ angular.module('starter', ['ionic', 'starter.controllers','app.auth','starter.se
       }
     })
 
-    .state('app.vsmission', {
-      url: '/vsmission',
+    .state('app.quest', {
+      url: '/quests',
       views: {
         'menuContent': {
-          templateUrl: 'templates/tab-vsmission.html',
-          controller: 'VersusMissionCtrl'
+          templateUrl: 'templates/tab-quest.html',
+          controller: 'QuestCtrl'
         }
       }
     })
@@ -182,7 +163,6 @@ angular.module('starter', ['ionic', 'starter.controllers','app.auth','starter.se
         }
       }
     })
-
     .state('app.leaderboard', {
       url: '/leaderboard',
       views: {
