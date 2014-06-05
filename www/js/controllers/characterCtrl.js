@@ -82,7 +82,8 @@ angular.module('starter.controllers')
 
   };
 
-  var localUserId = localStorageService.get('userId'); //'2Q2TVT'; //
+  // var localUserId = '27NN9K'; 
+ localStorageService.get('userId'); //'2Q2TVT'; //
 
   User.get({id : localUserId}, function (user) {
     $rootScope.user = user;

@@ -6,29 +6,79 @@
   <ion-content class="has-header">
     <div class="padding">
        <div class="button-bar bar-light">
-        <a class="button" ng-click="new()">New</a>
-        <a class="button" ng-click="complete()">Complete</a>
+        <a class="button" ng-click="all()">All</a>
+        <a class="button" ng-click="active()">Active</a>
+        <a class="button" ng-click="completed()">Completed</a>
       </div>
     </div>
 
     <div class="list">
-      <div class="item item-divider">
-        Boss Fights
-      </div>
-
-      <!-- filter by boss fights -->
-      <a class="item item-icon-left item-icon-right" ng-repeat="mission in soloMissions | filter: {type: 'boss'}" type="item-text-wrap" href="#/app/solomission/{{mission.id}}">
-        <i class="icon {{mission.icon}}"></i>
-          {{mission.name}}
+      
+      <!-- Steps quests -->
+      <div ng-show="isAll" class="item item-divider">
+        Step Up
+      </div> 
+      <a ng-show="isAll" class="item item-icon-left item-icon-right" ng-repeat="quest in quests | filter: {activity:'steps'}  | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
+        <i class="icon {{quest.icon}}"></i>
+          {{quest.title}} ({{quest.gold}} gold pieces)
         <i class="icon ion-ios7-arrow-right"></i>
       </a>
 
-      <div class="item item-divider">
-        Quests
-      </div>
+      <!-- Distance quests -->
+      <div ng-show="isAll" class="item item-divider">
+        Go the Distance
+      </div> 
+      <a ng-show="isAll" class="item item-icon-left item-icon-right" ng-repeat="quest in quests | filter: {activity:'distance'}  | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
+        <i class="icon {{quest.icon}}"></i>
+          {{quest.title}} ({{quest.gold}} gold pieces)
+        <i class="icon ion-ios7-arrow-right"></i>
+      </a>
 
-      <!-- filter by quests -->
-      <a class="item item-icon-left item-icon-right" ng-repeat="quest in quests" type="item-text-wrap" href="#/app/solomission/{{quest.id}}">
+      <!-- Strength quests -->
+      <div ng-show="isAll" class="item item-divider">
+        Crush It
+      </div> 
+      <a ng-show="isAll" class="item item-icon-left item-icon-right" ng-repeat="quest in quests | filter: {activity:'null'} | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
+        <i class="icon {{quest.icon}}"></i>
+          {{quest.title}} ({{quest.gold}} gold pieces)
+        <i class="icon ion-ios7-arrow-right"></i>
+      </a>
+
+      <!-- Sleep quests -->
+      <div ng-show="isAll" class="item item-divider">
+        Sleep It Off
+      </div> 
+      <a ng-show="isAll" class="item item-icon-left item-icon-right" ng-repeat="quest in quests | filter: {type:'sleep'}  | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
+        <i class="icon {{quest.icon}}"></i>
+          {{quest.title}} ({{quest.gold}} gold pieces)
+        <i class="icon ion-ios7-arrow-right"></i>
+      </a>
+
+
+      <!-- Active quests -->
+      <div ng-show="isActive" class="item item-divider">
+        Your Current Quests
+      </div> 
+      <a ng-show="isActive" class="item item-icon-left item-icon-right" ng-repeat="quest in quests | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
+        <i class="icon {{quest.icon}}"></i>
+          {{quest.title}} ({{quest.gold}} gold pieces)
+        <i class="icon ion-ios7-arrow-right"></i>
+      </a>
+
+      <!-- Completed quests -->
+      <div ng-show="isComplete" class="item item-divider">
+        Succeeded Quests
+      </div> 
+      <a ng-show="isComplete" class="item item-icon-left item-icon-right" ng-repeat="quest in quests | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
+        <i class="icon {{quest.icon}}"></i>
+          {{quest.title}} ({{quest.gold}} gold pieces)
+        <i class="icon ion-ios7-arrow-right"></i>
+      </a>
+
+      <div ng-show="isComplete" class="item item-divider">
+        Failed Quests
+      </div> 
+      <a ng-show="isComplete" class="item item-icon-left item-icon-right" ng-repeat="quest in quests | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
         <i class="icon {{quest.icon}}"></i>
           {{quest.title}} ({{quest.gold}} gold pieces)
         <i class="icon ion-ios7-arrow-right"></i>
