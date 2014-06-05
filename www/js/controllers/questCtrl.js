@@ -1,21 +1,52 @@
 angular.module('starter.controllers')
 
+// This controller handles the list of the quests that show up as
+// all,active,and completed
 .controller('QuestCtrl', function($scope, $ionicLoading, SoloMissions, Quests, User, TimesData, DatesData) {
 
+  // Creates the loading screen that only shows up after 500 ms if items have not yet loaded
   var loading = setTimeout(function(){
     $ionicLoading.show({
       template: '<p>Loading...</p><i class="icon ion-loading-c"></i>'
     });
   }, 500);
 
+  // Function to add alerts to the user about quests that have recently ended
+  $scope.addAlert = function(quest) {
+    if (quest.status === 'success') {
+      type = 'success';
+      msg = 'You completed your quest to ' + quest.shortDesc.toLowerCase() + 'and won ' + quest.gold + " pieces!";
+    } else if (quest.status === 'fail') {
+      type = 'danger';
+      msg = 'Sorry, you didn\'t finish your quest to ' + quest.shortDesc.toLowerCase() + '. Try again in a few days.'
+    }
+    $scope.alerts.push({type: type, msg: msg});
+  };
+
+  $scope.closeAlert = function(index) {
+    $scope.alerts.splice(index, 1);
+  };
+
   $scope.all = function() {
     $scope.isAll = true;
     $scope.isActive = false;
     $scope.isComplete = false;
-
     $scope.quests = [];
+    $scope.availableQuests = [];
+
+    // Create an array of ids of quests the user is currently doing
+    var currentQuests = [];
+    for (var i = 0; i < $scope.user.quests.length; i++ ) {
+      currentQuests.push($scope.user.quests[i].questId);
+    }
+    // Compare all quests against this array and only display them if they're not on it
     Quests.query(function(quests){
       $scope.quests = quests;
+      for (var i =0; i<$scope.quests.length;i++) {
+        if (currentQuests.indexOf($scope.quests[i]._id) < 0) {
+          $scope.availableQuests.push($scope.quests[i]);
+        }
+      }
       clearTimeout(loading);
       $ionicLoading.hide();
     });
@@ -30,57 +61,42 @@ angular.module('starter.controllers')
     var today = new Date();
     $scope.quests = [];
     for (var i =0; i< $scope.user.quests.length; i++) {
-      var quest = $scope.user.quests[i];
-      var complete = new Date(quest.completionTime);
-      if(complete > today) {
-        Quests.get({id : quest.questId}, function(q) {
-          console.log('whee');
-          $scope.quests.push(q);
-        });
+      if($scope.user.quests[i].status === 'active') {
+        (function(i) {
+          Quests.get({id : $scope.user.quests[i].questId}, function(q) {
+            $scope.quests.push(q);
+          });
+        }(i));
       } 
     }
   };
 
-  // Show all of the quests that have already been completed (in the last week?)
+  // Show all of the quests that have already been completed in the last week
   $scope.completed = function() {
     $scope.isAll = false;
     $scope.isActive = false;
     $scope.isComplete = true;
-    // completed missions in user database
-    $scope.soloMissions = [];
-    for (var i=0; i<$scope.user.battles.length; i++) {
-      var completedBattle = $scope.user.battles[i];
-      SoloMissions.get({id: completedBattle['_id']}, function(battle) {
-        $scope.soloMissions.push(battle);
-      });
-    }
-
+    $scope.successfulQuests = [];
+    $scope.failedQuests = [];
     var today = new Date();
-    $scope.quests = [];
+
+    // Iterate over all the quests that the user has stored; maybe eventually just save them
+    // locally to the user object
     for (var i =0; i< $scope.user.quests.length; i++) {
       var quest = $scope.user.quests[i];
-      var completeDate = new Date(quest.completionTime);
-      if(completeDate > today) { //change this later, completeDate should be< today
-        if (quest.numDays < 0) {
-          TimesData.get(quest.getObj, function(result) {
-            var total = result.total;
-            if (total >= quest.winGoal) {
-              quest.status = 'success'; 
-              User.update($scope.user);
+      var completeDate = new Date(quest.completionTime); //convert date to matched format
+      // Iterate over all the quests and get the ones that have status of completed
+      if(quest.status === 'success' || quest.status === 'fail') {
+        // if 7 days have passed since this was completed, they can do it again so we remove it from their user array
+        if(completeDate.addDays(7) <= today) {
+          $scope.user.quests = $scope.user.quests.splice($scope.user.quests.indexOf(quest));
+        } else { //if 7 days haven't passed, show them in recently completed
+          Quests.get({id : quest.questId}, function(q) {
+            q.completionTime = quest.completionTime; //add completion time so we can sort them
+            if (quest.status === 'success') {
+              $scope.successfulQuests.push(q);
             } else {
-              quest.status = 'fail';
-              User.update($scope.user);
-            }
-          });
-        } else if (quest.numDays > 0 ) {
-          DatesData.get(quest.getObj, function(num) {
-            var total = result.total;
-            if (total >= quest.winGoal) {
-              quest.status = 'success';
-              User.update($scope.user);
-            } else {
-              quest.status = 'fail';
-              User.update($scope.user);
+              $scope.failedQuests.push(q);
             }
           });
         }
@@ -88,13 +104,77 @@ angular.module('starter.controllers')
     }
   };
 
+  // The following function iterates over the current user's quests and checks to see if
+  // any have expired and if so, did they pass/fail the quest
+  $scope.checkQuests = function() {
+    $scope.alerts = [];
+    var today = parseInt(Date.parse(new Date()));
+    // Iterate over all the quests that the user has stored
+    for (var j =0; j< $scope.user.quests.length; j++) {
+      (function(i) { //immediately invoked function to retain the value of the iterable j
+        var quest = $scope.user.quests[i];
+        if (quest.status === 'active') {
+          console.log('quest is active');
+          var completeDate = parseInt(Date.parse(quest.completionTime)); //convert date to matched format
+          // check short quests - will have to do better checking of sleep quests later
+          console.log("Today:", today);
+          console.log("CompleteDate:" , completeDate);
+          if (today >= completeDate) {
+            console.log("Gets past if statement.");
+            if (quest.numDays < 1) {
+              TimesData.get(quest.getObj, function(result) {
+                console.log("My result", result);
+                var total = result.total;
+                if (total >= quest.winGoal) {
+                  $scope.user.quests[i].status = 'success';
+                  $scope.user.attributes.gold += quest.gold; // add the winnings
+                  User.update($scope.user);
+                } else {
+                  $scope.user.quests[i].status = 'fail';
+                  User.update($scope.user);
+                }
+                $scope.addAlert(quest);
+              });
+            } else if (quest.numDays > 0 ) { //multiday quests
+              DatesData.get(quest.getObj, function(result) {
+                console.log("Dates res", result);
+                var total = result.total;
+                if (total >= quest.winGoal) {
+                  $scope.user.quests[i].status = 'success';
+                  $scope.user.attributes.gold += quest.gold; // add the winnings
+                  User.update($scope.user);
+                } else {
+                  $scope.user.quests[i].status = 'fail';
+                  User.update($scope.user);
+                }
+                $scope.addAlert(quest);
+              });
+            }
+          }
+        }
+      }(j));
+    }
+  };
+
   $scope.all();
+  $scope.checkQuests();
+
+  // useful to add days and hours to the start time/day
+  Date.prototype.addDays = function(days,hours) {
+    var dat = new Date(this.valueOf());
+    dat.setDate(dat.getDate() + days);
+    if(hours) {
+      dat.setHours(this.getHours()+hours);
+    }
+    return dat;
+  };
+
 })
 
+// This particular controller handles the individual pages of each quest
 .controller('QuestDetailCtrl', function($scope, $stateParams, Quests, $ionicPopup, User, TimesData, DatesData) {
   var questId = $stateParams.questId
   $scope.quest = Quests.get({id: questId});
-  console.log($scope.quest);
   $scope.difficulty = function(num) {
     if ( num <= $scope.quest.difficulty ) {
       return true;
@@ -127,6 +207,8 @@ angular.module('starter.controllers')
     var numDays   = $scope.quest.numDays;
     var numHours = $scope.quest.numHours;
     var winGoal = $scope.quest.winGoals;
+    var gold = $scope.quest.gold;
+    var desc = $scope.quest.description;
     var start     = new Date(); // start date
     var end = start.addDays(numDays,numHours); // end date
     var startTime = timify(start.getHours()) + ':' + timify(start.getMinutes());
@@ -161,7 +243,9 @@ angular.module('starter.controllers')
         completionTime: end,
         getObj: resourceAttr,
         status: 'active',
-        winGoal: winGoal
+        winGoal: winGoal,
+        gold      : gold,
+        shortDesc : desc
       };
 
       if (numDays >= 1 ) {
@@ -172,7 +256,6 @@ angular.module('starter.controllers')
       }
       
       $scope.user.quests.push(questObj);
-      console.log($scope.user);
       User.update($scope.user);
     };
 
