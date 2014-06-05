@@ -82,8 +82,7 @@ angular.module('starter.controllers')
 
   };
 
-  // var localUserId = '27NN9K'; 
- localStorageService.get('userId'); //'2Q2TVT'; //
+  var localUserId = localStorageService.get('userId');
 
   User.get({id : localUserId}, function (user) {
     $rootScope.user = user;
@@ -97,7 +96,7 @@ angular.module('starter.controllers')
   });
 
   $scope.refresh = function() {
-    var id = localUserId; //localStorageService.get('userId');//
+    var id = localUserId;
     Refresh.get({id: id}, function() { // this will tell fitbit to get new data
       User.get({id : id}, function (user) { // this will retrieve that new data
         $rootScope.user = user;
