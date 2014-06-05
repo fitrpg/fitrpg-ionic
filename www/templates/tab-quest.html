@@ -1,4 +1,4 @@
-<ion-view title="Quests">
+<ion-view title="Quests" hide-back-button="true">
   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
@@ -13,11 +13,11 @@
     </div>
 
     <div class="list">
-      
+
       <!-- Steps quests -->
       <div ng-show="isAll" class="item item-divider">
         Step Up
-      </div> 
+      </div>
       <a ng-show="isAll" class="item item-icon-left item-icon-right" ng-repeat="quest in quests | filter: {activity:'steps'}  | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
         <i class="icon {{quest.icon}}"></i>
           {{quest.title}} ({{quest.gold}} gold pieces)
@@ -27,7 +27,7 @@
       <!-- Distance quests -->
       <div ng-show="isAll" class="item item-divider">
         Go the Distance
-      </div> 
+      </div>
       <a ng-show="isAll" class="item item-icon-left item-icon-right" ng-repeat="quest in quests | filter: {activity:'distance'}  | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
         <i class="icon {{quest.icon}}"></i>
           {{quest.title}} ({{quest.gold}} gold pieces)
@@ -37,7 +37,7 @@
       <!-- Strength quests -->
       <div ng-show="isAll" class="item item-divider">
         Crush It
-      </div> 
+      </div>
       <a ng-show="isAll" class="item item-icon-left item-icon-right" ng-repeat="quest in quests | filter: {activity:'null'} | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
         <i class="icon {{quest.icon}}"></i>
           {{quest.title}} ({{quest.gold}} gold pieces)
@@ -47,7 +47,7 @@
       <!-- Sleep quests -->
       <div ng-show="isAll" class="item item-divider">
         Sleep It Off
-      </div> 
+      </div>
       <a ng-show="isAll" class="item item-icon-left item-icon-right" ng-repeat="quest in quests | filter: {type:'sleep'}  | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
         <i class="icon {{quest.icon}}"></i>
           {{quest.title}} ({{quest.gold}} gold pieces)
@@ -58,7 +58,7 @@
       <!-- Active quests -->
       <div ng-show="isActive" class="item item-divider">
         Your Current Quests
-      </div> 
+      </div>
       <a ng-show="isActive" class="item item-icon-left item-icon-right" ng-repeat="quest in quests | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
         <i class="icon {{quest.icon}}"></i>
           {{quest.title}} ({{quest.gold}} gold pieces)
@@ -68,7 +68,7 @@
       <!-- Completed quests -->
       <div ng-show="isComplete" class="item item-divider">
         Succeeded Quests
-      </div> 
+      </div>
       <a ng-show="isComplete" class="item item-icon-left item-icon-right" ng-repeat="quest in quests | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
         <i class="icon {{quest.icon}}"></i>
           {{quest.title}} ({{quest.gold}} gold pieces)
@@ -77,7 +77,7 @@
 
       <div ng-show="isComplete" class="item item-divider">
         Failed Quests
-      </div> 
+      </div>
       <a ng-show="isComplete" class="item item-icon-left item-icon-right" ng-repeat="quest in quests | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
         <i class="icon {{quest.icon}}"></i>
           {{quest.title}} ({{quest.gold}} gold pieces)
