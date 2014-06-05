@@ -1,6 +1,6 @@
 angular.module('starter.controllers')
 
-.controller('FriendsCtrl', function($scope, User, $ionicLoading, $ionicPopup, $q) {
+.controller('FriendsCtrl', function($scope, User, $ionicLoading, $ionicListDelegate, $ionicPopup, $q) {
   // friends is accessed from $rootScope.user
   $scope.friends = [];
   var loading = setTimeout(function(){
@@ -56,7 +56,9 @@ angular.module('starter.controllers')
         body = 'You are already have a request to do battle with this friend.';
       }
     }
-    util.showAlert($ionicPopup, title, body, 'OK', function() {});
+    util.showAlert($ionicPopup, title, body, 'OK', function() {
+      $ionicListDelegate.closeOptionButtons();
+    });
   };
 })
 

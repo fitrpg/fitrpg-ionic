@@ -220,6 +220,13 @@ i.ion-refresh.refresh {
   padding-top: 15px;
 }
 
+.item-input {
+  margin: 0;
+}
+
+.card .item:last-child, .list-inset .item:last-child {
+  margin: 0;
+}
 #login {
   background-color: #f3796a
 }
