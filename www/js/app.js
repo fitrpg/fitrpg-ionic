@@ -154,12 +154,12 @@ angular.module('starter', ['ionic', 'starter.controllers','app.auth','starter.se
         }
       }
     })
-    .state('app.vsmission-detail', {
-      url: '/vsmission/:missionId',
+    .state('app.solomission-detail', {
+      url: '/solomission/:missionId',
       views: {
         'menuContent': {
-          templateUrl: 'templates/vs-detail.html',
-          controller: 'VersusMissionDetailCtrl'
+          templateUrl: 'templates/solo-detail.html',
+          controller: 'SoloMissionDetailCtrl'
         }
       }
     })
