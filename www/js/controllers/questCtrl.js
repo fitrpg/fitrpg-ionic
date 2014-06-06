@@ -18,7 +18,7 @@ angular.module('starter.controllers')
       msg = 'You completed your quest to ' + quest.shortDesc.toLowerCase() + 'and won ' + quest.gold + " pieces!";
     } else if (quest.status === 'fail') {
       type = 'danger';
-      msg = 'Sorry, you didn\'t finish your quest to ' + quest.shortDesc.toLowerCase() + '. Try again in a few days.'
+      msg = 'Sorry, you didn\'t finish your quest to ' + quest.shortDesc.toLowerCase() + ' Try again in a few days.'
     }
     $scope.alerts.push({type: type, msg: msg});
   };
@@ -114,16 +114,11 @@ angular.module('starter.controllers')
       (function(i) { //immediately invoked function to retain the value of the iterable j
         var quest = $scope.user.quests[i];
         if (quest.status === 'active') {
-          console.log('quest is active');
           var completeDate = parseInt(Date.parse(quest.completionTime)); //convert date to matched format
           // check short quests - will have to do better checking of sleep quests later
-          console.log("Today:", today);
-          console.log("CompleteDate:" , completeDate);
           if (today >= completeDate) {
-            console.log("Gets past if statement.");
             if (quest.numDays < 1) {
               TimesData.get(quest.getObj, function(result) {
-                console.log("My result", result);
                 var total = result.total;
                 if (total >= quest.winGoal) {
                   $scope.user.quests[i].status = 'success';
@@ -137,7 +132,6 @@ angular.module('starter.controllers')
               });
             } else if (quest.numDays > 0 ) { //multiday quests
               DatesData.get(quest.getObj, function(result) {
-                console.log("Dates res", result);
                 var total = result.total;
                 if (total >= quest.winGoal) {
                   $scope.user.quests[i].status = 'success';
@@ -188,6 +182,10 @@ angular.module('starter.controllers')
 .controller('QuestDetailCtrl', function($scope, $stateParams, Quests, $ionicPopup, User, TimesData, DatesData) {
   var questId = $stateParams.questId
   $scope.quest = Quests.get({id: questId});
+  $scope.available = true; 
+  $scope.active = false;
+  $scope.completed = false;
+  $scope.userQuest;
   $scope.difficulty = function(num) {
     if ( num <= $scope.quest.difficulty ) {
       return true;
@@ -195,6 +193,48 @@ angular.module('starter.controllers')
       return false;
     }
   };
+
+  // check if any of current user's quests match this one
+  var checkQuest = function() {
+    for (var i = 0; i < $scope.user.quests.length; i++) {
+      var userQuest = $scope.user.quests[i];
+      $scope.winGoal = userQuest.winGoal;
+      if (userQuest.questId === questId) { 
+        $scope.available = false;
+        evalQuest(userQuest);
+        return; //stop looping
+      }
+    }
+  };
+
+  // called in checkQuest, and when we refresh to show updated data
+  var evalQuest = function(userQuest,cb) {
+    $scope.userQuest = userQuest; //make userquest obj available to scope
+    // FOR ACTIVE QUESTS
+    if (userQuest.status === 'active') {
+      $scope.active = true;
+      if (userQuest.numDays < 1) {
+        TimesData.get(userQuest.getObj, function(result) {
+          $scope.progress = result.total || 0; //current progress 
+          console.log($scope.progress);
+          if (cb) { cb() };    
+        });
+      } else if (userQuest.numDays > 0 ) { // multiday quests
+        DatesData.get(userQuest.getObj, function(result) {
+          $scope.progress = result.total || 0; // current progress
+          console.log($scope.progress);
+          if (cb) { cb() };
+        });
+      }
+    // FOR COMPLETED QUESTS
+    } else {
+      $scope.completed = true;
+      if (cb) { cb() };
+    }
+  };
+
+  checkQuest();
+
 
   // function that helps us format the times for dates to make calls to fitbit, so '5' is '05'
   var timify = function(time) {
@@ -268,6 +308,9 @@ angular.module('starter.controllers')
         resourceAttr.endTime   = timify(end.getHours())   + ':' +timify(end.getMinutes());
       }
 
+      
+      $scope.available = false; 
+      $scope.active = true;
       $scope.user.quests.push(questObj);
       User.update($scope.user);
     };
@@ -276,7 +319,14 @@ angular.module('starter.controllers')
 
   };
 
-  // necessary to format to the way fitbit wants our dates
+  $scope.refresh = function() {
+    console.log($scope.user._id);
+    evalQuest($scope.quest, function() {
+      $scope.$broadcast('scroll.refreshComplete');
+    }); 
+  };
+   
+  // necessary to format to the way fitbit wants our dates  
   Date.prototype.yyyymmdd = function() {
     var yyyy = this.getFullYear().toString();
     var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
