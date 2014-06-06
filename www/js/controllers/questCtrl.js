@@ -261,7 +261,7 @@ angular.module('starter.controllers')
     var numHours = $scope.quest.numHours;
     var winGoal = $scope.quest.winGoals;
     var gold = $scope.quest.gold;
-    var desc = $scope.quest.description;
+    var desc = $scope.quest.shortDescription;
     var start     = new Date(); // start date
     var end = start.addDays(numDays,numHours); // end date
     var startTime = timify(start.getHours()) + ':' + timify(start.getMinutes());

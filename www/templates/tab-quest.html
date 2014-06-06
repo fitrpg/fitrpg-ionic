@@ -26,7 +26,7 @@
         <a ng-show="showList['steps']" class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in availableQuests | filter: {activity:'steps'}  | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
           <i class="icon {{quest.icon}}"></i>
             <h2>{{quest.title}}</h2>
-            <p>{{quest.gold}} gold pieces</p>
+            <p>{{quest.shortDescription}}</p>
           <i class="icon icon-gray ion-ios7-arrow-right"></i>
         </a>
 
@@ -37,7 +37,7 @@
         <a ng-show="showList['distance']" class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in availableQuests | filter: {activity:'distance'}  | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
           <i class="icon {{quest.icon}}"></i>
             <h2>{{quest.title}}</h2>
-            <p>{{quest.gold}} gold pieces</p>
+            <p>{{quest.shortDescription}}</p>
           <i class="icon icon-gray ion-ios7-arrow-right"></i>
         </a>
 
@@ -48,7 +48,7 @@
         <a ng-show="showList['strength']" class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in availableQuests | filter: {activity:'null'} | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
           <i class="icon {{quest.icon}}"></i>
             <h2>{{quest.title}}</h2>
-            <p>{{quest.gold}} gold pieces</p>
+            <p>{{quest.shortDescription}}</p>
           <i class="icon icon-gray ion-ios7-arrow-right"></i>
         </a>
 
@@ -59,7 +59,7 @@
         <a ng-show="showList['sleep']" class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in availableQuests | filter: {type:'sleep'}  | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
           <i class="icon {{quest.icon}}"></i>
             <h2>{{quest.title}}</h2>
-            <p>{{quest.gold}} gold pieces</p>
+            <p>{{quest.shortDescription}}</p>
           <i class="icon icon-gray ion-ios7-arrow-right"></i>
         </a>
       </div>
@@ -73,7 +73,7 @@
         <a class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in quests | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
           <i class="icon {{quest.icon}}"></i>
             <h2>{{quest.title}}</h2>
-            <p>{{quest.gold}} gold pieces</p>
+            <p>{{quest.shortDescription}}</p>
           <i class="icon icon-gray ion-ios7-arrow-right"></i>
         </a>
       </div>
@@ -86,7 +86,7 @@
         <a class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in successfulQuests | orderBy: 'completionTime'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
           <i class="icon {{quest.icon}}"></i>
             <h2>{{quest.title}}</h2>
-            <p>{{quest.gold}} gold pieces</p>
+            <p>{{quest.shortDescription}}</p>
           <i class="icon icon-gray ion-ios7-arrow-right"></i>
         </a>
 
@@ -96,7 +96,7 @@
         <a class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in failedQuests | orderBy: 'completionTime'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
           <i class="icon {{quest.icon}}"></i>
             <h2>{{quest.title}}</h2>
-            <p>{{quest.gold}} gold pieces</p>
+            <p>{{quest.shortDescription}}</p>
           <i class="icon icon-gray ion-ios7-arrow-right"></i>
         </a>
       </div>
