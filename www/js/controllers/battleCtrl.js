@@ -180,8 +180,6 @@ angular.module('starter.controllers')
             playerLose.attributes.gold = Math.floor(playerLose.attributes.gold *= 0.9);
             playerWin.attributes.experience = updateExp(playerWin,playerLose,'win');
             playerLose.attributes.experience = updateExp(playerLose,playerWin,'loss');
-            battle.status = 'win';
-            enemyBattle.status = 'loss';
             saveBattleResult(playerWin['_id'],playerLose['_id']);
           };
 
@@ -194,12 +192,16 @@ angular.module('starter.controllers')
           if (winner.result === 'player 1') {
             adjustAttr($scope.user,enemy);
             handleNegXp(enemy);
+            battle.status = 'win';
+            enemyBattle.status = 'loss';
           } else if (winner.result === 'player 2') {
             adjustAttr(enemy,$scope.user);
             handleNegXp($scope.user);
+            enemyBattle.status = 'win';
+            battle.status = 'loss';
           }
 
-          $scope.user.attributes.level = util.calcLevel($scope.user.fitbit.experience + $scope.user.attributes.experience,1);
+          $scope.user.attributes.level = util.calcLevel($scope.user.fitbit.experience + $scope.user.attributes.experience);
 
           util.showAlert($ionicPopup,'Challenge Accepted','Your duel to the death with '+ enemy.profile.displayName+ ' is in progress. Who will come out on top?', 'Results', function() {
             battleResults(battle.status);
