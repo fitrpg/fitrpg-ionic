@@ -1,86 +1,89 @@
 <ion-view title="Battle" hide-back-button="true">
   <ion-nav-buttons side="left">
-    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    <button menu-toggle="left" class="button button-icon icon-gray icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button class="button button-icon icon-gray icon ion-stats-bars" ng-click="history()"></button>
   </ion-nav-buttons>
 
-  <ion-content class="has-header">
+  <div class="bar bar-subheader custom-subheader">
+    <div class="button-bar bar-light">
+      <a class="button button-tab button-tab-active" ng-click="refresh()">Friends</a>
+      <a class="button button-tab button-tab-active" ng-click="newBossFights()">Bosses</a>
+    </div>
+  </div>
+
+  <ion-content class="has-header has-subheader has-footer">
     <ion-refresher
       pulling-text="Pull to refresh..."
       on-refresh="refresh()" >
     </ion-refresher>
 
-    <div class="padding">
-       <div class="button-bar bar-light">
-        <!-- data is from users battle array -->
-        <a class="button" ng-click="pending()">Pending</a>
-        <!-- data is from old battles database -->
-        <a class="button" ng-click="history()">Outcome</a>
+    <div ng-show="friendsTab">
+      <div class="list" ng-show="isPending">
+        <div class="list-inset">
+          <label class="item item-input">
+            <i class="icon ion-search placeholder-icon"></i>
+            <input type="text" placeholder="Search" ng-model="searchText">
+          </label>
+        </div>
+
+        <ion-list>
+          <ion-item class="item-avatar" ng-repeat="friend in friends | filter:searchText | orderBy: 'friend.battleData.status'" type="item-text-wrap">
+            <img ng-src="{{friend.profile.avatar}}">
+            <h2>{{friend.profile.displayName}}</h2>
+            <p>Level: {{friend.attributes.level}} <span ng-show="battlePending(friend.battleData)">Status: {{friend.battleData.status}}</span></p>
+            <ion-option-button class="button-positive button-swipe" ng-click="startBattle(friend['_id'])">Fight</ion-option-button>
+            <ion-option-button class="button-assertive button-swipe" ng-click="cancelBattle(friend['_id'])">Cancel</ion-option-button>
+          </ion-item>
+        </ion-list>
+
+      </div>
+
+      <div class="list" ng-hide="isPending">
+        <!-- <div class="donut">
+          <donut-chart chart-data="historyData"></donut-chart>
+        </div> -->
+        <h4>Wins: {{wins}}, Losses: {{losses}}</h4>
+        <div class="item item-divider">
+          Wins
+        </div>
+        <ion-list>
+          <ion-item class="item-avatar" ng-repeat="battle in oldWinBattles track by $index" type="item-text-wrap">
+            <img ng-src="{{battle.profile.avatar}}">
+            <h2>{{battle.profile.displayName}}</h2>
+            <p>Level {{battle.attributes.level}} {{battle.character}}</p>
+            <!-- change battle.name to unique identifier for battles -->
+          </ion-item>
+        </ion-list>
+
+        <div class="item item-divider">
+          Losses
+        </div>
+        <ion-list>
+          <ion-item class="item-avatar" ng-repeat="battle in oldLossBattles track by $index" type="item-text-wrap">
+            <img ng-src="{{battle.profile.avatar}}">
+            <h2>{{battle.profile.displayName}}</h2>
+            <p>Level {{battle.attributes.level}} {{battle.character}}</p>
+            <!-- change battle.name to unique identifier for battles -->
+          </ion-item>
+        </ion-list>
       </div>
     </div>
 
-    <div class="list" ng-show="isPending">
-      <div class="item item-divider">
-        Waiting
+    <!-- BOSS FIGHTS -->
+    <div ng-hide="friendsTab">
+      <div class="list">
+        <a class="item item-icon-right item-padding" ng-repeat="mission in soloMissions | filter: {type: 'boss'} | orderBy: '-level'" type="item-text-wrap" href="#/app/solomission/{{mission['_id']}}">
+          <h2>{{mission.title}}</h2>
+          <p>Level {{mission.level}}</p>
+          <i class="icon icon-gray ion-ios7-arrow-right"></i>
+        </a>
       </div>
-
-      <ion-list>
-        <ion-item class="item-avatar" ng-repeat="battle in battles | filter: { status: 'pending' } track by $index" type="item-text-wrap">
-          <img ng-src="{{battle.userData.profile.avatar}}">
-          <h2>{{battle.userData.profile.displayName}}</h2>
-          <p>Level {{battle.userData.attributes.level}} {{battle.userData.character}}</p>
-          <!-- change battle.name to unique identifier for battles -->
-          <ion-option-button class="button-assertive button-swipe" ng-click="cancelBattle(battle.enemy)">Cancel</ion-option-button>
-        </ion-item>
-      </ion-list>
-
-      <div class="item item-divider">
-        Requests
-      </div>
-
-      <ion-list>
-        <ion-item class="item-avatar" ng-repeat="battle in battles | filter: { status: 'request' }  track by $index" type="item-text-wrap">
-          <img ng-src="{{battle.userData.profile.avatar}}">
-          <h2>{{battle.userData.profile.displayName}}</h2>
-          <p>Level {{battle.userData.attributes.level}} {{battle.userData.character}}</p>
-          <!-- change battle.name to unique identifier for battles -->
-          <ion-option-button class="button-positive button-swipe" ng-click="startBattle(battle.enemy)">Fight</ion-option-button>
-          <ion-option-button class="button-assertive button-swipe" ng-click="cancelBattle(battle.enemy)">Flee</ion-option-button>
-        </ion-item>
-      </ion-list>
-
-    </div>
-
-    <div class="list" ng-hide="isPending">
-      <!-- <div class="donut">
-        <donut-chart chart-data="historyData"></donut-chart>
-      </div> -->
-      <h4>Wins: {{wins}}, Losses: {{losses}}</h4>
-      <div class="item item-divider">
-        Wins
-      </div>
-      <ion-list>
-        <ion-item class="item-avatar" ng-repeat="battle in oldWinBattles track by $index" type="item-text-wrap">
-          <img ng-src="{{battle.profile.avatar}}">
-          <h2>{{battle.profile.displayName}}</h2>
-          <p>Level {{battle.attributes.level}} {{battle.character}}</p>
-          <!-- change battle.name to unique identifier for battles -->
-        </ion-item>
-      </ion-list>
-
-      <div class="item item-divider">
-        Losses
-      </div>
-      <ion-list>
-        <ion-item class="item-avatar" ng-repeat="battle in oldLossBattles track by $index" type="item-text-wrap">
-          <img ng-src="{{battle.profile.avatar}}">
-          <h2>{{battle.profile.displayName}}</h2>
-          <p>Level {{battle.attributes.level}} {{battle.character}}</p>
-          <!-- change battle.name to unique identifier for battles -->
-        </ion-item>
-      </ion-list>
     </div>
 
   </ion-content>
+
 </ion-view>
 
 

@@ -32,6 +32,18 @@ angular.module('starter.controllers')
 
   $scope.getData();
   $scope.equipment();
+
+  $scope.showList = {
+    weapons: true,
+    armor: true,
+    accessories: true,
+    potions: true
+  };
+
+  $scope.toggleList = function(list) {
+    $scope.showList[list] = !$scope.showList[list];
+  };
+
 })
 
 .controller('ShopDetailCtrl', function($scope, $stateParams, Shop, User, $ionicPopup, $q) {

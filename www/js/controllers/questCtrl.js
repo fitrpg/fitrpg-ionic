@@ -67,7 +67,7 @@ angular.module('starter.controllers')
             $scope.quests.push(q);
           });
         }(i));
-      } 
+      }
     }
   };
 
@@ -100,7 +100,7 @@ angular.module('starter.controllers')
             }
           });
         }
-      } 
+      }
     }
   };
 
@@ -169,6 +169,19 @@ angular.module('starter.controllers')
     return dat;
   };
 
+  $scope.showList = {
+    steps: true,
+    distance: true,
+    strength: true,
+    sleep: true,
+    succeed: true,
+    fail: true
+  }
+
+  $scope.toggleList = function (list) {
+    $scope.showList[list] = !$scope.showList[list];
+  };
+
 })
 
 // This particular controller handles the individual pages of each quest
@@ -216,19 +229,19 @@ angular.module('starter.controllers')
 
     // for multi-day quests, there's a type, MAY LATER ON HAVE TO ACCOUNT FOR DIFFERENT SLEEP QUESTS
     if (numDays >=1) {
-      var body = 'This is the mission you\'ve chosen:<br><b>' + $scope.quest.description + 
-           '</b><br>You will have from today until ' + daysWeek[end.getDay()] + ' at 11:59PM' + 
+      var body = 'This is the mission you\'ve chosen:<br><b>' + $scope.quest.description +
+           '</b><br>You will have from today until ' + daysWeek[end.getDay()] + ' at 11:59PM' +
            ' to complete this quest. Do you accept?';
     } else {  // for one-day quests, we want to keep the times, otherwise we don't care
-      var body = 'This is the mission you\'ve chosen:<br><b>' + $scope.quest.description + 
-           '</b><br>You will have until ' + end.toLocaleTimeString() + 
+      var body = 'This is the mission you\'ve chosen:<br><b>' + $scope.quest.description +
+           '</b><br>You will have until ' + end.toLocaleTimeString() +
            ' to complete this quest. Do you accept?';
     }
-  
+
     var startTheQuest = function() {
-      
+
       // Generate the query object to be used when calling $resource
-      var resourceAttr = { 
+      var resourceAttr = {
         id        : $scope.user._id,
         activity  : $scope.quest.activity,
         startDate : start.yyyymmdd(),
@@ -254,7 +267,7 @@ angular.module('starter.controllers')
         resourceAttr.startTime = timify(start.getHours()) + ':' +timify(start.getMinutes());
         resourceAttr.endTime   = timify(end.getHours())   + ':' +timify(end.getMinutes());
       }
-      
+
       $scope.user.quests.push(questObj);
       User.update($scope.user);
     };
@@ -262,8 +275,8 @@ angular.module('starter.controllers')
     util.showPrompt($ionicPopup, title, body, 'I accept', 'Too scared', startTheQuest);
 
   };
-   
-  // necessary to format to the way fitbit wants our dates  
+
+  // necessary to format to the way fitbit wants our dates
   Date.prototype.yyyymmdd = function() {
     var yyyy = this.getFullYear().toString();
     var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
