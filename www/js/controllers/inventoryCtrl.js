@@ -28,12 +28,17 @@ angular.module('starter.controllers')
     checkItems();
   });
 
+  $scope.equipmentTab = 'button-tab-active';
   $scope.equipment = function() {
     $scope.isEquipment = true;
+    $scope.equipmentTab = 'button-tab-active';
+    $scope.itemsTab = '';
   };
 
   $scope.potion = function() {
     $scope.isEquipment = false;
+    $scope.equipmentTab = '';
+    $scope.itemsTab = 'button-tab-active';
   };
 
   $scope.equipment();
@@ -57,7 +62,6 @@ angular.module('starter.controllers')
   };
 
   var checkItems = function() {
-    console.log('check items')
     var quantity = {}
     for (var i=0; i<$scope.inventory.length; i++) {
       var item = $scope.inventory[i].type;
@@ -69,7 +73,6 @@ angular.module('starter.controllers')
       if (quantity[key]) {
         $scope.hasItem[key] = true;
       }
-      console.log(key, $scope.hasItem[key]);
     }
   };
 

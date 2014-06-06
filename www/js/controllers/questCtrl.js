@@ -27,12 +27,16 @@ angular.module('starter.controllers')
     $scope.alerts.splice(index, 1);
   };
 
+  $scope.allTab = 'button-tab-active';
   $scope.all = function() {
     $scope.isAll = true;
     $scope.isActive = false;
     $scope.isComplete = false;
     $scope.quests = [];
     $scope.availableQuests = [];
+    $scope.allTab = 'button-tab-active';
+    $scope.activeTab = '';
+    $scope.completedTab = '';
 
     // Create an array of ids of quests the user is currently doing
     var currentQuests = [];
@@ -57,6 +61,10 @@ angular.module('starter.controllers')
     $scope.isAll = false;
     $scope.isActive =  true;
     $scope.isComplete = false;
+    $scope.allTab = '';
+    $scope.activeTab = 'button-tab-active';
+    $scope.completedTab = '';
+
 
     var today = new Date();
     $scope.quests = [];
@@ -78,6 +86,10 @@ angular.module('starter.controllers')
     $scope.isComplete = true;
     $scope.successfulQuests = [];
     $scope.failedQuests = [];
+    $scope.allTab = '';
+    $scope.activeTab = '';
+    $scope.completedTab = 'button-tab-active';
+
     var today = new Date();
 
     // Iterate over all the quests that the user has stored; maybe eventually just save them

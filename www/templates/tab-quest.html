@@ -5,9 +5,9 @@
 
   <div class="bar bar-subheader custom-subheader">
     <div class="button-bar bar-light">
-      <a class="button button-tab button-tab-active" ng-click="all()">All</a>
-      <a class="button button-tab " ng-click="active()">Active</a>
-      <a class="button button-tab " ng-click="completed()">Completed</a>
+      <a class="button button-tab" ng-class="allTab" ng-click="all()">All</a>
+      <a class="button button-tab" ng-class="activeTab" ng-click="active()">Active</a>
+      <a class="button button-tab" ng-class="completedTab" ng-click="completed()">Completed</a>
     </div>
   </div>
 
@@ -68,7 +68,7 @@
       <!-- Active quests -->
       <div ng-show="isActive">
         <div class="item item-divider">
-          Your Current Quests<i class="icon ion-chevron-down pull-right"></i>
+          Your Current Quests
         </div>
         <a class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in quests | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
           <i class="icon {{quest.icon}}"></i>
@@ -83,7 +83,7 @@
         <div class="item item-divider" ng-click="toggleList('succeed')">
           Succeeded Quests<i class="icon ion-chevron-down pull-right" ng-show="showList['succeed']"></i><i class="icon ion-chevron-right pull-right" ng-hide="showList['succeed']"></i>
         </div>
-        <a class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in successfulQuests | orderBy: 'completionTime'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
+        <a ng-show="showList['succeed']" class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in successfulQuests | orderBy: 'completionTime'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
           <i class="icon {{quest.icon}}"></i>
             <h2>{{quest.title}}</h2>
             <p>{{quest.shortDescription}}</p>
@@ -93,7 +93,7 @@
         <div class="item item-divider" ng-click="toggleList('fail')">
           Failed Quests<i class="icon ion-chevron-down pull-right" ng-show="showList['fail']"></i><i class="icon ion-chevron-right pull-right" ng-hide="showList['fail']"></i>
         </div>
-        <a class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in failedQuests | orderBy: 'completionTime'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
+        <a ng-show="showList['fail']" class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in failedQuests | orderBy: 'completionTime'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
           <i class="icon {{quest.icon}}"></i>
             <h2>{{quest.title}}</h2>
             <p>{{quest.shortDescription}}</p>

@@ -1,6 +1,6 @@
 angular.module('starter.controllers')
 
-.controller('BattleCtrl', function($scope, Battle, SoloMissions, User, $ionicLoading, $ionicListDelegate, $ionicPopup, $q) {
+.controller('BattleCtrl', function($scope, Battle, SoloMissions, User, $ionicLoading, $ionicListDelegate, $ionicNavBarDelegate, $ionicPopup, $q) {
   $scope.friendsTab = true;
 
   var loading = setTimeout(function(){
@@ -44,10 +44,18 @@ angular.module('starter.controllers')
   }
 
   $scope.refresh = function() {
-    $scope.friendsTab = true;
     battles = [];
     $scope.friends = [];
     listOfBattles();
+  };
+
+  $scope.friendTab = 'button-tab-active';
+  $scope.friendsBattle = function() {
+    $scope.isPending = true;
+    $scope.friendTab = 'button-tab-active';
+    $scope.bossTab = '';
+    $scope.friendsTab = true;
+    $scope.refresh();
   };
 
   $scope.refresh();
@@ -94,7 +102,7 @@ angular.module('starter.controllers')
       body = 'This match was too close...there was no victor.';
     }
     util.showAlert($ionicPopup, title, body, 'Continue', function() {
-      $ionicListDelegatecloseOptionButtons()
+      $ionicListDelegate.closeOptionButtons();
     });
   };
 
@@ -104,7 +112,9 @@ angular.module('starter.controllers')
       title = 'Unfit for Battle';
       body = 'You don\'t look so good. You need to recover some of your health before you can battle again.';
 
-      util.showAlert($ionicPopup, title, body, 'OK', function() {});
+      util.showAlert($ionicPopup, title, body, 'OK', function() {
+        $ionicListDelegate.closeOptionButtons();
+      });
     } else {
       var battlePending = false;
       var battleRequest = false;
@@ -296,6 +306,8 @@ angular.module('starter.controllers')
   };
 
   $scope.newBossFights = function() {
+    $scope.bossTab = 'button-tab-active';
+    $scope.friendTab = '';
     $scope.friendsTab = false;
     $scope.soloMissions = [];
     SoloMissions.query(function(solos){
@@ -324,6 +336,14 @@ angular.module('starter.controllers')
 
   };
 
+  $scope.difficulty = function(index, num) {
+    if ( num <= $scope.soloMissions[index].difficulty ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   $scope.completeBossFights = function() {
     // completed missions in user database
     $scope.soloMissions = [];
@@ -337,4 +357,40 @@ angular.module('starter.controllers')
   };
 
   $scope.pending();
+
+  $scope.startMission = function(missionId) {
+    $scope.soloMission = SoloMissions.get({id: missionId});
+    var title, body;
+    if ($scope.user.attributes.HP > 0) {
+      title = 'Mission Started';
+      body = 'You are waging war against the forces of evil...',
+
+      util.showAlert($ionicPopup, title, body, 'Continue', function() {
+        var winner = util.bossBattle($scope.user,$scope.soloMission);
+        title = 'Mission Results';
+
+        if (winner.result === 'player') {
+          $scope.user.attributes.experience += $scope.soloMission.experience;
+          $scope.user.attributes.gold += $scope.soloMission.gold;
+          $scope.user.battles.push($scope.soloMission['_id']);
+          body = 'You\'ve crushed evil. Go find more bad guys to defeat!';
+        } else {
+          body = 'You were defeated. You may want to train more before doing battle.';
+        }
+        $scope.user.attributes.HP = winner.hp;
+        User.update($scope.user);
+
+        util.showAlert($ionicPopup, title, body, 'OK', function(){
+          $ionicListDelegate.closeOptionButtons();
+        });
+
+      });
+    } else {
+      title = 'Rest Up';
+      body = 'You should get some rest before battle.';
+      util.showAlert($ionicPopup, title, body, 'OK', function() {
+        $ionicListDelegate.closeOptionButtons();
+      });
+    }
+  };
 })
