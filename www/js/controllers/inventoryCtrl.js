@@ -25,6 +25,7 @@ angular.module('starter.controllers')
     }
     clearTimeout(loading);
     $ionicLoading.hide();
+    checkItems();
   });
 
   $scope.equipment = function() {
@@ -36,6 +37,41 @@ angular.module('starter.controllers')
   };
 
   $scope.equipment();
+
+  $scope.showList = {
+    weapons: true,
+    armor: true,
+    accessories: true,
+    potions: true
+  };
+
+  $scope.toggleList = function(list) {
+    $scope.showList[list] = !$scope.showList[list];
+  };
+
+  $scope.hasItem = {
+    weapon: false,
+    armor: false,
+    accessory: false,
+    potion: false
+  };
+
+  var checkItems = function() {
+    console.log('check items')
+    var quantity = {}
+    for (var i=0; i<$scope.inventory.length; i++) {
+      var item = $scope.inventory[i].type;
+      quantity[item] = quantity[item] || 0;
+      quantity[item]++;
+    }
+
+    for (var key in $scope.hasItem) {
+      if (quantity[key]) {
+        $scope.hasItem[key] = true;
+      }
+      console.log(key, $scope.hasItem[key]);
+    }
+  };
 
 })
 
