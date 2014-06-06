@@ -3,7 +3,7 @@
     <button menu-toggle="left" class="button button-icon icon-gray icon ion-navicon"></button>
   </ion-nav-buttons>
   <ion-nav-buttons side="right">
-    <button class="button button-icon icon-gray icon ion-android-add-contact"></button>
+    <button class="button button-icon icon-gray icon icon-fight" ng-click="navTo('battle')"></button>
   </ion-nav-buttons>
 <!--   <ion-nav-buttons side="right">
     <button class="button button-icon icon ion-refresh" ng-click="refresh()"></button>
@@ -117,7 +117,7 @@
         </div>
 
         <div class="item list-heading">
-          <h1>Weapons</h1>
+          <h1>Weapons<i class="icon ion-plus pull-right" ng-click="navTo('inventory')"></i></h1>
           <div ng-show="isEquipped('weapon1')">
             <p>{{user.equipped.weapon1.name}}</p>
           </div>
@@ -127,14 +127,14 @@
         </div>
 
         <div class="item list-heading">
-          <h1>Armor</h1>
+          <h1>Armor<i class="icon ion-plus pull-right" ng-click="navTo('inventory')"></i></h1>
           <div ng-show="isEquipped('armor')">
             <p>{{user.equipped.armor.name}}</p>
           </div>
         </div>
 
         <div class="item list-heading">
-          <h1>Accessories</h1>
+          <h1>Accessories<i class="icon ion-plus pull-right" ng-click="navTo('inventory')"></i></h1>
           <div ng-show="isEquipped('accessory1')">
             <p>{{user.equipped.accessory1.name}}</p>
           </div>

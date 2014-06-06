@@ -1,22 +1,23 @@
 <ion-view title="Battle" hide-back-button="true">
   <ion-nav-buttons side="left">
-    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    <button menu-toggle="left" class="button button-icon icon-gray icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button class="button button-icon icon-gray icon ion-stats-bars" ng-click="history()"></button>
   </ion-nav-buttons>
 
-  <ion-content class="has-header has-footer">
+  <div class="bar bar-subheader custom-subheader">
+    <div class="button-bar bar-light">
+      <a class="button button-tab button-tab-active" ng-click="refresh()">Friends</a>
+      <a class="button button-tab button-tab-active" ng-click="newBossFights()">Bosses</a>
+    </div>
+  </div>
+
+  <ion-content class="has-header has-subheader has-footer">
     <ion-refresher
       pulling-text="Pull to refresh..."
       on-refresh="refresh()" >
     </ion-refresher>
-
-
-
-    <div class="button-bar bar-light">
-      <!-- data is from users battle array -->
-      <a class="button" ng-click="pending()">Fight</a>
-      <!-- data is from old battles database -->
-      <a class="button" ng-click="history()">History</a>
-    </div>
 
     <div ng-show="friendsTab">
       <div class="list" ng-show="isPending">
@@ -72,26 +73,17 @@
 
     <!-- BOSS FIGHTS -->
     <div ng-hide="friendsTab">
-      <ion-list>
-        <ion-item class="item-avatar item-icon-right" ng-repeat="mission in soloMissions | filter: {type: 'boss'} | orderBy: '-level'" type="item-text-wrap" href="#/app/solomission/{{mission['_id']}}">
+      <div class="list">
+        <a class="item item-icon-right item-padding" ng-repeat="mission in soloMissions | filter: {type: 'boss'} | orderBy: '-level'" type="item-text-wrap" href="#/app/solomission/{{mission['_id']}}">
           <h2>{{mission.title}}</h2>
           <p>Level {{mission.level}}</p>
-          <i class="icon ion-ios7-information-outline"></i>
-        </ion-item>
-      </ion-list>
-
+          <i class="icon icon-gray ion-ios7-arrow-right"></i>
+        </a>
+      </div>
     </div>
 
   </ion-content>
 
-  <div class="tabs">
-    <div class="tab-item" ng-click="refresh()">
-      Friends
-    </div>
-    <div class="tab-item" ng-click="newBossFights()">
-      Bosses
-    </div>
-  </div>
 </ion-view>
 
 

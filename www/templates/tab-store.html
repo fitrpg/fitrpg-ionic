@@ -1,20 +1,21 @@
 <ion-view title="Store" hide-back-button="true">
   <ion-nav-buttons side="left">
-    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    <button menu-toggle="left" class="button button-icon icon-gray icon ion-navicon"></button>
   </ion-nav-buttons>
 
-  <ion-content class="has-header">
-    <div class="padding">
-       <div class="button-bar bar-light">
-       <!-- add ngclick filter to buttons and put a default filter to show only equipment -->
-        <a class="button" ng-click="equipment()">Equipment</a>
-        <a class="button" ng-click="potion()">Items</a>
-      </div>
+  <div class="bar bar-subheader custom-subheader">
+    <div class="button-bar bar-light">
+      <a class="button button-tab button-tab-active" ng-click="equipment()">Equipment</a>
+      <a class="button button-tab" ng-click="potion()">Items</a>
     </div>
+  </div>
+
+
+  <ion-content class="has-header has-subheader">
 
     <div class="list" ng-show="isEquipment">
-      <div class="item item-divider">
-        Weapons
+      <div class="item item-divider" ng-click="toggleList('weapons')">
+        Weapons<i class="icon ion-chevron-down pull-right" ng-show="showList['weapons']"></i><i class="icon ion-chevron-right pull-right" ng-hide="showList['weapons']"></i>
       </div>
 
 <!--       <div class="list">
@@ -25,17 +26,16 @@
         </a>
       </div>
  -->
-      <ion-list>
-        <ion-item class="item-avatar item-icon-right" ng-repeat="item in shop | filter: { type: 'weapon' } | orderBy: '-level'" type="item-text-wrap" href="#/app/store/{{item['_id']}}">
-          <img ng-src="blank.png">
+      <div class="list" ng-show="showList['weapons']">
+        <a class="item item-icon-right item-padding" ng-repeat="item in shop | filter: { type: 'weapon' } | orderBy: '-level'" type="item-text-wrap" href="#/app/store/{{item['_id']}}">
           <h2>{{item.name}}</h2>
           <p><span style="font-size:12px">S: {{item.strength}} D: {{item.dexterity}} E: {{item.endurance}} V: {{item.vitality}} Cost: {{item.cost}} </span></p>
-          <i class="icon ion-ios7-arrow-right"></i>
-        </ion-item>
-      </ion-list>
+          <i class="icon icon-gray ion-ios7-arrow-right"></i>
+        </a>
+      </div>
 
-      <div class="item item-divider">
-        Armor
+      <div class="item item-divider" ng-click="toggleList('armor')">
+        Armor<i class="icon ion-chevron-down pull-right" ng-show="showList['armor']"></i><i class="icon ion-chevron-right pull-right" ng-hide="showList['armor']"></i>
       </div>
 
 <!--       <div class="list">
@@ -46,17 +46,16 @@
         </a>
       </div>
  -->
-      <ion-list>
-        <ion-item class="item-avatar item-icon-right" ng-repeat="item in shop | filter: { type: 'armor' } | orderBy: '-level'" type="item-text-wrap" href="#/app/store/{{item['_id']}}">
-          <img ng-src="blank.png">
+      <div class="list" ng-show="showList['armor']">
+        <a class="item item-icon-right item-padding" ng-repeat="item in shop | filter: { type: 'armor' } | orderBy: '-level'" type="item-text-wrap" href="#/app/store/{{item['_id']}}">
           <h2>{{item.name}}</h2>
           <p><span style="font-size:12px">S: {{item.strength}} D: {{item.dexterity}} E: {{item.endurance}} V: {{item.vitality}} Cost: {{item.cost}} </span></p>
-          <i class="icon ion-ios7-arrow-right"></i>
-        </ion-item>
-      </ion-list>
+          <i class="icon icon-gray ion-ios7-arrow-right"></i>
+        </a>
+      </div>
 
-      <div class="item item-divider">
-        Accessories
+      <div class="item item-divider" ng-click="toggleList('accessories')">
+        Accessories<i class="icon ion-chevron-down pull-right" ng-show="showList['accessories']"></i><i class="icon ion-chevron-right pull-right" ng-hide="showList['accessories']"></i>
       </div>
 
 <!--       <div class="list">
@@ -67,22 +66,25 @@
         </a>
       </div>
  -->
-      <ion-list>
-        <ion-item class="item-avatar item-icon-right" ng-repeat="item in shop | filter: { type: 'accessory' } | orderBy: '-level'" type="item-text-wrap" href="#/app/store/{{item['_id']}}">
-          <img ng-src="blank.png">
+      <div class="list" ng-show="showList['accessories']">
+        <a class="item item-icon-right item-padding" ng-repeat="item in shop | filter: { type: 'accessory' } | orderBy: '-level'" type="item-text-wrap" href="#/app/store/{{item['_id']}}">
           <h2>{{item.name}}</h2>
           <p><span style="font-size:12px">S: {{item.strength}} D: {{item.dexterity}} E: {{item.endurance}} V: {{item.vitality}} Cost: {{item.cost}} </span></p>
-          <i class="icon ion-ios7-arrow-right"></i>
-        </ion-item>
-      </ion-list>
+          <i class="icon icon-gray ion-ios7-arrow-right"></i>
+        </a>
+      </div>
     </div>
 
     <div class="list" ng-hide="isEquipment">
-      <div class="list">
-        <a class="item item-icon-left item-icon-right" ng-repeat="item in shop | filter: { type: 'potion' }" href="#/app/store/{{item['_id']}}">
-          <i class="icon {{item.icon}}"></i>
-          {{item.name}}
-          <i class="icon ion-ios7-arrow-right"></i>
+      <div class="item item-divider" ng-click="toggleList('potions')">
+        Potions<i class="icon ion-chevron-down pull-right" ng-show="showList['potions']"></i><i class="icon ion-chevron-right pull-right" ng-hide="showList['potions']"></i>
+      </div>
+
+      <div class="list" ng-show="showList['potions']">
+        <a class="item item-icon-right item-padding" ng-repeat="item in shop | filter: { type: 'potion' }" href="#/app/store/{{item['_id']}}">
+          <h2>{{item.name}}</h2>
+          <p>{{item.description}}</p>
+          <i class="icon icon-gray ion-ios7-arrow-right"></i>
         </a>
       </div>
     </div>
