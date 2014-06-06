@@ -1,17 +1,11 @@
-<!--
-  This template loads for the 'tab.friend-detail' state (app.js)
-  'firend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
-  The FriendsCtrl pulls data from the Friends service (service.js)
-  The Friends service returns an array of friend data
--->
 <ion-view title="Item Details">
-  <ion-content has-header="true" padding="true" scroll="false">
+  <ion-content class="has-header padding dashboard">
+  <div class="list">
+    <div class="card">
 
-  <div class="list card">
-
-    <div class="item item-avatar">
-      <img src="mcfly.jpg">
-      <h2>{{inventoryItem.name}}</h2>
+    <div class="item item-avatar item-main">
+      <img src="./img/arrow.png">
+      <h3>{{inventoryItem.name}}</h3>
       <p>Type: {{inventoryItem.type}}</p>
     </div>
 
@@ -62,6 +56,7 @@
         Use
       </a>
     </div>
+  </div>
 
   </div>
 

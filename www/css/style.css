@@ -1,6 +1,23 @@
 /*#f3796a*/
 /*#adaeae*/
 
+/* FAQ & HELP PAGE */
+.item.faq { 
+  font-size:17px;
+  white-space: normal;
+  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  padding:11px 11px 11px 11px;
+}
+
+.list.marg {
+  margin:3px 10px -5px 10px;
+}
+
+/* Make sure text wraps around */
+.item.list-heading.faqanswer h1, .item.list-heading.faqanswer p {
+  white-space:normal;
+}
+
 /* MAIN CHARACTER SCREEN */
 .bar-custom {
   background-color: #fff;
