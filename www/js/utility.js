@@ -133,11 +133,10 @@ var util = {
     });
     confirmPopup.then(function(res) {
       if(res) {
-        callbackTrue(); 
-      } 
-      // else {
-      //   callbackFalse();
-      // }
+        callbackTrue();
+      } else if (callbackFalse) {
+        callbackFalse();
+      }
     });
   },
 
