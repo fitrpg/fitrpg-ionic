@@ -2,7 +2,7 @@
 /*#adaeae*/
 
 /* FAQ & HELP PAGE */
-.item.faq { 
+.item.faq {
   font-size:17px;
   white-space: normal;
   font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
@@ -205,15 +205,6 @@
 }
 /* END BATTLE STATS */
 
-.loginbox {
-  width: 100%;
-  top:80%
-  right: 0;
-  bottom: 0;
-  left: 0;
-  max-width:90%;
-}
-
 ion-item.refresh.item {
    border-style:none;
    width: 15px;
@@ -315,45 +306,35 @@ i.ion-refresh.refresh {
 .card .item:last-child, .list-inset .item:last-child {
   margin: 0;
 }
+
 #login {
   background-color: #f3796a
 }
 
-.login-title {
-  color: #ffffff;
-  font-size: 50px
-}
-
-.login-top-tag {
-  color: #ffffff;
-  padding-top: 30px;
-  width: 200px;
-  margin-left: -25px;
-  font-family:tahoma;
-  font-weight:lighter;
-  font-size: 21px
-}
-
-.login-bottom-tag {
-  color: #ffffff;
+.login-text {
+  position: absolute;
   width: 250px;
-  padding-top: 5px;
-  font-family:tahoma;
-  font-weight:lighter;
-  font-size: 21px
+  text-align: center;
+  left: 50%;
+  top: 20%;
+  margin-left: -125px;
+}
+
+.login-text h1{
+  color: #fff;
+  font-size: 50px;
+}
+
+.login-text p{
+  color: #fff;
+  font-size: 21px;
+  line-height: 1.2em;
 }
 
 .loginbutton {
-  position:absolute;
-  max-width:90%;
-  top: 76%;
-}
-
-.login-text {
-  color: #ffffff;
-  position:absolute;
-  top: 22%;
-  font-family:tahoma;
-  margin-left: -85px;
+  position: absolute;
   left: 50%;
+  margin-left: -150px;
+  max-width: 300px;
+  bottom: 15%;
 }
