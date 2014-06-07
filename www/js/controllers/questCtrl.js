@@ -138,6 +138,7 @@ angular.module('starter.controllers')
                   User.update($scope.user);
                 } else {
                   $scope.user.quests[i].status = 'fail';
+                  $scope.user.attributes.gold = $scope.user.attributes.gold - Math.floor(quest.gold/2);
                   User.update($scope.user);
                 }
                 $scope.addAlert(quest);
@@ -151,6 +152,7 @@ angular.module('starter.controllers')
                   User.update($scope.user);
                 } else {
                   $scope.user.quests[i].status = 'fail';
+                  $scope.user.attributes.gold = $scope.user.attributes.gold - Math.floor(quest.gold/2);
                   User.update($scope.user);
                 }
                 $scope.addAlert(quest);
@@ -281,11 +283,11 @@ angular.module('starter.controllers')
 
     // for multi-day quests, there's a type, MAY LATER ON HAVE TO ACCOUNT FOR DIFFERENT SLEEP QUESTS
     if (numDays >=1) {
-      var body = 'This is the mission you\'ve chosen:<br><b>' + $scope.quest.description +
+      var body = 'This is the mission you\'ve chosen:<br><b>' + $scope.quest.shortDescription +
            '</b><br>You will have from today until ' + daysWeek[end.getDay()] + ' at 11:59PM' +
            ' to complete this quest. Do you accept?';
     } else {  // for one-day quests, we want to keep the times, otherwise we don't care
-      var body = 'This is the mission you\'ve chosen:<br><b>' + $scope.quest.description +
+      var body = 'This is the mission you\'ve chosen:<br><b>' + $scope.quest.shortDescription +
            '</b><br>You will have until ' + end.toLocaleTimeString() +
            ' to complete this quest. Do you accept?';
     }
