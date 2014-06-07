@@ -1,6 +1,6 @@
 angular.module('starter.controllers')
 
-.controller('ShopCtrl', function($rootScope, $scope, Shop, $ionicLoading) {
+.controller('ShopCtrl', function($rootScope, $state, $scope, Shop, $ionicLoading) {
   var loading = setTimeout(function(){
     $ionicLoading.show({
       template: '<p>Loading...</p><i class="icon ion-loading-c"></i>'
@@ -22,12 +22,17 @@ angular.module('starter.controllers')
     });
   };
 
+  $scope.equipmentTab = 'button-tab-active';
   $scope.equipment = function() {
     $scope.isEquipment = true;
+    $scope.equipmentTab = 'button-tab-active';
+    $scope.itemsTab = '';
   };
 
   $scope.potion = function(id) {
     $scope.isEquipment = false;
+    $scope.equipmentTab = '';
+    $scope.itemsTab = 'button-tab-active';
   };
 
   $scope.getData();
@@ -86,7 +91,9 @@ angular.module('starter.controllers')
         $scope.user.inventory.push({id: inventoryId, quantity: 1, equipped: false, storeId:$scope.shopItem['_id']});
       }
       User.update($scope.user);
-      util.showAlert($ionicPopup, 'Item Purchased', 'Go to your inventory to equip or use your item.', 'OK', function() {});
+      util.showAlert($ionicPopup, 'Item Purchased', 'Go to your inventory to equip or use your item.', 'OK', function() {
+        $state.go('store');
+      });
     } else {
       util.showAlert($ionicPopup, 'Insufficient Gold', 'You need more gold. Fight some bosses or go on quests to earn gold.', 'OK', function() {});
     }

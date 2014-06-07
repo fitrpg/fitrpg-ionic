@@ -25,12 +25,13 @@
 }
 
 .icon-gray {
-  color: #adaeae;
+  color: #777;
 }
 
 .bar .title {
   color: #f3796a;
   text-align: left;
+  left: 52px !important;
 }
 
 .item-main {
@@ -83,10 +84,18 @@
   text-align: center;
 }
 
+.main-attributes i {
+  position: relative;
+  float: right;
+  top: 0px;
+  right: 0px;
+}
+
 .main-attributes h1 {
   font-size: 20px;
   color: #777;
-  margin-bottom: 0px;
+  margin-top: 5px;
+  margin-bottom: 0;
 }
 
 .main-attributes p {
@@ -110,7 +119,7 @@
 }
 
 .list-heading h1 {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: normal;
   color: #777;
   padding-left: 10px;
@@ -119,8 +128,9 @@
 }
 
 .list-heading p {
-  font-size: 11px;
+  font-size: 14px;
   padding-left: 15px;
+  padding-bottom: 10px;
 }
 
 .button-custom {
@@ -138,7 +148,7 @@
 
 .button-tab {
   padding: 0;
-  margin: 0 16px;
+  margin: 0;
   border: none;
 }
 
@@ -147,7 +157,7 @@
 }
 
 .bar-light .button {
-  font-size: 18px;
+  font-size: 14px;
   color: #f3796a;
 }
 
@@ -177,6 +187,23 @@
 }
 
 /* END LIST SCREEN */
+
+/* BEGIN BATTLE STATS */
+.battle-stats {
+  text-align: center;
+}
+
+.battle-stats h1 {
+  font-size: 20px;
+  color: #777;
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+.battle-stats p {
+  font-size: 11px;
+}
+/* END BATTLE STATS */
 
 .loginbox {
   width: 100%;

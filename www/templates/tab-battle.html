@@ -1,4 +1,5 @@
 <ion-view title="Battle" hide-back-button="true">
+
   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon-gray icon ion-navicon"></button>
   </ion-nav-buttons>
@@ -8,12 +9,12 @@
 
   <div class="bar bar-subheader custom-subheader">
     <div class="button-bar bar-light">
-      <a class="button button-tab button-tab-active" ng-click="refresh()">Friends</a>
-      <a class="button button-tab button-tab-active" ng-click="newBossFights()">Bosses</a>
+      <a class="button button-tab" ng-class="friendTab" ng-click="friendsBattle()">Friends</a>
+      <a class="button button-tab" ng-class="bossTab" ng-click="newBossFights()">Bosses</a>
     </div>
   </div>
 
-  <ion-content class="has-header has-subheader has-footer">
+  <ion-content class="has-header has-subheader">
     <ion-refresher
       pulling-text="Pull to refresh..."
       on-refresh="refresh()" >
@@ -40,11 +41,21 @@
 
       </div>
 
+      <!-- FRIENDS BATTLE STATS -->
       <div class="list" ng-hide="isPending">
         <!-- <div class="donut">
           <donut-chart chart-data="historyData"></donut-chart>
         </div> -->
-        <h4>Wins: {{wins}}, Losses: {{losses}}</h4>
+        <div class="item row battle-stats">
+          <div class="col">
+            <h1>{{wins}}</h1>
+            <p>Wins</p>
+          </div>
+          <div class="col">
+            <h1>{{losses}}</h1>
+            <p>Losses</p>
+          </div>
+        </div>
         <div class="item item-divider">
           Wins
         </div>
@@ -53,7 +64,6 @@
             <img ng-src="{{battle.profile.avatar}}">
             <h2>{{battle.profile.displayName}}</h2>
             <p>Level {{battle.attributes.level}} {{battle.character}}</p>
-            <!-- change battle.name to unique identifier for battles -->
           </ion-item>
         </ion-list>
 
@@ -65,7 +75,6 @@
             <img ng-src="{{battle.profile.avatar}}">
             <h2>{{battle.profile.displayName}}</h2>
             <p>Level {{battle.attributes.level}} {{battle.character}}</p>
-            <!-- change battle.name to unique identifier for battles -->
           </ion-item>
         </ion-list>
       </div>
@@ -73,13 +82,27 @@
 
     <!-- BOSS FIGHTS -->
     <div ng-hide="friendsTab">
-      <div class="list">
+<!--       <div class="list">
         <a class="item item-icon-right item-padding" ng-repeat="mission in soloMissions | filter: {type: 'boss'} | orderBy: '-level'" type="item-text-wrap" href="#/app/solomission/{{mission['_id']}}">
           <h2>{{mission.title}}</h2>
           <p>Level {{mission.level}}</p>
           <i class="icon icon-gray ion-ios7-arrow-right"></i>
         </a>
-      </div>
+      </div> -->
+        <ion-list>
+          <ion-item class="item item-icon-right" ng-repeat="mission in soloMissions | filter: {type: 'boss'} | orderBy: '-level'" type="item-text-wrap">
+            <h2>{{mission.title}}</h2>
+            <p>Level {{mission.level}},
+            Difficulty:
+              <i class="ion-star" ng-show="difficulty($index,1)"></i>
+              <i class="ion-star" ng-show="difficulty($index,2)"></i>
+              <i class="ion-star" ng-show="difficulty($index,3)"></i>
+              <i class="ion-star" ng-show="difficulty($index,4)"></i>
+              <i class="ion-star" ng-show="difficulty($index,5)"></i>
+            </p>
+            <ion-option-button class="button-positive button-swipe" ng-click="startMission(mission['_id'])">Fight</ion-option-button>
+          </ion-item>
+        </ion-list>
     </div>
 
   </ion-content>

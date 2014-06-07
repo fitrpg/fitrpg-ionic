@@ -5,8 +5,8 @@
 
   <div class="bar bar-subheader custom-subheader">
     <div class="button-bar bar-light">
-      <a class="button button-tab button-tab-active" ng-click="equipment()">Equipment</a>
-      <a class="button button-tab" ng-click="potion()">Items</a>
+      <a class="button button-tab" ng-class="equipmentTab" ng-click="equipment()">Equipment</a>
+      <a class="button button-tab" ng-class="itemsTab" ng-click="potion()">Items</a>
     </div>
   </div>
 
@@ -18,10 +18,9 @@
       </div>
 
       <div ng-show="showList['weapons']">
-        <a class="item item-icon-left item-icon-right" ng-repeat="item in inventory | filter: { type: 'weapon' } | orderBy: '-level'" href="#/app/inventory/{{item.inventoryId}}">
-          <i class="icon {{item.icon}}"></i>
-          {{item.name}}
-          <i class="icon ion-ios7-arrow-right"></i>
+        <a class="item item-icon-right item-padding" ng-repeat="item in inventory | filter: { type: 'weapon' } | orderBy: '-level' track by $index" href="#/app/inventory/{{item.inventoryId}}">
+          <h2>{{item.name}}</h2>
+          <i class="icon icon-gray ion-ios7-arrow-right"></i>
         </a>
         <span class="item item-padding" ng-hide="hasItem['weapon']">No Weapons Available</span>
       </div>
@@ -31,10 +30,9 @@
       </div>
 
       <div ng-show="showList['armor']">
-        <a class="item item-icon-left item-icon-right" ng-repeat="item in inventory | filter: { type: 'armor' } | orderBy: '-level'" href="#/app/inventory/{{item.inventoryId}}">
-          <i class="icon {{item.icon}}"></i>
-          {{item.name}}
-          <i class="icon ion-ios7-arrow-right"></i>
+        <a class="item item-icon-right item-padding" ng-repeat="item in inventory | filter: { type: 'armor' } | orderBy: '-level' track by $index" href="#/app/inventory/{{item.inventoryId}}">
+          <h2>{{item.name}}</h2>
+          <i class="icon icon-gray ion-ios7-arrow-right"></i>
         </a>
         <span class="item item-padding" ng-hide="hasItem['armor']">No Armor Available</span>
       </div>
@@ -44,10 +42,10 @@
       </div>
 
       <div ng-show="showList['accessories']">
-        <a class="item item-icon-left item-icon-right" ng-repeat="item in inventory | filter: { type: 'accessory' } | orderBy: '-level'" href="#/app/inventory/{{item.inventoryId}}">
+        <a class="item item-icon-right item-padding" ng-repeat="item in inventory | filter: { type: 'accessory' } | orderBy: '-level' track by $index" href="#/app/inventory/{{item.inventoryId}}">
           <i class="icon {{item.icon}}"></i>
-          {{item.name}}
-          <i class="icon ion-ios7-arrow-right"></i>
+          <h2>{{item.name}}</h2>
+          <i class="icon icon-gray ion-ios7-arrow-right"></i>
         </a>
         <span class="item item-padding" ng-hide="hasItem['accessory']">No Accessories Available</span>
       </div>
@@ -60,10 +58,10 @@
       </div>
 
       <div ng-show="showList['potions']">
-        <a class="item item-icon-left item-icon-right" ng-repeat="item in inventory | filter: { type: 'potion' }" href="#/app/inventory/{{item.inventoryId}}">
+        <a class="item item-icon-right item-padding" ng-repeat="item in inventory | filter: { type: 'potion' }" href="#/app/inventory/{{item.inventoryId}}">
           <i class="icon {{item.icon}}"></i>
-          {{item.name}}
-          <i class="icon ion-ios7-arrow-right"></i>
+          <h2>{{item.name}}</h2>
+          <i class="icon icon-gray ion-ios7-arrow-right"></i>
         </a>
         <span class="item item-padding" ng-hide="hasItem['potion']">No Potions Available</span>
       </div>

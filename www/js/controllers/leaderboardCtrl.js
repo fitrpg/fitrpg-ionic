@@ -7,7 +7,10 @@ angular.module('starter.controllers')
     });
   }, 500);
 
+  $scope.allTab = 'button-tab-active';
   $scope.all = function() {
+    $scope.allTab = 'button-tab-active';
+    $scope.friendsTab = '';
     $scope.leaderboard = [];
     User.query(function(users) {
       $scope.leaderboard = users;
@@ -17,6 +20,8 @@ angular.module('starter.controllers')
   };
 
   $scope.friends = function() {
+    $scope.allTab = '';
+    $scope.friendsTab = 'button-tab-active';
     $scope.leaderboard = [];
     for(var i = 0; i < $scope.user.friends.length; i++){
       User.get({id : $scope.user.friends[i]}, function(user) {

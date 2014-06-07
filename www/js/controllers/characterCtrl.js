@@ -82,7 +82,7 @@ angular.module('starter.controllers')
 
   };
 
-  var localUserId = localStorageService.get('userId');
+  var localUserId = localStorageService.get('userId'); //'2Q2TVT'; //
 
   User.get({id : localUserId}, function (user) {
     $rootScope.user = user;
@@ -126,6 +126,7 @@ angular.module('starter.controllers')
       // $rootScope.user.attributes.hp = util.vitalityToHp($rootScope.user.attributes.vitality,'warrior');
       $scope.calculatedData.maxHp = util.vitalityToHp($rootScope.user.attributes.vitality,'warrior');
     }
+    calculateData($rootScope.user);
     // update database
     User.update($rootScope.user);
   };
