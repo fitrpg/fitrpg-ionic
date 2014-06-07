@@ -1,6 +1,19 @@
 angular.module('starter.controllers')
 
-.controller('CharacterCtrl', function($rootScope, $window, $scope, $state, $ionicNavBarDelegate, $ionicLoading, User, Shop, Refresh, localStorageService) {
+.controller('CharacterCtrl', function(
+    $rootScope,
+    $scope,
+    $state,
+    $ionicLoading,
+    $ionicNavBarDelegate,
+    $ionicPopup,
+    $ionicPlatform,
+    User,
+    Shop,
+    Refresh,
+    localStorageService,
+    $window )
+{
   // initialize $rootScope.user to eliminate console errors before authentication
   var loading = setTimeout(function(){
     $ionicLoading.show({
@@ -9,6 +22,11 @@ angular.module('starter.controllers')
   }, 500);
 
   $scope.calculatedData = {};
+
+  var device = {
+    isApple: ionic.Platform.isIOS(),
+    isGoogle: ionic.Platform.isAndroid(),
+  };
 
   $scope.addAlert = function(status) {
     if (status === 'loss') {
@@ -181,5 +199,31 @@ angular.module('starter.controllers')
 
   $scope.navTo = function(location) {
     $state.go('app.' + location);
+  };
+
+  $scope.rateApp = function() {
+    title = 'Having Fun?';
+    body = 'Let us know what you think and what features you want added!';
+    likeBtn = 'Love It';
+    hateBtn = 'Hate It';
+    util.showPrompt($ionicPopup,title,body,likeBtn,hateBtn,
+      function() {
+        if (device.isApple) {
+          // update to ios package name
+          $window.open('https://itunes.apple.com/us/app/charades!-guess-words-friends/id653967729?mt=8&uo=4');
+        } else if (device.isGoogle) {
+          $window.open('market://details?id=com.fatchickenstudios.fitrpg');
+        }
+      },
+      function() {
+        document.addEventListener('deviceready', function () {
+          $window.plugin.email.open({
+              to: ['fitrpg@gmail.com'],
+              subject: 'Feedback and Bug Reports',
+              isHtml: false,
+          });
+        }, false)
+      }
+    )
   };
 })

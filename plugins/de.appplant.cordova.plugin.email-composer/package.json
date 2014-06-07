@@ -1,0 +1,29 @@
+{
+    "version": "0.8.1",
+    "name": "de.appplant.cordova.plugin.email-composer",
+    "cordova_name": "EmailComposer",
+    "description": "A bunch of email composition plugins for Cordova 3.x.x",
+    "license": "Apache 2.0",
+    "repo": "https://github.com/katzer/cordova-plugin-email-composer.git",
+    "keywords": [
+        "email",
+        " email intent",
+        " email composer",
+        " ios",
+        " android",
+        " windows phone",
+        " wp8"
+    ],
+    "platforms": [
+        "ios",
+        "android",
+        "amazon-fireos",
+        "wp8"
+    ],
+    "engines": [
+        {
+            "name": "cordova",
+            "version": ">=3.0.0"
+        }
+    ]
+}
