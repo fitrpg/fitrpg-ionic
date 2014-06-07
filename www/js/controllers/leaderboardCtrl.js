@@ -23,6 +23,7 @@ angular.module('starter.controllers')
     $scope.allTab = '';
     $scope.friendsTab = 'button-tab-active';
     $scope.leaderboard = [];
+    $scope.leaderboard.push($scope.user);
     for(var i = 0; i < $scope.user.friends.length; i++){
       User.get({id : $scope.user.friends[i]}, function(user) {
         if (user['_id']) {
