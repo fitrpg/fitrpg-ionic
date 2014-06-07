@@ -5,11 +5,11 @@ angular.module('app.auth', ['LocalStorageModule', 'ionic'])
 .controller('AuthenticationController', function ($scope, $state, $ionicLoading, User, localStorageService) {
   // Check our local storage for the proper credentials to ensure we are logged in, this means users can't get past app unless they select a username
   if (localStorageService.get('username')) {
-    if (localStorageService.get('fitbit-token') || localStorageService.get('jawbone-token')) {
+    if (localStorageService.get('fitbit-token') && isTokenInDate(localStorageService)) {
       $state.transitionTo('app.character');
       $scope.Authenticated = true;
     }
-  } else if (localStorageService.get('fitbit-token') || localStorageService.get('jawbone-token')) {
+  } else if (localStorageService.get('fitbit-token') && isTokenInDate(localStorageService)) {
 
     $ionicLoading.show({
        template: '<p>loading...</p><i class="icon ion-loading-c"></i>',
@@ -37,7 +37,6 @@ angular.module('app.auth', ['LocalStorageModule', 'ionic'])
   $scope.logout = function () {
     localStorageService.clearAll();
     location.href=location.pathname;
-
   };
 
 })
@@ -48,8 +47,6 @@ angular.module('app.auth', ['LocalStorageModule', 'ionic'])
   $scope.jawbonelogin = JawboneLoginService.login;
 
 })
-
-
 
 .factory('JawboneLoginService', function ($window, $state, localStorageService) {
   var url = 'https://fitrpg.azurewebsites.net/jawbone/auth';
@@ -67,7 +64,6 @@ angular.module('app.auth', ['LocalStorageModule', 'ionic'])
           localStorageService.set('jawbone-token', token);
           localStorageService.set('userId', userId);
           location.href=location.pathname;
-          //location.reload();
           loginWindow.close();
         }
       });
@@ -75,7 +71,7 @@ angular.module('app.auth', ['LocalStorageModule', 'ionic'])
   };
 })
 
-.factory('FitbitLoginService', function ($window, $state, $ionicLoading, localStorageService, $location) {
+.factory('FitbitLoginService', function ($window, $state, $ionicLoading, $location, localStorageService, $location) {
   var url = 'http://fitrpg.azurewebsites.net/fitbit/auth';
   var usernameUrl = 'http://fitrpg.azurewebsites.net/fitbit/getUsername';
   var loginWindow, token, hasToken, userId, hasUserId;
@@ -96,20 +92,34 @@ angular.module('app.auth', ['LocalStorageModule', 'ionic'])
           loginWindow.show();
       });
 
-
       loginWindow.addEventListener('loadstart', function (event) {
-        hasToken = event.url.indexOf('?oauth_token=');
-        hasUserId = event.url.indexOf('&userId=')
+          hasToken = event.url.indexOf('?oauth_token=');
+          hasUserId = event.url.indexOf('&userId=');
         if (hasToken > -1 && hasUserId > -1) {
-          token = event.url.substring(hasToken + 13);
-          userId = event.url.substring(hasUserId + 8);
+          token = event.url.match('oauth_token=(.*)&userId')[1];
+          userId = event.url.match('&userId=(.*)')[1];
           localStorageService.set('fitbit-token', token);
+          localStorageService.set('token-date', JSON.stringify(new Date()));
           localStorageService.set('userId', userId);
           loginWindow.close();
           location.href=location.pathname;
-          //eventually set  unique app ID with jwt?
         }
       });
     },
   };
 });
+
+var isTokenInDate = function(localStorageService){
+  var tokenDate = new Date(JSON.parse(localStorageService.get('token-date')));
+  if (tokenDate) {
+    var today = new Date();
+    var timeDiff = Math.abs(today.getTime() - tokenDate.getTime());
+    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    if(diffDays > 10) {
+      return false;
+    }
+  } else {
+    return false;
+  }
+  return true;
+}
