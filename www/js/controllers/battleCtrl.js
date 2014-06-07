@@ -20,6 +20,7 @@ angular.module('starter.controllers')
 
     for (var i=0; i<$scope.user.friends.length; i++) {
       var friend = $scope.user.friends[i];
+
       User.get({id: friend}, function(user){
         if (user['_id']) {
           $scope.friends.push(user);
@@ -31,7 +32,7 @@ angular.module('starter.controllers')
         for (var i=0; i<$scope.friends.length; i++) {
           var friend = $scope.friends[i];
           for (var j=0; j<battles.length; j++) {
-            var battle = battles[i];
+            var battle = battles[j];
             if (friend['_id'] === battle.enemy) {
               friend.battleData = battle;
               friend.battleData.status = util.capitalize(friend.battleData.status);
@@ -49,9 +50,11 @@ angular.module('starter.controllers')
     listOfBattles();
   };
 
+  $scope.showHistory = true;
   $scope.friendTab = 'button-tab-active';
   $scope.friendsBattle = function() {
     $scope.isPending = true;
+    $scope.showHistory = true;
     $scope.friendTab = 'button-tab-active';
     $scope.bossTab = '';
     $scope.friendsTab = true;
@@ -271,6 +274,7 @@ angular.module('starter.controllers')
     $scope.oldWinBattles = [];
     $scope.oldLossBattles = [];
     $scope.isPending = false;
+    $scope.showHistory = false;
     var userId = $scope.user['_id']
     Battle.query({winner: userId}, function(battlesWon){
      Battle.query({loser: userId}, function(battlesLost){
@@ -309,6 +313,7 @@ angular.module('starter.controllers')
     $scope.bossTab = 'button-tab-active';
     $scope.friendTab = '';
     $scope.friendsTab = false;
+    $scope.showHistory = false;
     $scope.soloMissions = [];
     SoloMissions.query(function(solos){
       var allSoloMissions = solos;
