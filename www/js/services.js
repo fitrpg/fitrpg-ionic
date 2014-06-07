@@ -65,4 +65,8 @@ angular.module('starter.services', ['ngResource'])
 
 .factory('VersusMissions',['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
   return $resource(SERVER_URL + '/api/groups/:id', {id : '@id'});
+}])
+
+.factory('Feedback',['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
+  return $resource(SERVER_URL + '/feedback/:id', {id : '@id'});
 }]);
