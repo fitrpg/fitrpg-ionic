@@ -30,7 +30,9 @@
 			Answers
 	    </div>
 	    <div ng-repeat="answer in answers | filter:searchText" id='{{answer.id}}' class="item list-heading faqanswer">
-	      	<h1>{{ answer.question }} </h1>
+	      	<h1>{{ answer.question }} <i ng-click="scrollTop()" class="item-icon-right ion-chevron-up scrollUp"></i></h1>
+	      		
+	      	<!-- </span> -->
 	      	<p> {{ answer.answer }} </p>
       	</div>
 
