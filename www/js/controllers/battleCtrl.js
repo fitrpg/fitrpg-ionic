@@ -254,12 +254,15 @@ angular.module('starter.controllers')
           }
           return false;
         };
-        var battleInfo = {type:'battle',enemy:id,status:'pending'};
-        var missionExists = checkMissionExists($scope.user,id);
-        if (!missionExists) {
-          $scope.user.missionsVersus.push(battleInfo);
-          User.update($scope.user);
-        }
+
+        User.get({id: $scope.user['_id']}, function(user) {
+          var battleInfo = {type:'battle',enemy:id,status:'pending'};
+          var missionExists = checkMissionExists(user,id);
+          if (!missionExists) {
+            user.missionsVersus.push(battleInfo);
+            User.update(user);
+          }
+        });
 
         User.get({id: id}, function(friend) {
           var battle = {type:'battle',enemy:$scope.user['_id'],status:'request'};

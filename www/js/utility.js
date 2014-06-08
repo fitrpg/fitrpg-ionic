@@ -5,9 +5,11 @@ var util = {
     if (charClass === 'strength' || charClass === 'endurance') {
       hp = vitality * 10;
     } else if (charClass === 'dexterity') {
-      hp = vitality * 15;
+      hp = vitality * 12;
     } else if (charClass === 'vitality') {
-      hp = vitality * 20;
+      hp = vitality * 15;
+    } else {
+      hp = vitality * 10;
     }
 
     return hp;

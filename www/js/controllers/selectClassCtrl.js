@@ -8,10 +8,10 @@ angular.module('starter.controllers')
     $scope.char = item;
   };
 
-  $scope.characterClasses = [{'text': 'Road Destroyer','value': 'runner'},
-                             {'text': 'Weight Crusher', 'value': 'weightlifter'},
-                             {'text': 'Jack of All Skills', 'value': 'mixed'},
-                             {'text': 'Lay-z Sleeper', 'value': 'lazy'}];
+  $scope.characterClasses = [{'text': 'Shadow Elf','value': 'endurance','description':'Endurance bonus for runners'},
+                             {'text': 'Dwarf King', 'value': 'strength','description':'Strength bonus for gym goers'},
+                             {'text': 'Rune Knight', 'value': 'dexterity','description':'Dexterity bonus for sports players'},
+                             {'text': 'Dream Weaver', 'value': 'vitality','description':'Vitality bonus for those who sleep'}];
 
   $scope.data = {
     clientSide: 'ng'
@@ -19,6 +19,7 @@ angular.module('starter.controllers')
 
   $scope.submit = function() {
     $scope.user.character = $scope.char.text;
+    $scope.user.characterClass = $scope.char.value;
     User.update($scope.user);
     $state.transitionTo('app.character');
   }
