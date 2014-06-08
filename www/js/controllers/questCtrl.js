@@ -2,7 +2,7 @@ angular.module('starter.controllers')
 
 // This controller handles the list of the quests that show up as
 // all,active,and completed
-.controller('QuestCtrl', function($scope, $ionicLoading, SoloMissions, Quests, User, TimesData, DatesData) {
+.controller('QuestCtrl', function($scope, $ionicLoading, $ionicScrollDelegate, SoloMissions, Quests, User, TimesData, DatesData) {
 
   // Creates the loading screen that only shows up after 500 ms if items have not yet loaded
   var loading = setTimeout(function(){
@@ -37,6 +37,7 @@ angular.module('starter.controllers')
     $scope.allTab = 'button-tab-active';
     $scope.activeTab = '';
     $scope.completedTab = '';
+    $ionicScrollDelegate.scrollTop();
 
     // Create an array of ids of quests the user is currently doing
     var currentQuests = [];
@@ -64,7 +65,7 @@ angular.module('starter.controllers')
     $scope.allTab = '';
     $scope.activeTab = 'button-tab-active';
     $scope.completedTab = '';
-
+    $ionicScrollDelegate.scrollTop();
 
     var today = new Date();
     $scope.quests = [];
@@ -89,7 +90,8 @@ angular.module('starter.controllers')
     $scope.allTab = '';
     $scope.activeTab = '';
     $scope.completedTab = 'button-tab-active';
-
+    $ionicScrollDelegate.scrollTop();
+    
     var today = new Date();
 
     // Iterate over all the quests that the user has stored; maybe eventually just save them
