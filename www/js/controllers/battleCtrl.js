@@ -24,13 +24,7 @@ angular.module('starter.controllers')
       User.get({id: friend}, function(user){
         if (user['_id']) {
           $scope.friends.push(user);
-        }
-        clearTimeout(loading);
-        $ionicLoading.hide();
-        $scope.$broadcast('scroll.refreshComplete');
-
-        for (var i=0; i<$scope.friends.length; i++) {
-          var friend = $scope.friends[i];
+          var friend = $scope.friends[$scope.friends.length-1];
           for (var j=0; j<battles.length; j++) {
             var battle = battles[j];
             if (friend['_id'] === battle.enemy) {
@@ -38,7 +32,11 @@ angular.module('starter.controllers')
               friend.battleData.status = util.capitalize(friend.battleData.status);
             }
           }
+          console.log(friend);
         }
+        clearTimeout(loading);
+        $ionicLoading.hide();
+        $scope.$broadcast('scroll.refreshComplete');
       });
     }
 
@@ -246,20 +244,34 @@ angular.module('starter.controllers')
           $ionicListDelegate.closeOptionButtons();
         });
       } else {
-        var battleInfo = {type:'battle',enemy:id,status:'pending'}
-        $scope.user.missionsVersus.push(battleInfo);
-        User.update($scope.user);
+        var checkMissionExists = function(player,enemyId) {
+          var missions = player.missionsVersus;
+          for (var i=0; i<missions.length; i++) {
+            var mission = missions[i];
+            if (mission.enemy === enemyId) {
+              return true;
+            }
+          }
+          return false;
+        };
+        var battleInfo = {type:'battle',enemy:id,status:'pending'};
+        var missionExists = checkMissionExists($scope.user,id);
+        if (!missionExists) {
+          $scope.user.missionsVersus.push(battleInfo);
+          User.update($scope.user);
+        }
 
-        for (var i=0; i<$scope.friends.length; i++) {
-          var friend = $scope.friends[i];
-          if (friend['_id'] === id) {
-            var battle = {type:'battle',enemy:$scope.user['_id'],status:'request'}
+        User.get({id: id}, function(friend) {
+          var battle = {type:'battle',enemy:$scope.user['_id'],status:'request'};
+          var friendMissionExists = checkMissionExists(friend,$scope.user['_id']);
+          if (!friendMissionExists) {
             friend.missionsVersus.push(battle);
             friend.battleData = battleInfo;
             User.update(friend);
             friend.battleData.status = util.capitalize(friend.battleData.status);
           }
-        }
+        });
+
         title = 'Request Sent';
         body = 'Your battle request has been sent. You can still equip new weapons or train more until the battle request is accepted.';
 
@@ -333,7 +345,7 @@ angular.module('starter.controllers')
         if (soloMission.level <= $scope.user.attributes.level && ($scope.user.attributes.level-6) < (soloMission.level)) {
           for (var j=0; j<$scope.user.battles.length; j++) {
             var completedBattle = $scope.user.battles[j];
-            if (completedBattle['_id'] === soloMission['_id']) {
+            if (completedBattle === soloMission['_id']) {
               battleComplete = true;
             }
           }
@@ -361,7 +373,7 @@ angular.module('starter.controllers')
     $scope.soloMissions = [];
     for (var i=0; i<$scope.user.battles.length; i++) {
       var completedBattle = $scope.user.battles[i];
-      SoloMissions.get({id: completedBattle['_id']}, function(battle) {
+      SoloMissions.get({id: completedBattle}, function(battle) {
         $scope.soloMissions.push(battle);
       });
     }
