@@ -207,15 +207,16 @@ angular.module('starter.controllers')
             } else if (playerXp < levelXp) {
               player.attributes.experience -= (levelXp - playerXp);
             }
+            console.log(player.attributes.experience)
           }
           if (winner.result === 'player 1') {
             adjustAttr($scope.user,enemy);
-            handleNegXp(enemy);
+            handleNegXp(enemy, enemy.attributes.level);
             battle.status = 'win';
             enemyBattle.status = 'loss';
           } else if (winner.result === 'player 2') {
             adjustAttr(enemy,$scope.user);
-            handleNegXp($scope.user);
+            handleNegXp($scope.user, $scope.user.attributes.level);
             enemyBattle.status = 'win';
             battle.status = 'loss';
           }
