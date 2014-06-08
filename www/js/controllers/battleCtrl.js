@@ -192,8 +192,10 @@ angular.module('starter.controllers')
             playerWin.attributes.HP = winner.hp;
             playerWin.attributes.gold += Math.floor(playerLose.attributes.gold*0.1);
             playerLose.attributes.gold = Math.floor(playerLose.attributes.gold *= 0.9);
-            playerWin.attributes.experience = updateExp(playerWin,playerLose,'win');
-            playerLose.attributes.experience = updateExp(playerLose,playerWin,'loss');
+            playerWin.attributes.experience = Math.floor(updateExp(playerWin,playerLose,'win'));
+            console.log(playerWin.attributes.experience);
+            playerLose.attributes.experience = Math.floor(updateExp(playerLose,playerWin,'loss'));
+            console.log(playerLose.attributes.experience);
             saveBattleResult(playerWin['_id'],playerLose['_id']);
           };
 
