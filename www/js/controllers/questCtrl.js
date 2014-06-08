@@ -91,7 +91,7 @@ angular.module('starter.controllers')
     $scope.activeTab = '';
     $scope.completedTab = 'button-tab-active';
     $ionicScrollDelegate.scrollTop();
-    
+
     var today = new Date();
 
     // Iterate over all the quests that the user has stored; maybe eventually just save them
@@ -195,7 +195,7 @@ angular.module('starter.controllers')
 })
 
 // This particular controller handles the individual pages of each quest
-.controller('QuestDetailCtrl', function($scope, $stateParams, Quests, $ionicPopup, User, TimesData, DatesData) {
+.controller('QuestDetailCtrl', function($scope, $state, $stateParams, Quests, $ionicPopup, User, TimesData, DatesData) {
   var questId = $stateParams.questId
   $scope.quest = Quests.get({id: questId});
   $scope.available = true; 
@@ -225,13 +225,15 @@ angular.module('starter.controllers')
 
   // called in checkQuest, and when we refresh to show updated data
   var evalQuest = function(userQuest,cb) {
+    console.log('gets to evalQuest');
+    console.log('param:', userQuest);
     $scope.userQuest = userQuest; //make userquest obj available to scope
     // FOR ACTIVE QUESTS
     if (userQuest.status === 'active') {
       $scope.active = true;
-      // $scope.$broadcast('timer-start');
       $scope.$broadcast('timer-set-countdown');
       $scope.parsedDate = Date.parse(userQuest.completionTime);
+      console.log('parsedDate', $scope.parsedDate);
       if (userQuest.numDays < 1) {
         TimesData.get(userQuest.getObj, function(result) {
           $scope.progress = result.total || 0; //current progress 
@@ -331,11 +333,12 @@ angular.module('starter.controllers')
         resourceAttr.endTime   = timify(end.getHours())   + ':' +timify(end.getMinutes());
       }
 
-      
       $scope.available = false; 
       $scope.active = true;
       $scope.user.quests.push(questObj);
       User.update($scope.user);
+      $state.go('app.quest');
+      //checkQuest();
     };
 
     util.showPrompt($ionicPopup, title, body, 'I accept', 'Too scared', startTheQuest);
