@@ -14,13 +14,14 @@ var util = {
   },
 
   attack: function(first,second,count) {
-    if (Math.floor(count%(first.endurance/2)) === 0) {
+    first.attackBonus = first.attackBonus || 1;
+    if (Math.floor(count%(100/(first.endurance/20))) === 0) {
       if (Math.random() < 1/(1+second.dexterity/25)) {
         var strength = first.strength;
         if (Math.random() < 0.05) {
           strength *= 2;
         }
-        console.log(strength);
+        // console.log(strength);
         return second.HP - strength*first.attackBonus;
       }
     }
@@ -95,7 +96,7 @@ var util = {
     var player1 = this.playerAttr(player);
     var count = 0;
     if (boss.difficulty !== null) {
-      boss.HP = boss.vitality*3*boss.difficulty;
+      boss.HP = boss.vitality*5*boss.difficulty;
     } else {
       boss.HP = boss.vitality*10;
     }
@@ -186,7 +187,7 @@ var util = {
     var expToLevel = function(lvl) {
       return 100*Math.pow(lvl,3) + 360*Math.pow(lvl,2) + 3500*lvl;
     };
-    while (expToLevel(level) < total) {
+    while (expToLevel(level) <= total) {
       level++;
     }
     return level;
