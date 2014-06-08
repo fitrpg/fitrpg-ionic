@@ -103,13 +103,32 @@ angular.module('starter.controllers')
 
   };
 
+  var setWeapons = function() {
+    var defaultWeapon = function(location) {
+      $rootScope.user.equipped[location] = {};
+      $rootScope.user.equipped[location].name = '';
+      $rootScope.user.equipped[location].inventoryId = null;
+    };
+
+    if (!$rootScope.user.equipped) {
+      $rootScope.user.equipped = {};
+      defaultWeapon('weapon1');
+      defaultWeapon('weapon2');
+      defaultWeapon('armor');
+      defaultWeapon('accessory1');
+      defaultWeapon('accessory2');
+    }
+  }
+
   var localUserId = localStorageService.get('userId'); //'2Q2TVT'; //
 
   User.get({id : localUserId}, function (user) {
     $rootScope.user = user;
+    setWeapons();
     calculateData($rootScope.user);
 
     alertBattleStatus();
+
 
     User.update($rootScope.user);
     clearTimeout(loading);
@@ -161,7 +180,7 @@ angular.module('starter.controllers')
 
   $scope.isEquipped = function(slot) {
     var user = $rootScope.user;
-    if (user && user.equipped &&userequipped[slot].inventoryId !== null) {
+    if (user && user.equipped[slot].inventoryId !== null) {
       return true;
     } else {
       return false;
