@@ -62,7 +62,9 @@
             <progressbar max="100" value="(progress*100)/winGoal"></progressbar>
           </div>
       </div>
-
     </div>
+
+    <div class="questTimer" ng-show="active">
+      <timer end-time="parsedDate"> You have {{days}} days, {{hours}} hours, {{minutes}} minutes, {{seconds}} seconds remaining.</timer>
   </ion-content>
 </ion-view>

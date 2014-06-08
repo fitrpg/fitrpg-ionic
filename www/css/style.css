@@ -1,6 +1,16 @@
 /*#f3796a*/
 /*#adaeae*/
 
+/*Quest page*/
+.questTimer {
+  text-align: center;
+  font-weight:bold;
+}
+
+.battleStatus {
+  float:right;
+}
+
 /* FAQ & HELP PAGE */
 .item.faq {
   font-size:17px;
@@ -26,6 +36,10 @@
 } 
 
 .item.list-heading.faqanswer p {
+  white-space:normal;
+}
+
+.item.item-padding.noquest {
   white-space:normal;
 }
 

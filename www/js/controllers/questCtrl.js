@@ -227,6 +227,9 @@ angular.module('starter.controllers')
     // FOR ACTIVE QUESTS
     if (userQuest.status === 'active') {
       $scope.active = true;
+      // $scope.$broadcast('timer-start');
+      $scope.$broadcast('timer-set-countdown');
+      $scope.parsedDate = Date.parse(userQuest.completionTime);
       if (userQuest.numDays < 1) {
         TimesData.get(userQuest.getObj, function(result) {
           $scope.progress = result.total || 0; //current progress 
@@ -280,15 +283,18 @@ angular.module('starter.controllers')
     var end = start.addDays(numDays,numHours); // end date
     var startTime = timify(start.getHours()) + ':' + timify(start.getMinutes());
     var title = 'Embark On A New Quest!';
+    var endString;
 
     // for multi-day quests, there's a type, MAY LATER ON HAVE TO ACCOUNT FOR DIFFERENT SLEEP QUESTS
     if (numDays >=1) {
+      endString = daysWeek[end.getDay()] + ' at 11:59PM';
       var body = 'This is the mission you\'ve chosen:<br><b>' + $scope.quest.shortDescription +
-           '</b><br>You will have from today until ' + daysWeek[end.getDay()] + ' at 11:59PM' +
+           '</b><br>You will have from today until ' + endString +
            ' to complete this quest. Do you accept?';
     } else {  // for one-day quests, we want to keep the times, otherwise we don't care
+      endString =end.toLocaleTimeString();
       var body = 'This is the mission you\'ve chosen:<br><b>' + $scope.quest.shortDescription +
-           '</b><br>You will have until ' + end.toLocaleTimeString() +
+           '</b><br>You will have until ' + endString +
            ' to complete this quest. Do you accept?';
     }
 
@@ -312,7 +318,8 @@ angular.module('starter.controllers')
         status: 'active',
         winGoal: winGoal,
         gold      : gold,
-        shortDesc : desc
+        shortDesc : desc,
+        endString : endString
       };
 
       if (numDays >= 1 ) {
