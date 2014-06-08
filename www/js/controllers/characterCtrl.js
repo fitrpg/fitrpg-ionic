@@ -118,6 +118,7 @@ angular.module('starter.controllers')
 
   $scope.refresh = function() {
     var id = localUserId;
+    console.log('refreshing');
     Refresh.get({id: id}, function() { // this will tell fitbit to get new data
       User.get({id : id}, function (user) { // this will retrieve that new data
         $rootScope.user = user;
@@ -130,6 +131,8 @@ angular.module('starter.controllers')
       });
     });
   };
+
+  $scope.refresh();
 
   $scope.hasSkillPoints = function() {
     if ($rootScope.user && $rootScope.user.attributes.skillPts) {
