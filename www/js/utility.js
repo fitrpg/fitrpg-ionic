@@ -140,12 +140,43 @@ var util = {
     });
   },
 
+  showPopup: function(controller,title,body,btn1,btn2,cancelBtn,callbackTrue,callbackFalse) {
+    var myPopup = controller.show({
+      title: title,
+      template: body,
+      buttons: [
+        {text: cancelBtn},
+        {text: btn1,
+          onTap: function(e) {
+            return 'btn1';
+          }
+        },
+        {text: btn2,
+          onTap: function(e) {
+            return 'btn2';
+          }
+        }
+      ]
+    });
+    myPopup.then(function(res) {
+      if(res === 'btn1') {
+        callbackFalse();
+      } else if (res === 'btn2') {
+        callbackTrue();
+      }
+    });
+  },
+
   currentLevelExp: function(lvl,exp) {
     return exp - (100*Math.pow(lvl-1,3) + 360*Math.pow(lvl-1,2) + 3500*(lvl-1));
   },
 
   nextLevelExp: function(lvl) {
     return (100*Math.pow(lvl,3) + 360*Math.pow(lvl,2) + 3500*lvl) - (100*Math.pow(lvl-1,3) + 360*Math.pow(lvl-1,2) + 3500*(lvl-1));
+  },
+
+  levelExp: function(lvl) {
+    return 100*Math.pow(lvl-1,3) + 360*Math.pow(lvl-1,2) + 3500*(lvl-1);
   },
 
   calcLevel: function(experience, currLvl) {

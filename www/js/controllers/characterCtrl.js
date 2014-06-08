@@ -56,8 +56,11 @@ angular.module('starter.controllers')
     $scope.calculatedData.maxHp = util.vitalityToHp($scope.calculatedData.vitality,'strength'); //change to $scope.user.characterClass
     user.attributes.HP += user.fitbit.HPRecov;
     user.fitbit.HPRecov = 0;
-    if (user.attributes.HP > $scope.calculatedData.maxHP) {
-      user.attributes.HP = $scope.calculatedData.maxHP;
+    if (user.attributes.HP > $scope.calculatedData.maxHp) {
+      user.attributes.HP = $scope.calculatedData.maxHp;
+    }
+    if (user.attributes.gold < 0) {
+      user.attributes.gold = 0;
     }
   };
 
@@ -137,20 +140,23 @@ angular.module('starter.controllers')
   };
 
   $scope.applyAttributes = function(attr) {
-    $rootScope.user.attributes[attr]++;
-    $rootScope.user.attributes.skillPts--;
-    if (attr === 'vitality') {
-      // change char class from warrior to user class
-      // $rootScope.user.attributes.hp = util.vitalityToHp($rootScope.user.attributes.vitality,'warrior');
-      $scope.calculatedData.maxHp = util.vitalityToHp($rootScope.user.attributes.vitality,'warrior');
+    if ($rootScope.user.attributes.skillPts > 0) {
+      $rootScope.user.attributes[attr]++;
+      $rootScope.user.attributes.skillPts--;
+      if (attr === 'vitality') {
+        // change char class from warrior to user class
+        // $rootScope.user.attributes.hp = util.vitalityToHp($rootScope.user.attributes.vitality,'warrior');
+        $scope.calculatedData.maxHp = util.vitalityToHp($rootScope.user.attributes.vitality,'warrior');
+      }
+      calculateData($rootScope.user);
+      // update database
+      User.update($rootScope.user);
     }
-    calculateData($rootScope.user);
-    // update database
-    User.update($rootScope.user);
   };
 
   $scope.isEquipped = function(slot) {
-    if ($rootScope.user && $rootScope.user.equipped[slot].inventoryId !== null) {
+    var user = $rootScope.user;
+    if (user && user.equipped &&userequipped[slot].inventoryId !== null) {
       return true;
     } else {
       return false;
@@ -202,28 +208,22 @@ angular.module('starter.controllers')
   };
 
   $scope.rateApp = function() {
-    title = 'Having Fun?';
-    body = 'Let us know what you think and what features you want added!';
-    likeBtn = 'Love It';
-    hateBtn = 'Hate It';
-    util.showPrompt($ionicPopup,title,body,likeBtn,hateBtn,
-      function() {
-        if (device.isApple) {
-          // update to ios package name
-          $window.open('https://itunes.apple.com/us/app/charades!-guess-words-friends/id653967729?mt=8&uo=4');
-        } else if (device.isGoogle) {
-          $window.open('market://details?id=com.fatchickenstudios.fitrpg');
+    var title = 'Having Fun?';
+    var body = 'Let us know what you think and what features you want added!';
+    var likeBtn = '<i class="icon ion-thumbsup"></i>';
+    var hateBtn = '<i class="icon ion-thumbsdown"></i>';
+    var cancelBtn = '<i class="icon ion-close"></i>';
+    util.showPopup($ionicPopup,title,body,hateBtn,likeBtn,cancelBtn,
+        function() {
+          if (device.isApple) {
+            $window.open('http://itunes.apple.com/app/id887067605');
+          } else if (device.isGoogle) {
+            $window.open('http://play.google.com/store/apps/details?id=com.fatchickenstudios.fitrpg');
+          }
+        },
+        function() {
+          $scope.navTo('feedback');
         }
-      },
-      function() {
-        document.addEventListener('deviceready', function () {
-          $window.plugin.email.open({
-              to: ['fitrpg@gmail.com'],
-              subject: 'Feedback and Bug Reports',
-              isHtml: false,
-          });
-        }, false)
-      }
-    )
+      )
   };
 })

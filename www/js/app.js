@@ -16,7 +16,7 @@ angular.module('starter', ['ionic', 'starter.controllers','app.auth','starter.se
     }
     if(window.StatusBar) {
       // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
+      StatusBar.hide();
     }
   });
 })
@@ -52,10 +52,21 @@ angular.module('starter', ['ionic', 'starter.controllers','app.auth','starter.se
       controller: 'CreateCtrl'
     })
 
+
     .state('app', {
       url: "/app",
       abstract: true,
       templateUrl: "templates/menu.html"
+    })
+
+    .state('app.feedback', {
+      url: '/feedback',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/feedback.html',
+          controller: 'FeedbackCtrl'
+        }
+      }
     })
 
     .state('app.character', {

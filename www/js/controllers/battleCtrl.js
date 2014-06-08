@@ -90,6 +90,7 @@ angular.module('starter.controllers')
         delete friend.battleData;
       }
     }
+    $ionicListDelegate.closeOptionButtons();
   };
 
   var battleResults = function(outcome) {
@@ -196,10 +197,13 @@ angular.module('starter.controllers')
             saveBattleResult(playerWin['_id'],playerLose['_id']);
           };
 
-          var handleNegXp = function(player){
+          var handleNegXp = function(player,level){
             var playerXp = player.fitbit.experience + player.attributes.experience;
+            var levelXp = util.levelExp(playerXp,level)
             if (playerXp < 0) {
               player.attributes.experience = -player.fitbit.experience;
+            } else if (playerXp < levelXp) {
+              player.attributes.experience -= (levelXp - playerXp);
             }
           }
           if (winner.result === 'player 1') {

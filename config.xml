@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.ionicframework.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>HelloCordova</name>
+<widget id="com.fatchickenstudios.fitrpg" version="1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>FitRPG</name>
     <description>
-        An Ionic Framework and Cordova project.
+        Get more out of your healthy lifestyle
     </description>
-    <author email="hi@ionicframework" href="http://ionicframework.com/">
-      Ionic Framework Team
+    <author email="fitrpg@gmail.com" href="http://www.fitrpg.co/">
+      FitRPG Team
     </author>
     <content src="index.html" />
     <access origin="*" />
@@ -13,7 +13,6 @@
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
-    <gap:plugin name="de.appplant.cordova.plugin.email-composer" />
 
     <!-- Don't store local date in an iCloud backup. Turn this to "cloud" to enable storage
          to be sent to iCloud. Note: enabling this could result in Apple rejecting your app.
@@ -21,6 +20,6 @@
     <preference name="BackupWebStorage" value="none" />
 
     <feature name="StatusBar">
-      <param name="ios-package" value="CDVStatusBar" onload="true" />
+      <param name="ios-package" value="CDVStatusBar" onload="false" />
     </feature>
 </widget>
