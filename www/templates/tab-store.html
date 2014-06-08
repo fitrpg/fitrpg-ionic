@@ -29,7 +29,7 @@
       <div class="list" ng-show="showList['weapons']">
         <a class="item item-icon-right item-padding" ng-repeat="item in shop | filter: { type: 'weapon' } | orderBy: '-level'" type="item-text-wrap" href="#/app/store/{{item['_id']}}">
           <h2>{{item.name}}</h2>
-          <p><span style="font-size:12px">S: {{item.strength}} D: {{item.dexterity}} E: {{item.endurance}} V: {{item.vitality}} Cost: {{item.cost}} </span></p>
+          <p><span style="font-size:12px"><strong>STR:</strong> {{item.strength}} <strong>DEX:</strong> {{item.dexterity}} <strong>END:</strong> {{item.endurance}} <strong>VIT:</strong> {{item.vitality}} <strong>Cost:</strong> {{item.cost}} </span></p>
           <i class="icon icon-gray ion-ios7-arrow-right"></i>
         </a>
       </div>
@@ -49,7 +49,7 @@
       <div class="list" ng-show="showList['armor']">
         <a class="item item-icon-right item-padding" ng-repeat="item in shop | filter: { type: 'armor' } | orderBy: '-level'" type="item-text-wrap" href="#/app/store/{{item['_id']}}">
           <h2>{{item.name}}</h2>
-          <p><span style="font-size:12px">S: {{item.strength}} D: {{item.dexterity}} E: {{item.endurance}} V: {{item.vitality}} Cost: {{item.cost}} </span></p>
+          <p><span style="font-size:12px"><strong>STR:</strong> {{item.strength}} <strong>DEX:</strong> {{item.dexterity}} <strong>END:</strong> {{item.endurance}} <strong>VIT:</strong> {{item.vitality}} <strong>Cost:</strong> {{item.cost}} </span></p>
           <i class="icon icon-gray ion-ios7-arrow-right"></i>
         </a>
       </div>
@@ -69,7 +69,7 @@
       <div class="list" ng-show="showList['accessories']">
         <a class="item item-icon-right item-padding" ng-repeat="item in shop | filter: { type: 'accessory' } | orderBy: '-level'" type="item-text-wrap" href="#/app/store/{{item['_id']}}">
           <h2>{{item.name}}</h2>
-          <p><span style="font-size:12px">S: {{item.strength}} D: {{item.dexterity}} E: {{item.endurance}} V: {{item.vitality}} Cost: {{item.cost}} </span></p>
+          <p><span style="font-size:12px"><strong>STR:</strong> {{item.strength}} <strong>DEX:</strong> {{item.dexterity}} <strong>END:</strong> {{item.endurance}} <strong>VIT:</strong> {{item.vitality}} <strong>Cost:</strong> {{item.cost}} </span></p>
           <i class="icon icon-gray ion-ios7-arrow-right"></i>
         </a>
       </div>

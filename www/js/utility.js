@@ -20,6 +20,7 @@ var util = {
         if (Math.random() < 0.05) {
           strength *= 2;
         }
+        console.log(strength);
         return second.HP - strength*first.attackBonus;
       }
     }
@@ -94,9 +95,9 @@ var util = {
     var player1 = this.playerAttr(player);
     var count = 0;
     if (boss.difficulty !== null) {
-      boss.HP = boss.vitality*10*boss.difficulty;
+      boss.HP = boss.vitality*3*boss.difficulty;
     } else {
-      boss.HP = boss.vitality*30;
+      boss.HP = boss.vitality*10;
     }
 
     this.battleTurns(player1,boss);
