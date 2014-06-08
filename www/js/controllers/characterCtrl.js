@@ -216,9 +216,9 @@ angular.module('starter.controllers')
     util.showPopup($ionicPopup,title,body,hateBtn,likeBtn,cancelBtn,
         function() {
           if (device.isApple) {
-            $window.open('http://itunes.apple.com/app/id887067605');
+            $window.open('http://itunes.apple.com/app/id887067605', '_system');
           } else if (device.isGoogle) {
-            $window.open('http://play.google.com/store/apps/details?id=com.fatchickenstudios.fitrpg');
+            $window.open('http://play.google.com/store/apps/details?id=com.fatchickenstudios.fitrpg', '_system');
           }
         },
         function() {
