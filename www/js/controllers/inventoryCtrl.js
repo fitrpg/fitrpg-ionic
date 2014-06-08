@@ -92,6 +92,7 @@ angular.module('starter.controllers')
 
   $scope.inventoryItem = Shop.get({id : item.storeId}, function(){
     $scope.inventoryItem.type = util.capitalize($scope.inventoryItem.type);
+    $scope.inventoryItem.quantity = item.quantity;
   });
 
   $scope.addClass = function(attr) {
