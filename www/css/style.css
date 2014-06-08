@@ -1,6 +1,16 @@
 /*#f3796a*/
 /*#adaeae*/
 
+/*Quest page*/
+.questTimer {
+  text-align: center;
+  font-weight:bold;
+}
+
+.battleStatus {
+  float:right;
+}
+
 /* FAQ & HELP PAGE */
 .item.faq {
   font-size:17px;
@@ -13,8 +23,23 @@
   margin:3px 10px -5px 10px;
 }
 
+.scrollUp {
+  position:absolute;
+  right:-36px;
+  top:15px;
+}
+
 /* Make sure text wraps around */
-.item.list-heading.faqanswer h1, .item.list-heading.faqanswer p {
+.item.list-heading.faqanswer h1 {
+  white-space:normal;
+  padding-right:13px;
+} 
+
+.item.list-heading.faqanswer p {
+  white-space:normal;
+}
+
+.item.item-padding.noquest {
   white-space:normal;
 }
 

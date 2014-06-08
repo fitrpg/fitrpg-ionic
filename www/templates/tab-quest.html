@@ -45,23 +45,31 @@
         <div class="item item-divider" ng-click="toggleList('strength')">
           Crush It<i class="icon ion-chevron-down pull-right" ng-show="showList['strength']"></i><i class="icon ion-chevron-right pull-right" ng-hide="showList['strength']"></i>
         </div>
-        <a ng-show="showList['strength']" class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in availableQuests | filter: {activity:'null'} | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
+        <span class="item item-padding noquest">
+          Quests to improve your strength and working out will be coming soon!
+        </span>
+       <!--  <a ng-show="showList['strength']" class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in availableQuests | filter: {activity:'null'} | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
           <i class="icon {{quest.icon}}"></i>
             <h2>{{quest.title}}</h2>
             <p>{{quest.shortDescription}}</p>
           <i class="icon icon-gray ion-ios7-arrow-right"></i>
-        </a>
+        </a> -->
 
         <!-- Sleep quests -->
         <div class="item item-divider" ng-click="toggleList('sleep')">
           Sleep It Off<i class="icon ion-chevron-down pull-right" ng-show="showList['sleep']"></i><i class="icon ion-chevron-right pull-right" ng-hide="showList['sleep']"></i>
         </div>
-        <a ng-show="showList['sleep']" class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in availableQuests | filter: {type:'sleep'}  | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
+        <span class="item item-padding noquest">
+          Quests to improve your sleep will be coming soon! 
+        </span>
+        <!-- <a ng-show="showList['sleep']" class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in availableQuests | filter: {type:'sleep'}  | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
           <i class="icon {{quest.icon}}"></i>
             <h2>{{quest.title}}</h2>
             <p>{{quest.shortDescription}}</p>
           <i class="icon icon-gray ion-ios7-arrow-right"></i>
-        </a>
+        </a> -->
+
+
       </div>
 
 
