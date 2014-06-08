@@ -1,6 +1,6 @@
 angular.module('starter.controllers')
 
-.controller('BattleCtrl', function($scope, Battle, SoloMissions, User, $ionicLoading, $ionicListDelegate, $ionicNavBarDelegate, $ionicPopup, $q) {
+.controller('BattleCtrl', function($scope, Battle, $ionicScrollDelegate, SoloMissions, User, $ionicLoading, $ionicListDelegate, $ionicNavBarDelegate, $ionicPopup, $q) {
   $scope.friendsTab = true;
 
   var loading = setTimeout(function(){
@@ -53,6 +53,7 @@ angular.module('starter.controllers')
   $scope.showHistory = true;
   $scope.friendTab = 'button-tab-active';
   $scope.friendsBattle = function() {
+    $ionicScrollDelegate.scrollTop();
     $scope.isPending = true;
     $scope.showHistory = true;
     $scope.friendTab = 'button-tab-active';
@@ -320,6 +321,7 @@ angular.module('starter.controllers')
   };
 
   $scope.newBossFights = function() {
+    $ionicScrollDelegate.scrollTop();
     $scope.bossTab = 'button-tab-active';
     $scope.friendTab = '';
     $scope.friendsTab = false;
