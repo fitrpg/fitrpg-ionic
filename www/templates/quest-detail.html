@@ -38,22 +38,22 @@
 
       <div class="item tabs tabs-secondary tabs-icon-left">
         
-        <a class="tab-item" ng-show="available" ng-click="startQuest()">
+        <a class="tab-item" ng-show="availableQuest" ng-click="startQuest()">
           <i class="icon ion-flag"></i>
           Start Quest
         </a>
 
-        <p ng-show="active">
+        <p ng-show="activeQuest">
           <b>You are currently doing this quest!</b>
         </p>
 
-        <p ng-show="completed">
+        <p ng-show="completedQuest">
           <b>You recently completed this quest!</b>
         </p>
 
       </div>
 
-      <div ng-show="active"  class="item">
+      <div ng-show="activeQuest"  class="item">
           <div class="col">
             <p>
               Your Progress
@@ -64,7 +64,7 @@
       </div>
     </div>
 
-    <div class="questTimer" ng-show="active">
+    <div class="questTimer" ng-show="activeQuest">
       <timer end-time="parsedDate"> You have {{days}} day(s), {{hours}} hour(s), {{minutes}} minute(s), and {{seconds}} second(s) remaining.</timer>
   </ion-content>
 </ion-view>

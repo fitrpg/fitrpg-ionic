@@ -116,7 +116,7 @@ angular.module('starter.controllers')
     $ionicLoading.hide();
   });
 
-  $scope.refresh = function() {
+  var refresh = function() {
     var id = localUserId;
     console.log('refreshing');
     Refresh.get({id: id}, function() { // this will tell fitbit to get new data
@@ -132,7 +132,9 @@ angular.module('starter.controllers')
     });
   };
 
-  $scope.refresh();
+  $scope.refresh = refresh;
+
+  document.addEventListener("resume", refresh, false); //whenever we resume the app, retrieve new data
 
   $scope.hasSkillPoints = function() {
     if ($rootScope.user && $rootScope.user.attributes.skillPts) {
