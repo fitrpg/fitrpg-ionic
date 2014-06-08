@@ -32,12 +32,14 @@
         <span ng-class="addClass(inventoryItem.dexterity)">{{ user.attributes.dexterity + inventoryItem.dexterity }}</span>
         <br><br>
         {{ inventoryItem.sellPrice }} Gold
+        <br><br>
       </p>
 
     </div>
 
     <div class="item item-body" ng-show="checkType()">
       <p>{{ inventoryItem.description }}</p><br>
+      <p>Quantity: {{ inventoryItem.quantity }}</p><br>
       <p class="pull-left">Sell Price</p>
       <p class="pull-right">{{ inventoryItem.sellPrice }} Gold</p>
     </div>
