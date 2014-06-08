@@ -200,14 +200,16 @@ angular.module('starter.controllers')
           };
 
           var handleNegXp = function(player,level){
+            console.log(player.attributes.experience);
             var playerXp = player.fitbit.experience + player.attributes.experience;
-            var levelXp = util.levelExp(playerXp,level)
+            var levelXp = util.levelExp(level);
+            console.log(playerXp, levelXp);
             if (playerXp < 0) {
               player.attributes.experience = -player.fitbit.experience;
             } else if (playerXp < levelXp) {
               player.attributes.experience -= (levelXp - playerXp);
             }
-            console.log(player.attributes.experience)
+            console.log(player.attributes.experience);
           }
           if (winner.result === 'player 1') {
             adjustAttr($scope.user,enemy);
@@ -216,6 +218,7 @@ angular.module('starter.controllers')
             enemyBattle.status = 'loss';
           } else if (winner.result === 'player 2') {
             adjustAttr(enemy,$scope.user);
+            console.log($scope.user);
             handleNegXp($scope.user, $scope.user.attributes.level);
             enemyBattle.status = 'win';
             battle.status = 'loss';
