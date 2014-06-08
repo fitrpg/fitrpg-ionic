@@ -198,9 +198,9 @@ angular.module('starter.controllers')
 .controller('QuestDetailCtrl', function($scope, $state, $stateParams, Quests, $ionicPopup, User, TimesData, DatesData) {
   var questId = $stateParams.questId
   $scope.quest = Quests.get({id: questId});
-  $scope.available = true; 
-  $scope.active = false;
-  $scope.completed = false;
+  $scope.availableQuest = true; 
+  $scope.activeQuest = false;
+  $scope.completedQuest = false;
   $scope.userQuest;
   $scope.difficulty = function(num) {
     if ( num <= $scope.quest.difficulty ) {
@@ -216,7 +216,7 @@ angular.module('starter.controllers')
       var userQuest = $scope.user.quests[i];
       $scope.winGoal = userQuest.winGoal;
       if (userQuest.questId === questId) { 
-        $scope.available = false;
+        $scope.availableQuest = false;
         evalQuest(userQuest);
         return; //stop looping
       }
@@ -230,7 +230,7 @@ angular.module('starter.controllers')
     $scope.userQuest = userQuest; //make userquest obj available to scope
     // FOR ACTIVE QUESTS
     if (userQuest.status === 'active') {
-      $scope.active = true;
+      $scope.activeQuest = true;
       $scope.$broadcast('timer-set-countdown');
       $scope.parsedDate = Date.parse(userQuest.completionTime);
       console.log('parsedDate', $scope.parsedDate);
@@ -249,7 +249,7 @@ angular.module('starter.controllers')
       }
     // FOR COMPLETED QUESTS
     } else {
-      $scope.completed = true;
+      $scope.completedQuest = true;
       if (cb) { cb() };
     }
   };
@@ -333,8 +333,7 @@ angular.module('starter.controllers')
         resourceAttr.endTime   = timify(end.getHours())   + ':' +timify(end.getMinutes());
       }
 
-      $scope.available = false; 
-      $scope.active = true;
+      $scope.availableQuest = false; 
       $scope.user.quests.push(questObj);
       User.update($scope.user);
       $state.go('app.quest');
