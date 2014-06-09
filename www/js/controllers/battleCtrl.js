@@ -255,8 +255,8 @@ angular.module('starter.controllers')
           return false;
         };
 
+        var battleInfo = {type:'battle',enemy:id,status:'pending'};
         User.get({id: $scope.user['_id']}, function(user) {
-          var battleInfo = {type:'battle',enemy:id,status:'pending'};
           var missionExists = checkMissionExists(user,id);
           if (!missionExists) {
             user.missionsVersus.push(battleInfo);
