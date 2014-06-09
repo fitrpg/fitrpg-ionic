@@ -4,8 +4,16 @@ angular.module('starter.controllers')
 .controller('InventoryCtrl', function($scope, Shop, $ionicLoading) {
   // inventory is accessed from $rootScope.user.inventory in the template
   var inventory = $scope.user.inventory;
-  $scope.inventory = [];
 
+  var makeCopy = function(object) {
+    objectCopy = {};
+    for (var key in object) {
+      objectCopy[key] = object[key];
+    }
+    return objectCopy;
+  };
+
+  $scope.inventory = [];
   var loading = setTimeout(function(){
     $ionicLoading.show({
       template: '<p>Loading...</p><i class="icon ion-loading-c"></i>'
@@ -16,9 +24,12 @@ angular.module('starter.controllers')
     for (var i=0; i<inventory.length; i++) {
       var itemId = inventory[i].storeId;
       for (var j=0; j<storeItems.length; j++) {
-        var storeItem = storeItems[j];
+        var storeItem = makeCopy(storeItems[j]);
         if (storeItem['_id'] === itemId){
           storeItem['inventoryId'] = inventory[i].id;
+          if (inventory[i].equipped) {
+            storeItem['equipped'] = 'Equipped';
+          }
           $scope.inventory.push(storeItem);
         }
       }
