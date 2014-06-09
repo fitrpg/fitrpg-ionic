@@ -28,13 +28,14 @@ angular.module('starter.controllers')
     isGoogle: ionic.Platform.isAndroid(),
   };
 
-  $scope.addAlert = function(status) {
+  var addAlert = function(status, name) {
+    name = name || '';
     if (status === 'loss') {
       type = 'danger';
-      msg = 'You suck. You lost experience and gold.'
+      msg = 'Looks like you need to work out more. You lost to ' + name + '.';
     } else if (status === 'win') {
       type = 'success';
-      msg = 'You win. You gained experience and gold.'
+      msg = 'You beat ' + name + '. You gained experience and gold.'
     } else if (status === 'request') {
       type = '';
       msg = 'Someone wants to battle you.';
@@ -71,23 +72,21 @@ angular.module('starter.controllers')
     var alertLoss = false;
     var alertRequest = false;
     for (var i=0; i<$rootScope.user.missionsVersus.length; i++) {
-      var mission = $rootScope.user.missionsVersus[i];
-      if (mission.type === 'battle') {
-        if (mission.status === 'win' && !alertWin) {
-          alertWin = true;
-          $scope.addAlert(mission.status);
-        } else if (mission.status === 'loss' && !alertLoss) {
-          alertLoss = true;
-          $scope.addAlert(mission.status);
-        } else if (mission.status === 'request' && !alertRequest) {
-          alertRequest = true;
-          $scope.addAlert(mission.status);
+      var alertMission = function(index){
+        var mission = $rootScope.user.missionsVersus[index];
+        if (mission.type === 'battle') {
+          if (mission.status === 'win' || mission.status === 'loss') {
+            User.get({id: mission.enemy}, function(enemy){
+              addAlert(mission.status,enemy.profile.displayName);
+            });
+            listOfIndices.push(index);
+          } else if (mission.status === 'request' && !alertRequest) {
+            alertRequest = true;
+            addAlert(mission.status);
+          }
         }
-
-        if (mission.status === 'win' || mission.status === 'loss') {
-          listOfIndices.push(i);
-        }
-      }
+      };
+      alertMission(i);
     }
 
     var removeMission = function(index,count) {
