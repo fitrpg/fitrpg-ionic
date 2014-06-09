@@ -195,4 +195,8 @@ var util = {
     return level;
   },
 
+  calcSkillPoints: function(currSkillPts, lvl, currLvl) {
+    return currSkillPts + (lvl-currLvl)*5;
+  },
+
 };
