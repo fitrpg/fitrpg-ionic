@@ -26,7 +26,7 @@
         <a ng-show="showList['steps']" class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in availableQuests | filter: {activity:'steps'}  | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
           <i class="icon {{quest.icon}}"></i>
             <h2>{{quest.title}}</h2>
-            <p>{{quest.shortDescription}}</p>
+            <p>{{quest.shortDescription}} Time: {{quest.numDays}} days, {{quest.numHours}} hrs</p>
           <i class="icon icon-gray ion-ios7-arrow-right"></i>
         </a>
 
@@ -37,7 +37,7 @@
         <a ng-show="showList['distance']" class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in availableQuests | filter: {activity:'distance'}  | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
           <i class="icon {{quest.icon}}"></i>
             <h2>{{quest.title}}</h2>
-            <p>{{quest.shortDescription}}</p>
+            <p>{{quest.shortDescription}} Time: {{quest.numDays}} days, {{quest.numHours}} hrs</p>
           <i class="icon icon-gray ion-ios7-arrow-right"></i>
         </a>
 
