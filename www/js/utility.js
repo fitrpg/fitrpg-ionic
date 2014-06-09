@@ -24,7 +24,7 @@ var util = {
           strength *= 2;
         }
         // console.log(strength);
-        return second.HP - strength*first.attackBonus;
+        return Math.floor(second.HP - strength*first.attackBonus);
       }
     }
     return second.HP;
