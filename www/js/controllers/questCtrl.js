@@ -134,6 +134,7 @@ angular.module('starter.controllers')
             if (quest.numDays < 1) {
               TimesData.get(quest.getObj, function(result) {
                 var total = result.total;
+                console.log('total', total);
                 if (total >= quest.winGoal) {
                   $scope.user.quests[i].status = 'success';
                   $scope.user.attributes.gold += quest.gold; // add the winnings
@@ -148,6 +149,7 @@ angular.module('starter.controllers')
             } else if (quest.numDays > 0 ) { //multiday quests
               DatesData.get(quest.getObj, function(result) {
                 var total = result.total;
+                  console.log('total', total);
                 if (total >= quest.winGoal) {
                   $scope.user.quests[i].status = 'success';
                   $scope.user.attributes.gold += quest.gold; // add the winnings
@@ -236,20 +238,23 @@ angular.module('starter.controllers')
       console.log('parsedDate', $scope.parsedDate);
       if (userQuest.numDays < 1) {
         TimesData.get(userQuest.getObj, function(result) {
+          console.log('progress', result.total);
           $scope.progress = result.total || 0; //current progress 
           console.log($scope.progress);
           if (cb) { cb() };    
         });
       } else if (userQuest.numDays > 0 ) { // multiday quests
         DatesData.get(userQuest.getObj, function(result) {
+          console.log('progress', result.total);
           $scope.progress = result.total || 0; // current progress
-          console.log($scope.progress);
           if (cb) { cb() };
         });
       }
+    } else if (userQuest.status === 'success' || userQuest.status === 'fail') {
+      $scope.completedQuest = true;
+      if (cb) {cb()};
     // FOR COMPLETED QUESTS
     } else {
-      $scope.completedQuest = true;
       if (cb) { cb() };
     }
   };
