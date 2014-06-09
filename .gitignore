@@ -4,3 +4,4 @@ platforms/ios
 www/lib
 .DS_store
 www/._.DS_store
+plugins/android.json
