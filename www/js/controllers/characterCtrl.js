@@ -155,7 +155,7 @@ angular.module('starter.controllers')
   document.addEventListener("resume", refresh, false); //whenever we resume the app, retrieve new data
 
   $scope.hasSkillPoints = function() {
-    if ($rootScope.user && $rootScope.user.attributes.skillPts) {
+    if ($rootScope.user && $rootScope.user.attributes.skillPts > 0) {
       return true;
     } else {
       return false;

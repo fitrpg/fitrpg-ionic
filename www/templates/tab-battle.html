@@ -32,7 +32,7 @@
         <ion-list>
           <ion-item class="item-avatar" ng-repeat="friend in friends | filter:searchText | orderBy: 'friend.battleData.status'" type="item-text-wrap">
             <img ng-src="{{friend.profile.avatar}}">
-            <h2>{{friend.profile.displayName}}</h2>
+            <h2>{{friend.username}}</h2>
             <p>Level: {{friend.attributes.level}} <span ng-show="battlePending(friend.battleData)">Status: {{friend.battleData.status}}</span></p>
             <ion-option-button class="button-positive button-swipe" ng-click="startBattle(friend['_id'])">Fight</ion-option-button>
             <ion-option-button class="button-assertive button-swipe" ng-click="cancelBattle(friend['_id'])">Cancel</ion-option-button>
@@ -62,7 +62,7 @@
         <ion-list>
           <ion-item class="item-avatar" ng-repeat="battle in oldWinBattles track by $index" type="item-text-wrap">
             <img ng-src="{{battle.profile.avatar}}">
-            <h2>{{battle.profile.displayName}}</h2>
+            <h2>{{battle.username}}</h2>
             <p>Level {{battle.attributes.level}} {{battle.character}}</p>
           </ion-item>
         </ion-list>
@@ -73,7 +73,7 @@
         <ion-list>
           <ion-item class="item-avatar" ng-repeat="battle in oldLossBattles track by $index" type="item-text-wrap">
             <img ng-src="{{battle.profile.avatar}}">
-            <h2>{{battle.profile.displayName}}</h2>
+            <h2>{{battle.username}}</h2>
             <p>Level {{battle.attributes.level}} {{battle.character}}</p>
           </ion-item>
         </ion-list>
