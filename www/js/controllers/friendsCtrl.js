@@ -9,14 +9,22 @@ angular.module('starter.controllers')
     });
   }, 500);
 
+  var stopLoading = function() {
+    clearTimeout(loading);
+    $ionicLoading.hide();
+  }
+
+  if ($scope.user.friends.length === 0) {
+    stopLoading();
+  }
+
   for (var i=0; i<$scope.user.friends.length; i++) {
     var friend = $scope.user.friends[i];
     User.get({id: friend}, function(user){
       if (user['_id']) {
         $scope.friends.push(user);
       }
-      clearTimeout(loading);
-      $ionicLoading.hide();
+      stopLoading();
     });
   }
 
@@ -83,6 +91,7 @@ angular.module('starter.controllers')
     }
     if (!friendExists) {
       $scope.user.friends.push(id);
+      User.update($scope.user);
       title = 'Friend Added';
       body = 'Your friend has been added.';
     } else {
