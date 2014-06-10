@@ -18,10 +18,8 @@ angular.module('starter.controllers')
       }
     }
 
-    for (var i=0; i<$scope.user.friends.length; i++) {
-      var friend = $scope.user.friends[i];
-
-      User.get({id: friend}, function(user){
+    var getFriendData = function(id) {
+      User.get({id: id}, function(user){
         if (user['_id']) {
           $scope.friends.push(user);
           var friend = $scope.friends[$scope.friends.length-1];
@@ -38,9 +36,28 @@ angular.module('starter.controllers')
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
       });
+    };
+
+    for (var i=0; i<$scope.user.friends.length; i++) {
+      var friend = $scope.user.friends[i];
+      getFriendData(friend);
     }
 
-  }
+    for (var i=0; i<$scope.user.missionsVersus.length; i++) {
+      var enemy = $scope.user.missionsVersus[i].enemy;
+      var friendExists = false;
+      for (var j=0; j<$scope.user.friends.length; j++) {
+        var friend = $scope.user.friends[j];
+        if (enemy === friend) {
+          friendExists = true;
+        }
+      }
+      if (!friendExists) {
+        getFriendData(enemy);
+      }
+    }
+
+  };
 
   $scope.refresh = function() {
     battles = [];
@@ -402,11 +419,15 @@ angular.module('starter.controllers')
           $scope.user.attributes.experience += $scope.soloMission.experience;
           $scope.user.attributes.gold += $scope.soloMission.gold;
           $scope.user.battles.push($scope.soloMission['_id']);
+          var newLevel = util.calcLevel($scope.user.fitbit.experience + $scope.user.attributes.experience);
+          $scope.user.attributes.skillPts = util.calcSkillPoints($scope.user.attributes.skillPts,newLevel,$scope.user.attributes.level);
+          $scope.user.attributes.level = newLevel;
           body = 'You\'ve crushed evil. Go find more bad guys to defeat!';
         } else {
           body = 'You were defeated. You may want to train more before doing battle.';
         }
         $scope.user.attributes.HP = winner.hp;
+
         User.update($scope.user);
 
         util.showAlert($ionicPopup, title, body, 'OK', function(){
