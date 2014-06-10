@@ -1,4 +1,3 @@
-  <img src="/readme/character_green.png" height=500 width=300 />
 
 <a href="https://play.google.com/store/apps/details?id=com.fatchickenstudios.fitrpg">
   <img alt="Get it on Google Play"
@@ -29,9 +28,3 @@ FitRPG is a mobile app created by [Amira Anuar](https://github.com/aellawind), [
   * Security
     * Implemnting json web tokens
     * OAuth
-  
-<h2>Screenshots</h2>
-
-<img src="/readme/character.png" />
-<img src="/readme/items.png" />
-<img src="/readme/quests.png" />
