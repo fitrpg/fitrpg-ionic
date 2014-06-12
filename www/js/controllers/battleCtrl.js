@@ -419,6 +419,14 @@ angular.module('starter.controllers')
           $scope.user.attributes.experience += $scope.soloMission.experience;
           $scope.user.attributes.gold += $scope.soloMission.gold;
           $scope.user.battles.push($scope.soloMission['_id']);
+          var index;
+          for (var i=0; i<$scope.soloMissions.length; i++) {
+            if ($scope.soloMissions['_id'] === missionId) {
+              index = i;
+            }
+          }
+          $scope.soloMissions.splice(index,1);
+
           var newLevel = util.calcLevel($scope.user.fitbit.experience + $scope.user.attributes.experience);
           $scope.user.attributes.skillPts = util.calcSkillPoints($scope.user.attributes.skillPts,newLevel,$scope.user.attributes.level);
           $scope.user.attributes.level = newLevel;
