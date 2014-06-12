@@ -33,7 +33,7 @@
 .item.list-heading.faqanswer h1 {
   white-space:normal;
   padding-right:13px;
-} 
+}
 
 .item.list-heading.faqanswer p {
   white-space:normal;
@@ -362,4 +362,8 @@ i.ion-refresh.refresh {
   margin-left: -150px;
   max-width: 300px;
   bottom: 15%;
+}
+
+.scroll-content {
+  margin-bottom: 20px;
 }
