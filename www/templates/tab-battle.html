@@ -30,7 +30,7 @@
         </div>
 
         <ion-list>
-          <ion-item class="item-avatar" ng-repeat="friend in friends | filter:searchText | orderBy: 'friend.battleData.status'" type="item-text-wrap">
+          <ion-item class="item-avatar" ng-repeat="friend in friends | filter:searchText | orderBy: 'battleData.status'" type="item-text-wrap">
             <img ng-src="{{friend.profile.avatar}}">
             <h2>{{friend.username}}</h2>
             <p>Level: {{friend.attributes.level}} <span ng-show="battlePending(friend.battleData)">Status: {{friend.battleData.status}}</span></p>

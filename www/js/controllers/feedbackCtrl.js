@@ -1,6 +1,6 @@
 angular.module('starter.controllers')
 
-.controller('FeedbackCtrl', function($scope, $state, $ionicPopup, Feedback) {
+.controller('FeedbackCtrl', function($scope, $state, $ionicPopup, User, Feedback, localStorageService) {
   $scope.feedback = {
     email: '',
     message: '',
@@ -12,6 +12,12 @@ angular.module('starter.controllers')
 
 
   $scope.submit = function(feedback) {
+    if (!localStorageService.get('rate')) {
+      localStorageService.set('rate',true);
+      $scope.user.attributes.gold += 500;
+      User.update($scope.user);
+    }
+
     Feedback.save({email: feedback.email, message: feedback.message, createdAt: new Date()});
 
     var title = 'Feedback Received';
