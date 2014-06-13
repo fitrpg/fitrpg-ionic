@@ -421,7 +421,7 @@ angular.module('starter.controllers')
           $scope.user.battles.push($scope.soloMission['_id']);
           var index;
           for (var i=0; i<$scope.soloMissions.length; i++) {
-            if ($scope.soloMissions['_id'] === missionId) {
+            if ($scope.soloMissions[i]['_id'] === missionId) {
               index = i;
             }
           }
