@@ -24,6 +24,7 @@
         <!-- add ngclick event to add battle to user database with status waiting -->
         <ion-option-button class="button-positive button-swipe" ng-click="requestBattle(friend['_id'])">Battle</ion-option-button>
       </ion-item>
+      <span class="item item-padding" ng-hide="hasFriends" ng-click="navTo('addfriends')">Add Friends</span>
     </ion-list>
   </ion-content>
 </ion-view>
