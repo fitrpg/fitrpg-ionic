@@ -1,6 +1,6 @@
 angular.module('starter.controllers')
 
-.controller('FriendsCtrl', function($scope, User, $ionicLoading, $ionicListDelegate, $ionicPopup, $q) {
+.controller('FriendsCtrl', function($scope, $state, User, $ionicLoading, $ionicListDelegate, $ionicPopup, $q) {
   // friends is accessed from $rootScope.user
   $scope.friends = [];
   var loading = setTimeout(function(){
@@ -23,10 +23,16 @@ angular.module('starter.controllers')
     User.get({id: friend}, function(user){
       if (user['_id']) {
         $scope.friends.push(user);
+        $scope.hasFriends = true;
       }
       stopLoading();
     });
   }
+
+  $scope.hasFriends = false;
+  $scope.navTo = function(location) {
+    $state.go('app.' + location);
+  };
 
   $scope.requestBattle = function(friendId) {
     var title;

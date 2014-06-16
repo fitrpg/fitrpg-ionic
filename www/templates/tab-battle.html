@@ -37,6 +37,7 @@
             <ion-option-button class="button-positive button-swipe" ng-click="startBattle(friend['_id'])">Fight</ion-option-button>
             <ion-option-button class="button-assertive button-swipe" ng-click="cancelBattle(friend['_id'])">Cancel</ion-option-button>
           </ion-item>
+          <span class="item item-padding" ng-hide="hasBattles">No Pending Battles or Requests</span>
         </ion-list>
 
       </div>
