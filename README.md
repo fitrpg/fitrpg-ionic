@@ -19,7 +19,7 @@ FitRPG is a mobile app created by [Amira Anuar](https://github.com/aellawind), [
 
 <b>Challenges</b>:
   * User flow during fitbit OAuth  
-    *  Originally we wanted to do the OAuth login client side on the app. But due to fitbit using OAuth 1.0 and not allowing CORS or JSONP, it had to be done server side. This was a challenge since the server redirects your app during the OAuth process and takes you out of the app context. We had to find a way to keep this redirect within the app and inform the app if the authentication was successful.
+    *  Originally we wanted to do the OAuth login client side on the app. But due to fitbit using OAuth 1.0 and not allowing CORS or JSONP, it had to be done server side. This was a challenge since the server redirects your app during the OAuth process and takes you out of the app context. We had to find a way to keep this redirect within the app and inform the app if the authentication was successful. Read our blog post [here](http://amiraanuar.com/mobile-authentication-in-ionic-with-oauth-through-external-apis-fitbit-pt-2-client/) on how we implemented the client-side portion of authentication via Ionic.
   * Game logic design
     * Balancing how sleep, steps and other activities relate to the characters attributes and making sure one is not more effective than other attributes.
   * User interface design
