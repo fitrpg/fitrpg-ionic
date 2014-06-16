@@ -18,6 +18,15 @@ angular.module('starter.controllers')
       }
     }
 
+    var stopLoading = function() {
+      clearTimeout(loading);
+      $ionicLoading.hide();
+    };
+
+    if ($scope.user.friends.length === 0) {
+      stopLoading();
+    };
+
     var getFriendData = function(id) {
       User.get({id: id}, function(user){
         if (user['_id']) {
@@ -31,9 +40,9 @@ angular.module('starter.controllers')
             }
           }
           console.log(friend);
+          $scope.hasBattles = true;
         }
-        clearTimeout(loading);
-        $ionicLoading.hide();
+        stopLoading();
         $scope.$broadcast('scroll.refreshComplete');
       });
     };
@@ -64,6 +73,8 @@ angular.module('starter.controllers')
     $scope.friends = [];
     listOfBattles();
   };
+
+  $scope.hasBattles = false;
 
   $scope.showHistory = true;
   $scope.friendTab = 'button-tab-active';
@@ -228,6 +239,9 @@ angular.module('starter.controllers')
             handleNegXp(enemy, enemy.attributes.level);
             battle.status = 'win';
             enemyBattle.status = 'loss';
+            var newLevel = util.calcLevel($scope.user.fitbit.experience + $scope.user.attributes.experience);
+            $scope.user.attributes.skillPts = util.calcSkillPoints($scope.user.attributes.skillPts,newLevel,$scope.user.attributes.level);
+            $scope.user.attributes.level = newLevel;
           } else if (winner.result === 'player 2') {
             adjustAttr(enemy,$scope.user);
             handleNegXp($scope.user, $scope.user.attributes.level);
@@ -235,9 +249,6 @@ angular.module('starter.controllers')
             battle.status = 'loss';
           }
 
-          var newLevel = util.calcLevel($scope.user.fitbit.experience + $scope.user.attributes.experience);
-          $scope.user.attributes.skillPts = util.calcSkillPoints($scope.user.attributes.skillPts,newLevel,$scope.user.attributes.level);
-          $scope.user.attributes.level = newLevel;
 
           util.showAlert($ionicPopup,'Challenge Accepted','Your duel to the death with '+ enemy.profile.displayName+ ' is in progress. Who will come out on top?', 'Results', function() {
             battleResults(battle.status);
