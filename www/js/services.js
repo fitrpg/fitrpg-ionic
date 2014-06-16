@@ -28,6 +28,10 @@ angular.module('starter.services', ['ngResource'])
   return $resource(SERVER_URL + '/fitbit/refresh/:id', {id: '@id'});
 }])
 
+.factory('Settings', ['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
+  return $resource(SERVER_URL + '/settings/:id', {id: '@id'});
+}])
+
 .factory('User', ['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
   return $resource(SERVER_URL + '/api/users/:id', {id : '@id'}, {
       update: { method: 'PUT' }

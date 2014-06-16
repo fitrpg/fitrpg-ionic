@@ -11,6 +11,7 @@ angular.module('starter.controllers')
     User,
     Shop,
     Refresh,
+    Settings,
     localStorageService,
     $window )
 {
@@ -148,6 +149,7 @@ angular.module('starter.controllers')
         $scope.$broadcast('scroll.refreshComplete');
       });
     });
+    getSettings();
   };
 
   $scope.refresh = refresh;
@@ -230,10 +232,26 @@ angular.module('starter.controllers')
     $state.go('app.' + location);
   };
 
+  var showIncentive = false;
+
+  var getSettings = function() {
+    var platform;
+    if (device.isApple) {
+      platform = 'ios';
+    } else if (device.isGoogle) {
+      platforom = 'android'
+    }
+    Settings.get( { platform: platform }, function(item) {
+      showIncentive = item.incentive;
+    });
+  };
+
+  getSettings();
+
   $scope.rateApp = function() {
     var title = 'Having Fun?';
     var body;
-    if (localStorageService.get('rate')) {
+    if (localStorageService.get('rate') || !showIncentive) {
       body = 'Let us know what you think and what features you want added!';
     } else {
       body = 'Leave some feedback for us and get 500 GOLD! Good or bad we want to hear from you so we can continue to add to and improve the game.';
