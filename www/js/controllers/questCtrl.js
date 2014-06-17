@@ -96,25 +96,27 @@ angular.module('starter.controllers')
 
     // Iterate over all the quests that the user has stored; maybe eventually just save them
     // locally to the user object
-    for (var i =0; i< $scope.user.quests.length; i++) {
-      var quest = $scope.user.quests[i];
-      var completeDate = new Date(quest.completionTime); //convert date to matched format
-      // Iterate over all the quests and get the ones that have status of completed
-      if(quest.status === 'success' || quest.status === 'fail') {
-        // if 7 days have passed since this was completed, they can do it again so we remove it from their user array
-        if(completeDate.addDays(7) <= today) {
-          $scope.user.quests = $scope.user.quests.splice($scope.user.quests.indexOf(quest));
-        } else { //if 7 days haven't passed, show them in recently completed
-          Quests.get({id : quest.questId}, function(q) {
-            q.completionTime = quest.completionTime; //add completion time so we can sort them
-            if (quest.status === 'success') {
-              $scope.successfulQuests.push(q);
-            } else {
-              $scope.failedQuests.push(q);
-            }
-          });
+    for (var j =0; j< $scope.user.quests.length; j++) {
+      (function(i) {
+        var quest = $scope.user.quests[i];
+        var completeDate = new Date(quest.completionTime); //convert date to matched format
+        // Iterate over all the quests and get the ones that have status of completed
+        if(quest.status === 'success' || quest.status === 'fail') {
+          // if 7 days have passed since this was completed, they can do it again so we remove it from their user array
+          if(completeDate.addDays(7) <= today) {
+            $scope.user.quests = $scope.user.quests.splice($scope.user.quests.indexOf(quest));
+          } else { //if 7 days haven't passed, show them in recently completed
+            Quests.get({id : quest.questId}, function(q) {
+              q.completionTime = quest.completionTime; //add completion time so we can sort them
+              if (quest.status === 'success') {
+                $scope.successfulQuests.push(q);
+              } else {
+                $scope.failedQuests.push(q);
+              }
+            });
+          }
         }
-      }
+      }(j));
     }
   };
 
