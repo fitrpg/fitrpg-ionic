@@ -27,3 +27,7 @@ FitRPG is a mobile app created by [Amira Anuar](https://github.com/aellawind), [
   * Security
     * Implementing json web tokens
     * OAuth
+
+<h2>Upcoming Features</h2>
+  * Push Notfications
+  * Versus Missions
