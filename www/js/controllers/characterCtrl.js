@@ -10,6 +10,9 @@ angular.module('starter.controllers')
     $ionicPlatform,
     User,
     Shop,
+    Quests,
+    TimesData,
+    DatesData,
     Refresh,
     Settings,
     localStorageService,
@@ -44,8 +47,23 @@ angular.module('starter.controllers')
     $scope.alerts.push({type: type, msg: msg});
   };
 
+  var addQuestAlert = function(quest) {
+    if (quest.status === 'success') {
+      type = 'success';
+      msg = 'You completed your quest to ' + quest.shortDesc.toLowerCase() + ' You won ' + quest.gold + " pieces!";
+    } else if (quest.status === 'fail') {
+      type = 'danger';
+      msg = 'Sorry, you didn\'t finish your quest to ' + quest.shortDesc.toLowerCase() + ' You lost gold. Try again in a few days.'
+    }
+    $scope.questAlerts.push({type: type, msg: msg});
+  };
+
   $scope.closeAlert = function(index) {
     $scope.alerts.splice(index, 1);
+  };
+
+  $scope.closeQuestAlert = function(index) {
+    $scope.questAlerts.splice(index, 1);
   };
 
   var calculateData = function(user) {
@@ -103,6 +121,50 @@ angular.module('starter.controllers')
 
   };
 
+  var alertQuestStatus = function() {
+    $scope.questAlerts = [];
+    var today = parseInt(Date.parse(new Date()));
+    for (var j =0; j< $rootScope.user.quests.length; j++) {
+      (function(i) { 
+        var quest = $rootScope.user.quests[i];
+        if (quest.status === 'active') {
+          var completeDate = parseInt(Date.parse(quest.completionTime)); 
+          if (today >= completeDate) {
+            if (quest.numDays < 1) {
+              TimesData.get(quest.getObj, function(result) {
+                var total = result.total;
+                if (total >= quest.winGoal) {
+                  $rootScope.user.quests[i].status = 'success';
+                  $rootScope.user.attributes.gold += quest.gold; 
+                  $rootScope.user.attributes.experience += quest.gold*2;
+                } else {
+                  $rootScope.user.quests[i].status = 'fail';
+                  $rootScope.user.attributes.gold = $rootScope.user.attributes.gold - Math.floor(quest.gold/3);
+                }
+                User.update($rootScope.user);
+                addQuestAlert(quest);
+              });
+            } else if (quest.numDays > 0 ) { 
+              DatesData.get(quest.getObj, function(result) {
+                var total = result.total;
+                if (total >= quest.winGoal) {
+                  $rootScope.user.quests[i].status = 'success';
+                  $rootScope.user.attributes.gold += quest.gold; 
+                  $rootScope.user.attributes.experience += quest.gold*2;
+                } else {
+                  $rootScope.user.quests[i].status = 'fail';
+                  $rootScope.user.attributes.gold = $rootScope.user.attributes.gold - Math.floor(quest.gold/3);
+                }
+                User.update($rootScope.user);
+                addQuestAlert(quest);
+              });
+            }
+          }
+        }
+      }(j));
+    }
+  };
+
   var setWeapons = function() {
     var defaultWeapon = function(location) {
       $rootScope.user.equipped[location] = {};
@@ -122,30 +184,44 @@ angular.module('starter.controllers')
 
   var localUserId = localStorageService.get('userId'); //'2Q2TVT'; //
 
-  User.get({id : localUserId}, function (user) {
-    $rootScope.user = user;
-    setWeapons();
-    calculateData($rootScope.user);
-
-    alertBattleStatus();
-
-
-    User.update($rootScope.user);
-    clearTimeout(loading);
-    $ionicLoading.hide();
-  });
+  var checkNewData = function() {
+    User.get({id : localUserId}, function (user) {
+      $rootScope.user = user;
+      setWeapons();
+      getSettings();
+      if (user.needsUpdate === true) {
+        Refresh.get({id:localUserId}, function() {
+          User.get({id:localUserId}, function(user) {
+            console.log('needed a new update');
+            $rootScope.user = user;
+            calculateData($rootScope.user);
+            alertBattleStatus();
+            alertQuestStatus();
+            $rootScope.user.needsUpdate = false;
+            User.update($rootScope.user);
+            clearTimeout(loading);
+            $ionicLoading.hide();
+          });
+        });
+      } else {
+        console.log('did not need a new update');
+        alertBattleStatus();
+        calculateData($rootScope.user);
+        User.update($rootScope.user);
+        clearTimeout(loading);
+        $ionicLoading.hide();
+      }
+    });
+  }
 
   var refresh = function() {
-    var id = localUserId;
     console.log('refreshing');
-    Refresh.get({id: id}, function() { // this will tell fitbit to get new data
-      User.get({id : id}, function (user) { // this will retrieve that new data
+    Refresh.get({id: localUserId}, function() { // this will tell fitbit to get new data
+      User.get({id : localUserId}, function (user) { // this will retrieve that new data
         $rootScope.user = user;
         calculateData($rootScope.user);
         alertBattleStatus();
         User.update($rootScope.user);
-        // $window.alert("Successfully retrieved data for", id);
-        // location.href = location.pathname; //refresh page
         $scope.$broadcast('scroll.refreshComplete');
       });
     });
@@ -154,7 +230,8 @@ angular.module('starter.controllers')
 
   $scope.refresh = refresh;
 
-  document.addEventListener("resume", refresh, false); //whenever we resume the app, retrieve new data
+  checkNewData();
+  document.addEventListener("resume", checkNewData, false); //whenever we resume the app, retrieve new data if there is any
 
   $scope.hasSkillPoints = function() {
     if ($rootScope.user && $rootScope.user.attributes.skillPts > 0) {

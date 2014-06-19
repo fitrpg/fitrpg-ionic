@@ -2,7 +2,7 @@ angular.module('starter.controllers')
 
 // This controller handles the list of the quests that show up as
 // all,active,and completed
-.controller('QuestCtrl', function($scope, $ionicLoading, $ionicScrollDelegate, SoloMissions, Quests, User, TimesData, DatesData) {
+.controller('QuestCtrl', function($scope, $ionicLoading, $ionicScrollDelegate, localStorageService, SoloMissions, Quests, User, TimesData, DatesData) {
 
   // Creates the loading screen that only shows up after 500 ms if items have not yet loaded
   var loading = setTimeout(function(){
@@ -10,22 +10,6 @@ angular.module('starter.controllers')
       template: '<p>Loading...</p><i class="icon ion-loading-c"></i>'
     });
   }, 500);
-
-  // Function to add alerts to the user about quests that have recently ended
-  $scope.addAlert = function(quest) {
-    if (quest.status === 'success') {
-      type = 'success';
-      msg = 'You completed your quest to ' + quest.shortDesc.toLowerCase() + ' You won ' + quest.gold + " pieces!";
-    } else if (quest.status === 'fail') {
-      type = 'danger';
-      msg = 'Sorry, you didn\'t finish your quest to ' + quest.shortDesc.toLowerCase() + ' You lost gold. Try again in a few days.'
-    }
-    $scope.alerts.push({type: type, msg: msg});
-  };
-
-  $scope.closeAlert = function(index) {
-    $scope.alerts.splice(index, 1);
-  };
 
   $scope.allTab = 'button-tab-active';
   $scope.all = function() {
@@ -132,7 +116,7 @@ angular.module('starter.controllers')
 
   // The following function iterates over the current user's quests and checks to see if
   // any have expired and if so, did they pass/fail the quest
-  $scope.checkQuests = function() {
+  var checkQuests = function() {
     $scope.alerts = [];
     var today = parseInt(Date.parse(new Date()));
     // Iterate over all the quests that the user has stored
@@ -149,17 +133,14 @@ angular.module('starter.controllers')
                 console.log('total', total);
                 if (total >= quest.winGoal) {
                   $scope.user.quests[i].status = 'success';
-                  console.log('goldprev',$scope.user.attributes.gold);
                   $scope.user.attributes.gold += quest.gold; // add the winnings
                   $scope.user.attributes.experience += quest.gold*2;
-                  console.log('goldafter',$scope.user.attributes.gold);
                   User.update($scope.user);
                 } else {
                   $scope.user.quests[i].status = 'fail';
                   $scope.user.attributes.gold = $scope.user.attributes.gold - Math.floor(quest.gold/3);
                   User.update($scope.user);
                 }
-                $scope.addAlert(quest);
               });
             } else if (quest.numDays > 0 ) { //multiday quests
               DatesData.get(quest.getObj, function(result) {
@@ -175,7 +156,6 @@ angular.module('starter.controllers')
                   $scope.user.attributes.gold = $scope.user.attributes.gold - Math.floor(quest.gold/3);
                   User.update($scope.user);
                 }
-                $scope.addAlert(quest);
               });
             }
           }
@@ -185,7 +165,17 @@ angular.module('starter.controllers')
   };
 
   $scope.all();
-  $scope.checkQuests();
+
+  // Only check the quests if the user needs an update
+  var localUserId = localStorageService.get('userId'); 
+  User.get({id:localUserId}, function(user) {
+    if (user.needsUpdate === true) {
+      checkQuests();
+      $scope.user.needsUpdate = false;
+      User.update($scope.user);
+    }
+  });
+  
 
   // useful to add days and hours to the start time/day
   Date.prototype.addDays = function(days,hours) {
