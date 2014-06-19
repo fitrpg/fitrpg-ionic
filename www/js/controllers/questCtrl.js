@@ -18,7 +18,7 @@ angular.module('starter.controllers')
       msg = 'You completed your quest to ' + quest.shortDesc.toLowerCase() + ' You won ' + quest.gold + " pieces!";
     } else if (quest.status === 'fail') {
       type = 'danger';
-      msg = 'Sorry, you didn\'t finish your quest to ' + quest.shortDesc.toLowerCase() + ' Try again in a few days.'
+      msg = 'Sorry, you didn\'t finish your quest to ' + quest.shortDesc.toLowerCase() + ' You lost gold. Try again in a few days.'
     }
     $scope.alerts.push({type: type, msg: msg});
   };
@@ -116,6 +116,8 @@ angular.module('starter.controllers')
               }
             });
           }
+        } else {
+          refreshQuests.push(quest);
         }
       }(j));
     }
@@ -149,11 +151,12 @@ angular.module('starter.controllers')
                   $scope.user.quests[i].status = 'success';
                   console.log('goldprev',$scope.user.attributes.gold);
                   $scope.user.attributes.gold += quest.gold; // add the winnings
+                  $scope.user.attributes.experience += quest.gold*2;
                   console.log('goldafter',$scope.user.attributes.gold);
                   User.update($scope.user);
                 } else {
                   $scope.user.quests[i].status = 'fail';
-                  $scope.user.attributes.gold = $scope.user.attributes.gold - Math.floor(quest.gold/2);
+                  $scope.user.attributes.gold = $scope.user.attributes.gold - Math.floor(quest.gold/3);
                   User.update($scope.user);
                 }
                 $scope.addAlert(quest);
@@ -164,14 +167,12 @@ angular.module('starter.controllers')
                   console.log('total', total);
                 if (total >= quest.winGoal) {
                   $scope.user.quests[i].status = 'success';
-                                    console.log('goldprev',$scope.user.attributes.gold);
                   $scope.user.attributes.gold += quest.gold; // add the winnings
-                                    console.log('goldafter',$scope.user.attributes.gold);
-
+                  $scope.user.attributes.experience += quest.gold*2;
                   User.update($scope.user);
                 } else {
                   $scope.user.quests[i].status = 'fail';
-                  $scope.user.attributes.gold = $scope.user.attributes.gold - Math.floor(quest.gold/2);
+                  $scope.user.attributes.gold = $scope.user.attributes.gold - Math.floor(quest.gold/3);
                   User.update($scope.user);
                 }
                 $scope.addAlert(quest);
