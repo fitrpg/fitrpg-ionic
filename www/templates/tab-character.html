@@ -20,6 +20,7 @@
     </ion-refresher>
 
     <alert ng-repeat="alert in alerts" type="{{alert.type}}" ng-click="navTo('battle')" close="closeAlert($index)">{{alert.msg}}</alert>
+    <alert ng-repeat="alert in questAlerts" type="{{alert.type}}" ng-click="navTo('quest')" close="closeQuestAlert($index)">{{alert.msg}}</alert>
 
     <div class="list">
       <div class="card">
