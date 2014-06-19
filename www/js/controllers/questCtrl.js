@@ -15,7 +15,7 @@ angular.module('starter.controllers')
   $scope.addAlert = function(quest) {
     if (quest.status === 'success') {
       type = 'success';
-      msg = 'You completed your quest to ' + quest.shortDesc.toLowerCase() + 'and won ' + quest.gold + " pieces!";
+      msg = 'You completed your quest to ' + quest.shortDesc.toLowerCase() + ' You won ' + quest.gold + " pieces!";
     } else if (quest.status === 'fail') {
       type = 'danger';
       msg = 'Sorry, you didn\'t finish your quest to ' + quest.shortDesc.toLowerCase() + ' Try again in a few days.'
@@ -94,6 +94,8 @@ angular.module('starter.controllers')
 
     var today = new Date();
 
+    var refreshQuests = [];
+
     // Iterate over all the quests that the user has stored; maybe eventually just save them
     // locally to the user object
     for (var j =0; j< $scope.user.quests.length; j++) {
@@ -103,9 +105,8 @@ angular.module('starter.controllers')
         // Iterate over all the quests and get the ones that have status of completed
         if(quest.status === 'success' || quest.status === 'fail') {
           // if 7 days have passed since this was completed, they can do it again so we remove it from their user array
-          if(completeDate.addDays(7) <= today) {
-            $scope.user.quests = $scope.user.quests.splice($scope.user.quests.indexOf(quest));
-          } else { //if 7 days haven't passed, show them in recently completed
+          if(completeDate.addDays(7) > today) {
+            refreshQuests.push(quest);
             Quests.get({id : quest.questId}, function(q) {
               q.completionTime = quest.completionTime; //add completion time so we can sort them
               if (quest.status === 'success') {
@@ -118,7 +119,14 @@ angular.module('starter.controllers')
         }
       }(j));
     }
+
+    $scope.user.quests = refreshQuests;
+    console.log('scope user quests!', $scope.user.quests);
+    User.update($scope.user);
   };
+
+  // LATER ON THIS FUNCTION WOULD ONLY RUN IF THE USER HAS RECENTLY SYNCED WITH FITBIT
+  // BUT THIS IS A FUNCTIONALITY THAT I CANNOT CURRENTLY IMPLEMENT 
 
   // The following function iterates over the current user's quests and checks to see if
   // any have expired and if so, did they pass/fail the quest
@@ -139,7 +147,9 @@ angular.module('starter.controllers')
                 console.log('total', total);
                 if (total >= quest.winGoal) {
                   $scope.user.quests[i].status = 'success';
+                  console.log('goldprev',$scope.user.attributes.gold);
                   $scope.user.attributes.gold += quest.gold; // add the winnings
+                  console.log('goldafter',$scope.user.attributes.gold);
                   User.update($scope.user);
                 } else {
                   $scope.user.quests[i].status = 'fail';
@@ -154,7 +164,10 @@ angular.module('starter.controllers')
                   console.log('total', total);
                 if (total >= quest.winGoal) {
                   $scope.user.quests[i].status = 'success';
+                                    console.log('goldprev',$scope.user.attributes.gold);
                   $scope.user.attributes.gold += quest.gold; // add the winnings
+                                    console.log('goldafter',$scope.user.attributes.gold);
+
                   User.update($scope.user);
                 } else {
                   $scope.user.quests[i].status = 'fail';
