@@ -30,7 +30,7 @@
         </div>
 
         <ion-list>
-          <ion-item class="item-avatar" ng-repeat="friend in friends | filter:searchText | orderBy: 'battleData.status'" type="item-text-wrap">
+          <ion-item class="item-avatar" ng-repeat="friend in friends | filter:searchText | orderBy: 'battleData.status'" type="item-text-wrap" ng-click="startBattle(friend['_id'])">
             <img ng-src="{{friend.profile.avatar}}">
             <h2>{{friend.username}}</h2>
             <p>Level: {{friend.attributes.level}} <span ng-show="battlePending(friend.battleData)">Status: {{friend.battleData.status}}</span></p>
@@ -91,7 +91,7 @@
         </a>
       </div> -->
         <ion-list>
-          <ion-item class="item item-icon-right" ng-repeat="mission in soloMissions | filter: {type: 'boss'} | orderBy: '-level'" type="item-text-wrap">
+          <ion-item class="item item-icon-right" ng-repeat="mission in soloMissions | filter: {type: 'boss'} | orderBy: '-level'" type="item-text-wrap" ng-click="startMission(mission['_id'])">
             <h2>{{mission.title}}</h2>
             <p>Level {{mission.level}},
             Difficulty:
