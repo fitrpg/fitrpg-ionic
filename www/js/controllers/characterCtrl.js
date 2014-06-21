@@ -26,6 +26,8 @@ angular.module('starter.controllers')
   }, 500);
 
   $scope.calculatedData = {};
+  $scope.alertCount = 0;
+  $scope.showAlert = false;
 
   var device = {
     isApple: ionic.Platform.isIOS(),
@@ -45,6 +47,7 @@ angular.module('starter.controllers')
       type = '';
       msg = 'Someone wants to battle you.';
     }
+    $scope.alertCount++;
     $scope.alerts.push({type: type, msg: msg});
   };
 
@@ -52,6 +55,7 @@ angular.module('starter.controllers')
     var type, msg;
     type = 'success';
     msg = 'You leveled up! You\'ve gained skill points to increase your attributes.';
+    $scope.alertCount++;
     $scope.levelUpAlerts.push({type: type, msg: msg});
   }
 
@@ -64,8 +68,14 @@ angular.module('starter.controllers')
       type = 'danger';
       msg = 'Sorry, you didn\'t finish your quest to ' + quest.shortDesc.toLowerCase() + ' You lost gold. Try again in a few days.'
     }
+    $scope.alertCount++;
     $scope.questAlerts.push({type: type, msg: msg});
   };
+
+  $scope.displayAlerts = function() {
+    $scope.alertCount = 0;
+    $scope.showAlert = true;
+  }
 
   $scope.closeAlert = function(index) {
     $scope.alerts.splice(index, 1);
@@ -247,6 +257,8 @@ angular.module('starter.controllers')
       User.get({id : localUserId}, function (user) { // this will retrieve that new data
         $rootScope.user = user;
         calculateData($rootScope.user);
+        $scope.alertCount = 0;
+        $scope.showAlert = false;
         alertBattleStatus();
         alertLevelUpStatus();
         User.update($rootScope.user);
