@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'timer', 'starter.controllers','app.auth','starter.services', 'starter.directives', 'ui.bootstrap'])
 
-.run(function($rootScope,$ionicPlatform) {
+.run(function($rootScope,$ionicPlatform,$state,$ionicNavBarDelegate) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -20,6 +20,15 @@ angular.module('starter', ['ionic', 'timer', 'starter.controllers','app.auth','s
     // }
     ionic.Platform.fullScreen();
   });
+  $ionicPlatform.registerBackButtonAction(function () {
+    if ($state.current.name === 'app.character') {
+      navigator.app.exitApp();
+    } else if($state.current.name === 'app.feedback' || $state.current.name === 'app.inventory' || $state.current.name === 'app.store' || $state.current.name === 'app.friends' || $state.current.name === 'app.battle' || $state.current.name === 'app.quest' || $state.current.name === 'app.leaderboard' || $state.current.name === 'app.help') {
+      $state.go('app.character');
+    } else {
+      $ionicNavBarDelegate.back();
+    }
+  }, 100);
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
