@@ -2,6 +2,7 @@ angular.module('starter.controllers')
 
 .controller('BattleCtrl', function($scope, Battle, $ionicScrollDelegate, SoloMissions, User, $ionicLoading, $ionicListDelegate, $ionicNavBarDelegate, $ionicPopup, $q) {
   $scope.friendsTab = true;
+  $scope.showRandom = true;
 
   var loading = setTimeout(function(){
     $ionicLoading.show({
@@ -82,6 +83,7 @@ angular.module('starter.controllers')
     $ionicScrollDelegate.scrollTop();
     $scope.isPending = true;
     $scope.showHistory = true;
+    $scope.showRandom = true;
     $scope.friendTab = 'button-tab-active';
     $scope.bossTab = '';
     $scope.friendsTab = true;
@@ -135,6 +137,13 @@ angular.module('starter.controllers')
     util.showAlert($ionicPopup, title, body, 'Continue', function() {
       $ionicListDelegate.closeOptionButtons();
     });
+  };
+
+  $scope.random = function() {
+    //show popup if you want to do a random matched battle
+    //query users within user level
+      //server side should have a query that returns a user within a specific level
+    //startbattle with user
   };
 
   $scope.startBattle = function(id) {
@@ -326,6 +335,7 @@ angular.module('starter.controllers')
     $scope.oldLossBattles = [];
     $scope.isPending = false;
     $scope.showHistory = false;
+    $scope.showRandom = false;
     var userId = $scope.user['_id']
     Battle.query({winner: userId}, function(battlesWon){
      Battle.query({loser: userId}, function(battlesLost){
