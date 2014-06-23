@@ -5,20 +5,49 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'timer', 'starter.controllers','app.auth','starter.services', 'starter.directives', 'ui.bootstrap'])
+angular.module('starter', ['ionic', 'timer', 'starter.controllers','app.auth','starter.services', 'starter.directives', 'ui.bootstrap', 'ngCordova'])
 
-.run(function($rootScope,$ionicPlatform,$state,$ionicNavBarDelegate) {
+.run(function($rootScope,$ionicPlatform,$state,$ionicNavBarDelegate,$cordovaPush,$window) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if(window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
     }
-    // if(window.StatusBar) {
-    //   // org.apache.cordova.statusbar required
-    //   StatusBar.hide();
-    // }
+
     ionic.Platform.fullScreen();
+
+    var device = {
+      isApple: ionic.Platform.isIOS(),
+      isGoogle: ionic.Platform.isAndroid(),
+    };
+
+    var androidConfig = {
+      'senderID':'replace_with_sender_id',
+      'ecb':'onNotification'
+    };
+
+    var iosConfig = {
+      'badge':'true',
+      'sound':'true',
+      'alert':'true',
+      'ecb':'onNotificationAPN'
+    };
+
+    var config;
+
+    if (device.isApple) {
+      config = iosConfig;
+    } else if (device.isGoogle) {
+      config = androidConfig;
+    }
+
+    $cordovaPush.register(config).then(function(result) {
+      console.log(result);
+    }, function(err) {
+      console.log(err);
+    });
+
   });
   $ionicPlatform.registerBackButtonAction(function () {
     if ($state.current.name === 'app.character') {
@@ -204,3 +233,62 @@ angular.module('starter', ['ionic', 'timer', 'starter.controllers','app.auth','s
       }
     })
 })
+
+function onNotificationAPN (event) {
+  if ( event.alert ) {
+    navigator.notification.alert(event.alert);
+  }
+
+  if ( event.sound ) {
+    var snd = new Media(event.sound);
+    snd.play();
+  }
+
+  if ( event.badge ) {
+    $cordovaPush.setBadgeNumber(2).then(function(result) {
+      // Success!
+    }, function(err) {
+      // An error occured. Show a message to the user
+    });
+  }
+};
+
+function onNotification(e) {
+  console.log(e.event);
+
+  switch( e.event ) {
+    case 'registered':
+      if ( e.regid.length > 0 )
+      {
+        // Your GCM push server needs to know the regID before it can push to this device
+        // here is where you might want to send it the regID for later use.
+        console.log("regID = " + e.regid);
+      }
+      break;
+
+    case 'message':
+      // if this flag is set, this notification happened while we were in the foreground.
+      // you might want to play a sound to get the user's attention, throw up a dialog, etc.
+      if ( e.foreground )
+      {
+        var soundfile = e.soundname || e.payload.sound;
+        var my_media = new Media("/android_asset/www/"+ soundfile);
+        my_media.play();
+      }
+      else
+      {  // otherwise we were launched because the user touched a notification in the notification tray.
+        if ( e.coldstart ) {
+        }
+        else {
+        }
+      }
+      console.log(e.payload.message, e.payload.msgcnt, e.payload.timeStamp)
+      break;
+
+    case 'error':
+      break;
+
+    default:
+      break;
+  }
+};
