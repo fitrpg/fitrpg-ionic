@@ -34,20 +34,20 @@ angular.module('starter.services', ['ngResource'])
 
 .factory('User', ['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
   return $resource(SERVER_URL + '/api/users/:id', {id : '@id'}, {
-      update: { method: 'PUT' }
+    update: { method: 'PUT' }
   });
 }])
 
 // get fitbit data based off of a date range
 .factory('DatesData', ['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
   return $resource(SERVER_URL + '/fitbit/daterange/:id/:type/:activity/:startDate/:endDate',
-      {id: '@id', type: '@type', activity: '@activity', startDate: '@startDate', endDate: '@endDate'} );
+    {id: '@id', type: '@type', activity: '@activity', startDate: '@startDate', endDate: '@endDate'} );
 }])
 
 // get fitbit data based off of a time range
 .factory('TimesData', ['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
   return $resource(SERVER_URL + '/fitbit/timerange/:id/:activity/:startDate/:endDate/:startTime/:endTime',
-      {id: '@id', activity: '@activity', startDate: '@startDate', endDate: '@endDate', startTime: '@startTime', endTime: '@endTime'} );
+    {id: '@id', activity: '@activity', startDate: '@startDate', endDate: '@endDate', startTime: '@startTime', endTime: '@endTime'} );
 }])
 
 .factory('Shop', ['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
@@ -68,6 +68,15 @@ angular.module('starter.services', ['ngResource'])
 
 .factory('VersusMissions',['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
   return $resource(SERVER_URL + '/api/groups/:id', {id : '@id'});
+}])
+
+.factory('RandomUser',['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
+  return $resource(SERVER_URL + '/api/users/random/:id/:level',
+    {id : '@id', level: '@level'});
+}])
+
+.factory('Leaderboard',['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
+  return $resource(SERVER_URL + '/api/users/leaderboard');
 }])
 
 .factory('Feedback',['$resource', 'SERVER_URL', function($resource, SERVER_URL) {

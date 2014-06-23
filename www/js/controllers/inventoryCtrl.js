@@ -100,10 +100,19 @@ angular.module('starter.controllers')
       item = inventory[index];
     }
   }
+  $scope.isWeapon = false;
 
   $scope.inventoryItem = Shop.get({id : item.storeId}, function(){
     $scope.inventoryItem.type = util.capitalize($scope.inventoryItem.type);
     $scope.inventoryItem.quantity = item.quantity;
+    if ($scope.inventoryItem.size === 1) {
+      $scope.inventoryItem.sizeText = 'One-Handed';
+    } else if ($scope.inventoryItem.size === 2) {
+      $scope.inventoryItem.sizeText = 'Two-Handed';
+    }
+    if ($scope.inventoryItem.type === 'Weapon') {
+      $scope.isWeapon = true;
+    }
   });
 
   $scope.addClass = function(attr) {

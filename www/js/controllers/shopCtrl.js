@@ -52,8 +52,17 @@ angular.module('starter.controllers')
 })
 
 .controller('ShopDetailCtrl', function($scope, $stateParams, Shop, User, $ionicPopup, $q) {
+  $scope.isWeapon = false;
   $scope.shopItem = Shop.get({id : $stateParams.shopId}, function(item){
     $scope.shopItem.type = util.capitalize($scope.shopItem.type);
+    if ($scope.shopItem.size === 1) {
+      $scope.shopItem.sizeText = 'One-Handed';
+    } else if ($scope.shopItem.size === 2) {
+      $scope.shopItem.sizeText = 'Two-Handed';
+    }
+    if ($scope.shopItem.type === 'Weapon') {
+      $scope.isWeapon = true;
+    }
   });
 
   $scope.addClass = function(attr) {

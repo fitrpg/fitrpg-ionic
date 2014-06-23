@@ -1,7 +1,8 @@
 angular.module('starter.controllers')
 
-.controller('BattleCtrl', function($scope, Battle, $ionicScrollDelegate, SoloMissions, User, $ionicLoading, $ionicListDelegate, $ionicNavBarDelegate, $ionicPopup, $q) {
+.controller('BattleCtrl', function($scope, Battle, RandomUser, $ionicScrollDelegate, SoloMissions, User, $ionicLoading, $ionicListDelegate, $ionicNavBarDelegate, $ionicPopup, $q, $window) {
   $scope.friendsTab = true;
+  $scope.showRandom = true;
 
   var loading = setTimeout(function(){
     $ionicLoading.show({
@@ -82,6 +83,7 @@ angular.module('starter.controllers')
     $ionicScrollDelegate.scrollTop();
     $scope.isPending = true;
     $scope.showHistory = true;
+    $scope.showRandom = true;
     $scope.friendTab = 'button-tab-active';
     $scope.bossTab = '';
     $scope.friendsTab = true;
@@ -134,6 +136,23 @@ angular.module('starter.controllers')
     }
     util.showAlert($ionicPopup, title, body, 'Continue', function() {
       $ionicListDelegate.closeOptionButtons();
+    });
+  };
+
+  $scope.random = function() {
+    var title, body;
+    title = 'Random Battle';
+    body = 'Battle a randomly matched player. Are you up for the challenge?'
+    util.showPrompt($ionicPopup, title, body, 'Start', 'Cancel', function() {
+      RandomUser.get({id: $scope.user['_id'], level: $scope.user.attributes.level}, function(enemy) {
+        if (Object.keys(enemy).length > 0) {
+          $scope.startBattle(enemy['_id']);
+        } else {
+          title = 'No Matches Found';
+          body = 'We couldn\'t find a suitable match for you. You must be too strong.';
+          util.showAlert($ionicPopup, title, body, 'OK', function() {});
+        }
+      });
     });
   };
 
@@ -326,6 +345,7 @@ angular.module('starter.controllers')
     $scope.oldLossBattles = [];
     $scope.isPending = false;
     $scope.showHistory = false;
+    $scope.showRandom = false;
     var userId = $scope.user['_id']
     Battle.query({winner: userId}, function(battlesWon){
      Battle.query({loser: userId}, function(battlesLost){

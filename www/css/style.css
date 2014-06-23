@@ -230,6 +230,17 @@
 }
 /* END BATTLE STATS */
 
+/* MISC */
+
+.alert-dismissable .close {
+  width: 33px;
+  height: 41px;
+  top: -12px;
+  right: -31px;
+}
+
+/* END MISC */
+
 ion-item.refresh.item {
    border-style:none;
    width: 15px;
