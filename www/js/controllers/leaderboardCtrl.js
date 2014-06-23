@@ -1,6 +1,6 @@
 angular.module('starter.controllers')
 
-.controller('LeaderboardCtrl', function($scope, $ionicLoading, User) {
+.controller('LeaderboardCtrl', function($scope, $ionicLoading, User, Leaderboard) {
   var loading = setTimeout(function(){
     $ionicLoading.show({
       template: '<p>Loading...</p><i class="icon ion-loading-c"></i>'
@@ -12,7 +12,7 @@ angular.module('starter.controllers')
     $scope.allTab = 'button-tab-active';
     $scope.friendsTab = '';
     $scope.leaderboard = [];
-    User.query(function(users) {
+    Leaderboard.query(function(users) {
       $scope.leaderboard = users;
       clearTimeout(loading);
       $ionicLoading.hide();

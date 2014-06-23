@@ -1,6 +1,6 @@
 angular.module('starter.controllers')
 
-.controller('BattleCtrl', function($scope, Battle, $ionicScrollDelegate, SoloMissions, User, $ionicLoading, $ionicListDelegate, $ionicNavBarDelegate, $ionicPopup, $q) {
+.controller('BattleCtrl', function($scope, Battle, RandomUser, $ionicScrollDelegate, SoloMissions, User, $ionicLoading, $ionicListDelegate, $ionicNavBarDelegate, $ionicPopup, $q, $window) {
   $scope.friendsTab = true;
   $scope.showRandom = true;
 
@@ -140,10 +140,20 @@ angular.module('starter.controllers')
   };
 
   $scope.random = function() {
-    //show popup if you want to do a random matched battle
-    //query users within user level
-      //server side should have a query that returns a user within a specific level
-    //startbattle with user
+    var title, body;
+    title = 'Random Battle';
+    body = 'Battle a randomly matched player. Are you up for the challenge?'
+    util.showPrompt($ionicPopup, title, body, 'Start', 'Cancel', function() {
+      RandomUser.get({id: $scope.user['_id'], level: $scope.user.attributes.level}, function(enemy) {
+        if (Object.keys(enemy).length > 0) {
+          $scope.startBattle(enemy['_id']);
+        } else {
+          title = 'No Matches Found';
+          body = 'We couldn\'t find a suitable match for you. You must be too strong.';
+          util.showAlert($ionicPopup, title, body, 'OK', function() {});
+        }
+      });
+    });
   };
 
   $scope.startBattle = function(id) {
