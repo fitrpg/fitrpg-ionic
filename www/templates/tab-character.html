@@ -1,7 +1,10 @@
-<ion-view title="FitRPG" hide-back-button="true">
+<ion-view title="" hide-back-button="true">
 
   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon-gray icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button class="button button-icon" ng-click="displayAlerts()" ng-show="alertCount"><span class="badge badge-assertive">{{alertCount}}</span></button>
   </ion-nav-buttons>
   <ion-nav-buttons side="right">
     <button class="button button-icon icon-gray icon ion-star" ng-click="rateApp()"></button>
@@ -19,8 +22,9 @@
       on-refresh="refresh()">
     </ion-refresher>
 
-    <alert ng-repeat="alert in alerts" type="{{alert.type}}" ng-click="navTo('battle')" close="closeAlert($index)">{{alert.msg}}</alert>
-    <alert ng-repeat="alert in questAlerts" type="{{alert.type}}" ng-click="navTo('quest')" close="closeQuestAlert($index)">{{alert.msg}}</alert>
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}" ng-click="navTo('battle')" close="closeAlert($index)" ng-show="showAlert">{{alert.msg}}</alert>
+    <alert ng-repeat="alert in levelUpAlerts" type="{{alert.type}}" close="closeLevelUpAlert($index)" ng-show="showAlert">{{alert.msg}}</alert>
+    <alert ng-repeat="alert in questAlerts" type="{{alert.type}}" ng-click="navTo('quest')" close="closeQuestAlert($index)" ng-show="showAlert">{{alert.msg}}</alert>
 
     <div class="list">
       <div class="card">

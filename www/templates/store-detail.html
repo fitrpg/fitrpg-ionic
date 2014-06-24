@@ -15,6 +15,7 @@
           Vitality<br><br>
           Endurance<br><br>
           Dexterity<br><br>
+          <span ng-show="isWeapon">Size<br><br></span>
           Cost
         </p>
         <p class="pull-right">
@@ -31,6 +32,8 @@
           {{ user.attributes.dexterity }} <i class="icon ion-ios7-arrow-thin-right"></i>
           <span ng-class="addClass(shopItem.dexterity)">{{ user.attributes.dexterity + shopItem.dexterity }}</span>
           <br><br>
+          <span ng-show="isWeapon">{{ shopItem.sizeText }}
+          <br><br></span>
           {{ shopItem.cost }} Gold
         </p>
 

@@ -295,20 +295,24 @@ angular.module('starter.controllers')
     var gold = $scope.quest.gold;
     var desc = $scope.quest.shortDescription;
     var start     = new Date(); // start date
-    var end = start.addDays(numDays,numHours); // end date
+    var addD  = numDays-1 >= 0 ? numDays-1 : 0; // the number of days we're adding to get to 'end'
     var startTime = timify(start.getHours()) + ':' + timify(start.getMinutes());
     var title = 'Embark On A New Quest!';
-    var endString;
+    var endString,end,body;
 
     // for multi-day quests, there's a type, MAY LATER ON HAVE TO ACCOUNT FOR DIFFERENT SLEEP QUESTS
     if (numDays >=1) {
+      end = start.addDays(addD); // end date
+      end.setHours(23);
+      end.setMinutes(59); // timer always ends at midnight
       endString = daysWeek[end.getDay()] + ' at 11:59PM';
-      var body = 'This is the mission you\'ve chosen:<br><b>' + $scope.quest.shortDescription +
+      body = 'This is the mission you\'ve chosen:<br><b>' + $scope.quest.shortDescription +
            '</b><br>You will have from today until ' + endString +
            ' to complete this quest. Do you accept?';
     } else {  // for one-day quests, we want to keep the times, otherwise we don't care
+      end = start.addDays(addD,numHours); // end date
       endString =end.toLocaleTimeString();
-      var body = 'This is the mission you\'ve chosen:<br><b>' + $scope.quest.shortDescription +
+      body = 'This is the mission you\'ve chosen:<br><b>' + $scope.quest.shortDescription +
            '</b><br>You will have until ' + endString +
            ' to complete this quest. Do you accept?';
     }

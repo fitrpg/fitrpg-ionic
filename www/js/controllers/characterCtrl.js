@@ -26,6 +26,8 @@ angular.module('starter.controllers')
   }, 500);
 
   $scope.calculatedData = {};
+  $scope.alertCount = 0;
+  $scope.showAlert = false;
 
   var device = {
     isApple: ionic.Platform.isIOS(),
@@ -34,6 +36,7 @@ angular.module('starter.controllers')
 
   var addAlert = function(status, name) {
     name = name || '';
+    var type, msg;
     if (status === 'loss') {
       type = 'danger';
       msg = 'Looks like you need to work out more. You lost to ' + name + '.';
@@ -44,10 +47,20 @@ angular.module('starter.controllers')
       type = '';
       msg = 'Someone wants to battle you.';
     }
+    $scope.alertCount++;
     $scope.alerts.push({type: type, msg: msg});
   };
 
+  var addLevelUpAlert = function() {
+    var type, msg;
+    type = 'success';
+    msg = 'You leveled up! You\'ve gained skill points to increase your attributes.';
+    $scope.alertCount++;
+    $scope.levelUpAlerts.push({type: type, msg: msg});
+  }
+
   var addQuestAlert = function(quest) {
+    var type, msg;
     if (quest.status === 'success') {
       type = 'success';
       msg = 'You completed your quest to ' + quest.shortDesc.toLowerCase() + ' You won ' + quest.gold + " pieces!";
@@ -55,11 +68,21 @@ angular.module('starter.controllers')
       type = 'danger';
       msg = 'Sorry, you didn\'t finish your quest to ' + quest.shortDesc.toLowerCase() + ' You lost gold. Try again in a few days.'
     }
+    $scope.alertCount++;
     $scope.questAlerts.push({type: type, msg: msg});
   };
 
+  $scope.displayAlerts = function() {
+    $scope.alertCount = 0;
+    $scope.showAlert = true;
+  }
+
   $scope.closeAlert = function(index) {
     $scope.alerts.splice(index, 1);
+  };
+
+  $scope.closeLevelUpAlert = function(index) {
+    $scope.levelUpAlerts.splice(index, 1);
   };
 
   $scope.closeQuestAlert = function(index) {
@@ -121,21 +144,34 @@ angular.module('starter.controllers')
 
   };
 
+  var alertLevelUpStatus = function() {
+    $scope.levelUpAlerts = [];
+    var userLevel = localStorageService.get('level');
+    var currentLevel = $rootScope.user.attributes.level;
+    if (!userLevel) {
+      userLevel = localStorageService.set('level',1);
+    }
+    if (userLevel < currentLevel) {
+      localStorageService.set('level', currentLevel);
+      addLevelUpAlert();
+    }
+  };
+
   var alertQuestStatus = function() {
     $scope.questAlerts = [];
     var today = parseInt(Date.parse(new Date()));
     for (var j =0; j< $rootScope.user.quests.length; j++) {
-      (function(i) { 
+      (function(i) {
         var quest = $rootScope.user.quests[i];
         if (quest.status === 'active') {
-          var completeDate = parseInt(Date.parse(quest.completionTime)); 
+          var completeDate = parseInt(Date.parse(quest.completionTime));
           if (today >= completeDate) {
             if (quest.numDays < 1) {
               TimesData.get(quest.getObj, function(result) {
                 var total = result.total;
                 if (total >= quest.winGoal) {
                   $rootScope.user.quests[i].status = 'success';
-                  $rootScope.user.attributes.gold += quest.gold; 
+                  $rootScope.user.attributes.gold += quest.gold;
                   $rootScope.user.attributes.experience += quest.gold*2;
                 } else {
                   $rootScope.user.quests[i].status = 'fail';
@@ -144,12 +180,12 @@ angular.module('starter.controllers')
                 User.update($rootScope.user);
                 addQuestAlert(quest);
               });
-            } else if (quest.numDays > 0 ) { 
+            } else if (quest.numDays > 0 ) {
               DatesData.get(quest.getObj, function(result) {
                 var total = result.total;
                 if (total >= quest.winGoal) {
                   $rootScope.user.quests[i].status = 'success';
-                  $rootScope.user.attributes.gold += quest.gold; 
+                  $rootScope.user.attributes.gold += quest.gold;
                   $rootScope.user.attributes.experience += quest.gold*2;
                 } else {
                   $rootScope.user.quests[i].status = 'fail';
@@ -196,6 +232,7 @@ angular.module('starter.controllers')
             $rootScope.user = user;
             calculateData($rootScope.user);
             alertBattleStatus();
+            alertLevelUpStatus();
             alertQuestStatus();
             $rootScope.user.needsUpdate = false;
             User.update($rootScope.user);
@@ -220,7 +257,10 @@ angular.module('starter.controllers')
       User.get({id : localUserId}, function (user) { // this will retrieve that new data
         $rootScope.user = user;
         calculateData($rootScope.user);
+        $scope.alertCount = 0;
+        $scope.showAlert = false;
         alertBattleStatus();
+        alertLevelUpStatus();
         User.update($rootScope.user);
         $scope.$broadcast('scroll.refreshComplete');
       });
