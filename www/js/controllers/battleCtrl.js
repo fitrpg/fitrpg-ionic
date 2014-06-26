@@ -483,7 +483,7 @@ angular.module('starter.controllers')
         $scope.soloMissions.splice(index,1);
 
         checkLevel($scope.user);
-        body = 'You\'ve crushed evil. Go find more bad guys to defeat!';
+        body = 'You\'ve crushed evil. You gained ' + $scope.soloMission.experience + ' experience and ' + $scope.soloMission.gold + ' gold';
       } else {
         body = 'You were defeated. You may want to train more before doing battle.';
       }
