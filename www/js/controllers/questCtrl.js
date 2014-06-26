@@ -21,7 +21,7 @@ angular.module('starter.controllers')
     loseQuest: function(user,userQuest) {
       userQuest.status = 'fail';
       user.userQuest = userQuest;
-      user.attributes.gold = user.attributes.gold - Math.floor(quest.gold/2);
+      user.attributes.gold = user.attributes.gold - Math.floor(userQuest.gold/2);
       return user;
     }
   }
@@ -171,7 +171,8 @@ angular.module('starter.controllers')
       $scope.winGoal = $scope.user.quests[i].winGoal;
       if ($scope.user.quests[i].questId === questId) { 
         $scope.availableQuest = false;
-        evalQuest($scope.user.quests[i]);
+        $scope.userQuest = $scope.user.quests[i];
+        evalQuest();
         return; //stop looping
       }
     }
@@ -179,29 +180,28 @@ angular.module('starter.controllers')
 
   // Called in pickOutQuest, and when we refresh to show updated data
   // We also return true or false for whether or not the quest has been completed
-  var evalQuest = function(userQuest,cb) {
-    $scope.userQuest = userQuest;
-    if (userQuest.status === 'active') {
+  var evalQuest = function(cb) {
+    if ($scope.userQuest.status === 'active') {
       $scope.activeQuest = true;
       $scope.$broadcast('timer-set-countdown');
       $scope.parsedDate = Date.parse($scope.userQuest.completionTime);
       if ($scope.userQuest.numDays < 1) {
         TimesData.get($scope.userQuest.getObj, function(result) {
           $scope.progress = result.total || 0; //current progress 
-          if (cb) { cb() };    
-          return $scope.progress <= $scope.winGoal; // SWITCH LATER return if the progress is greater than the wingoal
+          var completed = $scope.progress >= $scope.winGoal; 
+          if (cb) { cb(completed) };    
         });
-      } else if (userQuest.numDays > 0 ) { // multiday quests
+      } else if ($scope.userQuest.numDays > 0 ) { // multiday quests
         DatesData.get($scope.userQuest.getObj, function(result) {
-          $scope.progress = result.total || 0; // current progress           
-          if (cb) { cb() };
-          return $scope.progress <= $scope.winGoal;  // SWITCH LATER less than for testing
+          $scope.progress = result.total || 0; // current progress
+          var completed = $scope.progress >= $scope.winGoal; 
+          if (cb) { cb(completed) };
         });
       }
-    } else if (userQuest.status === 'success' || userQuest.status === 'fail') {
+    } else if ($scope.userQuest.status === 'success' || $scope.userQuest.status === 'fail') {
       $scope.completedQuest = true;
+      if (cb) {cb()};
     }
-    if (cb) {cb()};
   };
 
   // function that helps us format the times for dates to make calls to fitbit, so '5' is '05'
@@ -289,17 +289,21 @@ angular.module('starter.controllers')
 
   $scope.manualCompleteQuest = function() {
     var title, body, button, endQuest;
-    if (evalQuest($scope.quest)) {
-      title    = 'Success!';
-      body     = 'Congratulations! You completed this quest. You won ' + $scope.userQuest.gold + ' gold pieces.';
-      endQuest = finishQuest.winQuest;
-    } else {
-      title    = 'Fail!';
-      body     = 'Sorry, you did not complete your quest on time. You lost gold. Try again later.';
-      endQuest = finishQuest.loseQuest;
-    }
-    util.showAlert($ionicPopup, title, body, button, function() {
-      User.update(endQuest($scope.user,$scope.userQuest));
+    evalQuest(function(completed) {
+      console.log('completed',completed);
+      if(completed) {
+        title    = 'Success!';
+        body     = 'Congratulations! You completed this quest. You won ' + $scope.userQuest.gold + ' gold pieces.';
+        endQuest = finishQuest.winQuest;
+      } else {
+        title    = 'Fail!';
+        body     = 'Sorry, you did not complete your quest on time. You lost gold. Try again later.';
+        endQuest = finishQuest.loseQuest;
+      }
+      util.showAlert($ionicPopup, title, body, button, function() {
+        User.update(endQuest($scope.user,$scope.userQuest));
+        $state.go('app.quest');
+      });
     });
   };
 
