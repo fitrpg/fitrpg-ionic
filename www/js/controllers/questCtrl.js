@@ -1,7 +1,33 @@
 angular.module('starter.controllers')
 
-// This controller handles the list of the quests that show up as
-// all,active,and completed
+.constant('daysWeek', {
+    0: 'Sunday',
+    1: 'Monday',
+    2: 'Tuesday',
+    3: 'Wedneday',
+    4: 'Thursday',
+    5: 'Friday',
+    6: 'Saturday'
+})
+
+.factory('finishQuest', function() {
+  return {
+    winQuest: function(user,userQuest) {
+      userQuest.status = 'success';
+      user.userQuest = userQuest;
+      user.attributes.gold += userQuest.gold;
+      return user;
+    },
+    loseQuest: function(user,userQuest) {
+      userQuest.status = 'fail';
+      user.userQuest = userQuest;
+      user.attributes.gold = user.attributes.gold - Math.floor(quest.gold/2);
+      return user;
+    }
+  }
+})
+
+// This controller handles the list of the quests that show up as all,active,and completed
 .controller('QuestCtrl', function($scope, $ionicLoading, $ionicScrollDelegate, localStorageService, SoloMissions, Quests, User, TimesData, DatesData) {
 
   // Creates the loading screen that only shows up after 500 ms if items have not yet loaded
@@ -41,7 +67,7 @@ angular.module('starter.controllers')
     });
   };
 
-  // Show all of the quests whose completions dates are after today
+  // Show all of the quests that are active
   $scope.active = function() {
     $scope.isAll = false;
     $scope.isActive =  true;
@@ -75,9 +101,7 @@ angular.module('starter.controllers')
     $scope.activeTab = '';
     $scope.completedTab = 'button-tab-active';
     $ionicScrollDelegate.scrollTop();
-
     var today = new Date();
-
     var refreshQuests = [];
 
     // Iterate over all the quests that the user has stored; maybe eventually just save them
@@ -107,85 +131,10 @@ angular.module('starter.controllers')
     }
 
     $scope.user.quests = refreshQuests;
-    console.log('scope user quests!', $scope.user.quests);
     User.update($scope.user);
   };
 
-  // LATER ON THIS FUNCTION WOULD ONLY RUN IF THE USER HAS RECENTLY SYNCED WITH FITBIT
-  // BUT THIS IS A FUNCTIONALITY THAT I CANNOT CURRENTLY IMPLEMENT 
-
-  // The following function iterates over the current user's quests and checks to see if
-  // any have expired and if so, did they pass/fail the quest
-  var checkQuests = function() {
-    $scope.alerts = [];
-    var today = parseInt(Date.parse(new Date()));
-    // Iterate over all the quests that the user has stored
-    for (var j =0; j< $scope.user.quests.length; j++) {
-      (function(i) { //immediately invoked function to retain the value of the iterable j
-        var quest = $scope.user.quests[i];
-        if (quest.status === 'active') {
-          var completeDate = parseInt(Date.parse(quest.completionTime)); //convert date to matched format
-          // check short quests - will have to do better checking of sleep quests later
-          if (today >= completeDate) {
-            if (quest.numDays < 1) {
-              TimesData.get(quest.getObj, function(result) {
-                var total = result.total;
-                console.log('total', total);
-                if (total >= quest.winGoal) {
-                  $scope.user.quests[i].status = 'success';
-                  $scope.user.attributes.gold += quest.gold; // add the winnings
-                  $scope.user.attributes.experience += quest.gold*2;
-                  User.update($scope.user);
-                } else {
-                  $scope.user.quests[i].status = 'fail';
-                  $scope.user.attributes.gold = $scope.user.attributes.gold - Math.floor(quest.gold/3);
-                  User.update($scope.user);
-                }
-              });
-            } else if (quest.numDays > 0 ) { //multiday quests
-              DatesData.get(quest.getObj, function(result) {
-                var total = result.total;
-                  console.log('total', total);
-                if (total >= quest.winGoal) {
-                  $scope.user.quests[i].status = 'success';
-                  $scope.user.attributes.gold += quest.gold; // add the winnings
-                  $scope.user.attributes.experience += quest.gold*2;
-                  User.update($scope.user);
-                } else {
-                  $scope.user.quests[i].status = 'fail';
-                  $scope.user.attributes.gold = $scope.user.attributes.gold - Math.floor(quest.gold/3);
-                  User.update($scope.user);
-                }
-              });
-            }
-          }
-        }
-      }(j));
-    }
-  };
-
   $scope.all();
-
-  // Only check the quests if the user needs an update
-  var localUserId = localStorageService.get('userId'); 
-  User.get({id:localUserId}, function(user) {
-    if (user.needsUpdate === true) {
-      checkQuests();
-      $scope.user.needsUpdate = false;
-      User.update($scope.user);
-    }
-  });
-  
-
-  // useful to add days and hours to the start time/day
-  Date.prototype.addDays = function(days,hours) {
-    var dat = new Date(this.valueOf());
-    dat.setDate(dat.getDate() + days);
-    if(hours) {
-      dat.setHours(this.getHours()+hours);
-    }
-    return dat;
-  };
 
   $scope.showList = {
     steps: true,
@@ -203,70 +152,57 @@ angular.module('starter.controllers')
 })
 
 // This particular controller handles the individual pages of each quest
-.controller('QuestDetailCtrl', function($scope, $state, $stateParams, Quests, $ionicPopup, User, TimesData, DatesData) {
+.controller('QuestDetailCtrl', function($scope, $state, $stateParams, Quests, $ionicPopup, User, TimesData, DatesData, daysWeek, finishQuest) {
   var questId = $stateParams.questId
   $scope.quest = Quests.get({id: questId});
   $scope.availableQuest = true; 
   $scope.activeQuest = false;
   $scope.completedQuest = false;
   $scope.userQuest;
+
+  // Show 1-5 stars on the screen depending on the difficulty
   $scope.difficulty = function(num) {
-    if ( num <= $scope.quest.difficulty ) {
-      return true;
-    } else {
-      return false;
-    }
+    return num <= $scope.quest.difficulty;
   };
 
-  // check if any of current user's quests match this one
-  var checkQuest = function() {
+  // Check if the user currently has this quest active or completed
+  var pickOutQuest = function() {
     for (var i = 0; i < $scope.user.quests.length; i++) {
-      var userQuest = $scope.user.quests[i];
-      $scope.winGoal = userQuest.winGoal;
-      if (userQuest.questId === questId) { 
+      $scope.winGoal = $scope.user.quests[i].winGoal;
+      if ($scope.user.quests[i].questId === questId) { 
         $scope.availableQuest = false;
-        evalQuest(userQuest);
+        evalQuest($scope.user.quests[i]);
         return; //stop looping
       }
     }
   };
 
-  // called in checkQuest, and when we refresh to show updated data
+  // Called in pickOutQuest, and when we refresh to show updated data
+  // We also return true or false for whether or not the quest has been completed
   var evalQuest = function(userQuest,cb) {
-    console.log('gets to evalQuest');
-    console.log('param:', userQuest);
-    $scope.userQuest = userQuest; //make userquest obj available to scope
-    // FOR ACTIVE QUESTS
+    $scope.userQuest = userQuest;
     if (userQuest.status === 'active') {
       $scope.activeQuest = true;
       $scope.$broadcast('timer-set-countdown');
-      $scope.parsedDate = Date.parse(userQuest.completionTime);
-      console.log('parsedDate', $scope.parsedDate);
-      if (userQuest.numDays < 1) {
-        TimesData.get(userQuest.getObj, function(result) {
-          console.log('progress', result.total);
+      $scope.parsedDate = Date.parse($scope.userQuest.completionTime);
+      if ($scope.userQuest.numDays < 1) {
+        TimesData.get($scope.userQuest.getObj, function(result) {
           $scope.progress = result.total || 0; //current progress 
-          console.log($scope.progress);
           if (cb) { cb() };    
+          return $scope.progress <= $scope.winGoal; // SWITCH LATER return if the progress is greater than the wingoal
         });
       } else if (userQuest.numDays > 0 ) { // multiday quests
-        DatesData.get(userQuest.getObj, function(result) {
-          console.log('progress', result.total);
-          $scope.progress = result.total || 0; // current progress
+        DatesData.get($scope.userQuest.getObj, function(result) {
+          $scope.progress = result.total || 0; // current progress           
           if (cb) { cb() };
+          return $scope.progress <= $scope.winGoal;  // SWITCH LATER less than for testing
         });
       }
     } else if (userQuest.status === 'success' || userQuest.status === 'fail') {
       $scope.completedQuest = true;
-      if (cb) {cb()};
-    // FOR COMPLETED QUESTS
-    } else {
-      if (cb) { cb() };
     }
+    if (cb) {cb()};
   };
-
-  checkQuest();
-
 
   // function that helps us format the times for dates to make calls to fitbit, so '5' is '05'
   var timify = function(time) {
@@ -274,17 +210,6 @@ angular.module('starter.controllers')
       time = '0' + time;
     }
     return time;
-  }
-
-  // to prettify the display of dates to the user
-  var daysWeek = {
-    0: 'Sunday',
-    1: 'Monday',
-    2: 'Tuesday',
-    3: 'Wedneday',
-    4: 'Thursday',
-    5: 'Friday',
-    6: 'Saturday'
   }
 
   $scope.startQuest = function() {
@@ -319,40 +244,37 @@ angular.module('starter.controllers')
 
     var startTheQuest = function() {
 
-      // Generate the query object to be used when calling $resource
-      var resourceAttr = {
-        id        : $scope.user._id,
-        activity  : $scope.quest.activity,
-        startDate : start.yyyymmdd(),
-        endDate   : end.yyyymmdd(),
-      };
-
       // Generate the quest object to be saved to the user's quests array
       var questObj = {
         questId: questId,
         numDays   : numDays,
         numHours : numHours,
         completionTime: end,
-        getObj: resourceAttr,
         status: 'active',
         winGoal: winGoal,
         gold      : gold,
         shortDesc : desc,
-        endString : endString
+        endString : endString,
+        getObj: { // the query object to be used when calling $resource
+                  id        : $scope.user._id,
+                  activity  : $scope.quest.activity,
+                  startDate : start.yyyymmdd(),
+                  endDate   : end.yyyymmdd(),
+                }
       };
 
       if (numDays >= 1 ) {
-        resourceAttr.type = $scope.quest.type;
+        questObj.getObj.type = $scope.quest.type;
       } else {
-        resourceAttr.startTime = timify(start.getHours()) + ':' +timify(start.getMinutes());
-        resourceAttr.endTime   = timify(end.getHours())   + ':' +timify(end.getMinutes());
+        questObj.getObj.startTime = timify(start.getHours()) + ':' +timify(start.getMinutes());
+        questObj.getObj.endTime   = timify(end.getHours())   + ':' +timify(end.getMinutes());
       }
 
       $scope.availableQuest = false; 
       $scope.user.quests.push(questObj);
       User.update($scope.user);
       $state.go('app.quest');
-      //checkQuest();
+
     };
 
     util.showPrompt($ionicPopup, title, body, 'I accept', 'Too scared', startTheQuest);
@@ -360,27 +282,27 @@ angular.module('starter.controllers')
   };
 
   $scope.refresh = function() {
-    console.log($scope.user._id);
     evalQuest($scope.quest, function() {
       $scope.$broadcast('scroll.refreshComplete');
     }); 
   };
-   
-  // necessary to format to the way fitbit wants our dates  
-  Date.prototype.yyyymmdd = function() {
-    var yyyy = this.getFullYear().toString();
-    var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
-    var dd  = this.getDate().toString();
-    return yyyy + '-' + (mm[1]?mm:'0'+mm[0]) + '-' + (dd[1]?dd:'0'+dd[0]);
+
+  $scope.manualCompleteQuest = function() {
+    var title, body, button, endQuest;
+    if (evalQuest($scope.quest)) {
+      title    = 'Success!';
+      body     = 'Congratulations! You completed this quest. You won ' + $scope.userQuest.gold + ' gold pieces.';
+      endQuest = finishQuest.winQuest;
+    } else {
+      title    = 'Fail!';
+      body     = 'Sorry, you did not complete your quest on time. You lost gold. Try again later.';
+      endQuest = finishQuest.loseQuest;
+    }
+    util.showAlert($ionicPopup, title, body, button, function() {
+      User.update(endQuest($scope.user,$scope.userQuest));
+    });
   };
 
-  // useful to add days and hours to the start time/day
-  Date.prototype.addDays = function(days,hours) {
-    var dat = new Date(this.valueOf());
-    dat.setDate(dat.getDate() + days);
-    if(hours) {
-      dat.setHours(this.getHours()+hours);
-    }
-    return dat;
-  };
+  // Every time we load the page, we check to see if the quest is completed or not
+  pickOutQuest();
 })

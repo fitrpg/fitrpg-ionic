@@ -44,7 +44,7 @@
         </a>
 
         <p ng-show="activeQuest">
-          <b>You are currently doing this quest!</b>
+          <b>You are currently doing this quest!</b><br>
         </p>
 
         <p ng-show="completedQuest">
@@ -53,7 +53,7 @@
 
       </div>
 
-      <div ng-show="activeQuest"  class="item">
+      <div ng-show="activeQuest">
           <div class="col">
             <p>
               Your Progress
@@ -65,6 +65,7 @@
     </div>
 
     <div class="questTimer" ng-show="activeQuest">
-      <timer end-time="parsedDate"> You have {{days}} day(s), {{hours}} hour(s), {{minutes}} minute(s), and {{seconds}} second(s) remaining.</timer>
+      <timer end-time="parsedDate"> You have {{days}} day(s), {{hours}} hour(s), {{minutes}} minute(s), and {{seconds}} second(s) remaining.</timer><br>
+      <button ng-show="activeQuest" ng-click="manualCompleteQuest()">Complete this Quest</button>
   </ion-content>
 </ion-view>
