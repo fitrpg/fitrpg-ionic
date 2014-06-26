@@ -1,7 +1,16 @@
 angular.module('starter.controllers')
 
-.controller('BattleCtrl', function($scope, Battle, RandomUser, $ionicScrollDelegate, SoloMissions, User, $ionicLoading, $ionicListDelegate, $ionicNavBarDelegate, $ionicPopup, $q, $window) {
+.controller('BattleCtrl', function($scope, Battle, RandomUser, $ionicScrollDelegate, SoloMissions, User, $ionicLoading, $ionicListDelegate, $ionicNavBarDelegate, $ionicPopup, $q, $window, $cordovaSocialSharing) {
   var battles;
+
+
+  var sendTweet = function (message) {
+    $cordovaSocialSharing.shareViaTwitter(message).then(function(result) {
+        // Success!
+    }, function(err) {
+        // An error occured. Show a message to the user
+    });
+  };
 
   // Show/hide buttons on specified screen
   var tabSettings = function(tab) {
@@ -164,21 +173,29 @@ angular.module('starter.controllers')
     $ionicListDelegate.closeOptionButtons();
   };
 
-  var battleResults = function(outcome) {
-    var title, body;
+  var battleResults = function(outcome, enemy) {
+    var title, body, message;
     if (outcome === 'win') {
       title = 'Victorious in Battle';
       body = 'Congratulations, your training has served you well. Keep up the good work! You\'ve gained experience and gold';
+      message = 'I beat ' + enemy + ' in battle! I\'m the fittest! @fitrpg';
     } else if (outcome === 'loss') {
       title = 'Defeated in Battle';
       body = 'Sorry, you need to train more if you don\'t want to be a weakling. You\'ve lost experience and gold';
+      message = 'I was defeated by ' + enemy + ' in battle! I need to train more. @fitrpg';
     } else {
       title = 'Draw';
       body = 'This match was too close...there was no victor.';
+      message = 'It was too close of a  match with ' + enemy + '. There was no winner. @fitrpg';
     }
-    util.showAlert($ionicPopup, title, body, 'Continue', function() {
-      $ionicListDelegate.closeOptionButtons();
-    });
+    util.showPrompt($ionicPopup, title, body, 'Share', 'Continue',
+      function() {
+        sendTweet(message);
+      },
+      function() {
+        $ionicListDelegate.closeOptionButtons();
+      }
+    );
   };
 
   $scope.random = function() {
@@ -308,7 +325,7 @@ angular.module('starter.controllers')
           }
 
           util.showAlert($ionicPopup,'Challenge Accepted','Your duel to the death with '+ enemy.profile.displayName+ ' is in progress. Who will come out on top?', 'Results', function() {
-            battleResults(battle.status);
+            battleResults(battle.status, enemy.username);
           });
 
           $scope.user.missionsVersus.splice(indexOfBattle,1);
