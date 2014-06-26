@@ -87,6 +87,15 @@ angular.module('starter.controllers')
     }
   });
 
+  $scope.addFriendPrompt = function(friend) {
+    var title = 'Add Friend';
+    var body = 'Do you want to add ' + friend.username + ' to your friends list?';
+
+    util.showPrompt($ionicPopup, title, body, 'Add', 'Cancel', function() {
+      $scope.addFriend(friend._id);
+    });
+  }
+
   $scope.addFriend = function(id) {
     var friendExists = false;
     for (var i=0; i<$scope.user.friends.length; i++) {

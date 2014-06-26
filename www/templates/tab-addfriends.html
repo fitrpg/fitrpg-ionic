@@ -11,7 +11,7 @@
     </div>
 
     <ion-list>
-      <ion-item class="item-avatar" ng-repeat="friend in friends | filter:searchText | orderBy:'profile.displayName'" type="item-text-wrap">
+      <ion-item class="item-avatar" ng-repeat="friend in friends | filter:searchText | orderBy:'profile.displayName'" type="item-text-wrap" ng-click="addFriendPrompt(friend)">
         <img ng-src="{{friend.profile.avatar}}">
         <h2>{{friend.username}}</h2>
         <p>Level {{friend.attributes.level}} {{friend.character}}</p>
