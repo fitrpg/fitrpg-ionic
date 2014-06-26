@@ -172,7 +172,6 @@ angular.module('starter.controllers')
                 if (total >= quest.winGoal) {
                   $rootScope.user.quests[i].status = 'success';
                   $rootScope.user.attributes.gold += quest.gold;
-                  $rootScope.user.attributes.experience += quest.gold*2;
                 } else {
                   $rootScope.user.quests[i].status = 'fail';
                   $rootScope.user.attributes.gold = $rootScope.user.attributes.gold - Math.floor(quest.gold/3);
@@ -186,7 +185,6 @@ angular.module('starter.controllers')
                 if (total >= quest.winGoal) {
                   $rootScope.user.quests[i].status = 'success';
                   $rootScope.user.attributes.gold += quest.gold;
-                  $rootScope.user.attributes.experience += quest.gold*2;
                 } else {
                   $rootScope.user.quests[i].status = 'fail';
                   $rootScope.user.attributes.gold = $rootScope.user.attributes.gold - Math.floor(quest.gold/3);
