@@ -24,6 +24,7 @@
 
     <alert ng-repeat="alert in alerts" type="{{alert.type}}" ng-click="navTo('battle')" close="closeAlert($index)" ng-show="showAlert">{{alert.msg}}</alert>
     <alert ng-repeat="alert in levelUpAlerts" type="{{alert.type}}" close="closeLevelUpAlert($index)" ng-show="showAlert">{{alert.msg}}</alert>
+    <alert ng-repeat="alert in friendRequestAlerts" type="{{alert.type}}" close="closeFriendRequestAlert($index)" ng-show="showAlert">{{alert.msg}}</alert>
     <alert ng-repeat="alert in questAlerts" type="{{alert.type}}" ng-click="navTo('quest')" close="closeQuestAlert($index)" ng-show="showAlert">{{alert.msg}}</alert>
 
     <div class="list">
@@ -82,6 +83,25 @@
           <div class="col" ng-click="applyAttributes('dexterity')">
             <i class="icon ion-plus-circled" ng-show="hasSkillPoints()"></i>
             <h1>{{calculatedData.dexterity}}</h1>
+            <p>Dexterity</p>
+          </div>
+        </div>
+
+        <div class="item row main-attributes">
+          <div class="col">
+            <h1>{{user.fitbit.strength}}</h1>
+            <p>Strength</p>
+          </div>
+          <div class="col">
+            <h1>{{user.fitbit.vitality}}</h1>
+            <p>Vitality</p>
+          </div>
+          <div class="col">
+            <h1>{{user.fitbit.endurance}}</h1>
+            <p>Endurance</p>
+          </div>
+          <div class="col">
+            <h1>{{user.fitbit.dexterity}}</h1>
             <p>Dexterity</p>
           </div>
         </div>
