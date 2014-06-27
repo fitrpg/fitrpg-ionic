@@ -152,7 +152,7 @@ angular.module('starter.controllers')
 })
 
 // This particular controller handles the individual pages of each quest
-.controller('QuestDetailCtrl', function($scope, $state, $stateParams, Quests, $ionicPopup, User, TimesData, DatesData, daysWeek, finishQuest) {
+.controller('QuestDetailCtrl', function($scope, $state, $stateParams, Quests, $ionicPopup, User, TimesData, DatesData, daysWeek, finishQuest, $cordovaSocialSharing) {
   var questId = $stateParams.questId
   $scope.quest = Quests.get({id: questId});
   $scope.availableQuest = true; 
@@ -163,6 +163,14 @@ angular.module('starter.controllers')
   // Show 1-5 stars on the screen depending on the difficulty
   $scope.difficulty = function(num) {
     return num <= $scope.quest.difficulty;
+  };
+
+  var sendTweet = function (message) {
+    $cordovaSocialSharing.shareViaTwitter(message).then(function(result) {
+    // Success!
+    }, function(err) {
+    // An error occured. Show a message to the user
+    });
   };
 
   // Check if the user currently has this quest active or completed
@@ -288,22 +296,29 @@ angular.module('starter.controllers')
   };
 
   $scope.manualCompleteQuest = function() {
-    var title, body, button, endQuest;
+    var title, body, endQuest, message;
     evalQuest(function(completed) {
       console.log('completed',completed);
       if(completed) {
         title    = 'Success!';
         body     = 'Congratulations! You completed this quest. You won ' + $scope.userQuest.gold + ' gold pieces.';
+        message  = 'I completed my quest: ' + $scope.userQuest.shortDesc + ' I\'m super fit! @fitrpg';
         endQuest = finishQuest.winQuest;
       } else {
         title    = 'Fail!';
         body     = 'Sorry, you did not complete your quest on time. You lost gold. Try again later.';
+        message  = 'I didn\'t complete my quest: ' + $scope.userQuest.shortDesc + 'I need to train more. @fitrpg';
         endQuest = finishQuest.loseQuest;
       }
-      util.showAlert($ionicPopup, title, body, button, function() {
-        User.update(endQuest($scope.user,$scope.userQuest));
-        $state.go('app.quest');
-      });
+      User.update(endQuest($scope.user,$scope.userQuest));
+      util.showPrompt($ionicPopup, title, body, 'Share', 'Continue',
+        function() {
+          sendTweet(message);
+        },
+        function() {
+          $state.go('app.quest');
+        }
+      );
     });
   };
 

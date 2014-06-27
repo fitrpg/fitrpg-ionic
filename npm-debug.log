@@ -1,0 +1,85 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   'ngCordova',
+1 verbose cli   '--save' ]
+2 info using npm@1.4.9
+3 info using node@v0.10.28
+4 warn package.json ionic-project@1.0.0 No repository field.
+5 verbose readDependencies using package.json deps
+6 verbose cache add [ 'ngCordova', null ]
+7 verbose cache add name=undefined spec="ngCordova" args=["ngCordova",null]
+8 verbose parsed url { protocol: null,
+8 verbose parsed url   slashes: null,
+8 verbose parsed url   auth: null,
+8 verbose parsed url   host: null,
+8 verbose parsed url   port: null,
+8 verbose parsed url   hostname: null,
+8 verbose parsed url   hash: null,
+8 verbose parsed url   search: null,
+8 verbose parsed url   query: null,
+8 verbose parsed url   pathname: 'ngCordova',
+8 verbose parsed url   path: 'ngCordova',
+8 verbose parsed url   href: 'ngCordova' }
+9 silly lockFile c4cc40e6-ngCordova ngCordova
+10 verbose lock ngCordova /Users/chrispak/.npm/c4cc40e6-ngCordova.lock
+11 silly lockFile c4cc40e6-ngCordova ngCordova
+12 silly lockFile c4cc40e6-ngCordova ngCordova
+13 verbose addNamed [ 'ngCordova', '' ]
+14 verbose addNamed [ null, '*' ]
+15 silly lockFile e8f61dac-ngCordova ngCordova@
+16 verbose lock ngCordova@ /Users/chrispak/.npm/e8f61dac-ngCordova.lock
+17 silly addNameRange { name: 'ngCordova', range: '*', hasData: false }
+18 verbose url raw ngCordova
+19 verbose url resolving [ 'https://registry.npmjs.org/', './ngCordova' ]
+20 verbose url resolved https://registry.npmjs.org/ngCordova
+21 info trying registry request attempt 1 at 22:37:36
+22 http GET https://registry.npmjs.org/ngCordova
+23 http 404 https://registry.npmjs.org/ngCordova
+24 verbose headers { date: 'Tue, 24 Jun 2014 05:37:36 GMT',
+24 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R14B04)',
+24 verbose headers   'content-type': 'application/json',
+24 verbose headers   'cache-control': 'max-age=0',
+24 verbose headers   'content-length': '52',
+24 verbose headers   'accept-ranges': 'bytes',
+24 verbose headers   via: '1.1 varnish',
+24 verbose headers   age: '0',
+24 verbose headers   'x-served-by': 'cache-lax1430-LAX',
+24 verbose headers   'x-cache': 'MISS',
+24 verbose headers   'x-cache-hits': '0',
+24 verbose headers   'x-timer': 'S1403588256.821214,VS0,VE36',
+24 verbose headers   'keep-alive': 'timeout=10, max=50',
+24 verbose headers   connection: 'Keep-Alive' }
+25 silly registry.get cb [ 404,
+25 silly registry.get   { date: 'Tue, 24 Jun 2014 05:37:36 GMT',
+25 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R14B04)',
+25 silly registry.get     'content-type': 'application/json',
+25 silly registry.get     'cache-control': 'max-age=0',
+25 silly registry.get     'content-length': '52',
+25 silly registry.get     'accept-ranges': 'bytes',
+25 silly registry.get     via: '1.1 varnish',
+25 silly registry.get     age: '0',
+25 silly registry.get     'x-served-by': 'cache-lax1430-LAX',
+25 silly registry.get     'x-cache': 'MISS',
+25 silly registry.get     'x-cache-hits': '0',
+25 silly registry.get     'x-timer': 'S1403588256.821214,VS0,VE36',
+25 silly registry.get     'keep-alive': 'timeout=10, max=50',
+25 silly registry.get     connection: 'Keep-Alive' } ]
+26 silly lockFile e8f61dac-ngCordova ngCordova@
+27 silly lockFile e8f61dac-ngCordova ngCordova@
+28 error 404 404 Not Found: ngCordova
+28 error 404
+28 error 404 'ngCordova' is not in the npm registry.
+28 error 404 You should bug the author to publish it
+28 error 404 It was specified as a dependency of 'ionic-project'
+28 error 404
+28 error 404 Note that you can also install from a
+28 error 404 tarball, folder, or http url, or git url.
+29 error System Darwin 13.1.0
+30 error command "/usr/local/bin/node" "/usr/local/bin/npm" "install" "ngCordova" "--save"
+31 error cwd /Users/chrispak/Documents/HR13/fitrpg-ionic
+32 error node -v v0.10.28
+33 error npm -v 1.4.9
+34 error code E404
+35 verbose exit [ 1, true ]
