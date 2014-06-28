@@ -155,29 +155,18 @@ angular.module('starter.controllers')
   };
 })
 
-.controller('AddFriendsCtrl', function($scope, User, $ionicPopup,  $ionicLoading) {
+.controller('AddFriendsCtrl', function($scope, User, $ionicPopup,  $ionicLoading, UserSearch) {
   // friends is accessed from $rootScope.user.friends in the template
   $scope.friends = [];
 
-  var loading = setTimeout(function(){
-    $ionicLoading.show({
-      template: '<p>Loading...</p><i class="icon ion-loading-c"></i>'
-    });
-  }, 500);
-
-  var stopLoading = function() {
-    clearTimeout(loading);
-    $ionicLoading.hide();
-  };
-
-  User.query(function(users){
-    for (var i=0; i<users.length; i++) {
-      if ($scope.user['_id'] !== users[i]['_id']) {
-        $scope.friends.push(users[i]);
-      }
-    }
-    stopLoading();
-  });
+  // User.query(function(users){
+  //   for (var i=0; i<users.length; i++) {
+  //     if ($scope.user['_id'] !== users[i]['_id']) {
+  //       $scope.friends.push(users[i]);
+  //     }
+  //   }
+  //   stopLoading();
+  // });
 
   $scope.addFriendPrompt = function(friend) {
     var title = 'Add Friend';
@@ -185,6 +174,37 @@ angular.module('starter.controllers')
 
     util.showPrompt($ionicPopup, title, body, 'Add', 'Cancel', function() {
       $scope.addFriend(friend._id);
+    });
+  };
+
+  $scope.notFound = false;
+
+  $scope.friendSearch = function(username) {
+    $scope.notFound = false;
+
+    var loading = setTimeout(function(){
+      $ionicLoading.show({
+        template: '<p>Searching...</p><i class="icon ion-loading-c"></i>'
+      });
+    }, 500);
+
+    var stopLoading = function() {
+      clearTimeout(loading);
+      $ionicLoading.hide();
+    };
+
+    UserSearch.query({username: username}, function(users) {
+      if (users.length === 0) {
+        $scope.notFound = true;
+      }
+
+      for (var i=0; i<users.length; i++) {
+        if ($scope.user['_id'] !== users[i]['_id']) {
+          $scope.friends.push(users[i]);
+        }
+      }
+
+      stopLoading();
     });
   };
 
