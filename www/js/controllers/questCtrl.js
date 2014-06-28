@@ -152,7 +152,7 @@ angular.module('starter.controllers')
 })
 
 // This particular controller handles the individual pages of each quest
-.controller('QuestDetailCtrl', function($scope, $state, $stateParams, Quests, $ionicPopup, User, TimesData, DatesData, daysWeek, finishQuest, $cordovaSocialSharing) {
+.controller('QuestDetailCtrl', function($scope, $state, $stateParams, Quests, $ionicPopup, User, TimesData, DatesData, daysWeek, finishQuest, NewTimesData, $cordovaSocialSharing) {
   var questId = $stateParams.questId
   $scope.quest = Quests.get({id: questId});
   $scope.availableQuest = true; 
@@ -194,11 +194,41 @@ angular.module('starter.controllers')
       $scope.$broadcast('timer-set-countdown');
       $scope.parsedDate = Date.parse($scope.userQuest.completionTime);
       if ($scope.userQuest.numDays < 1) {
-        TimesData.get($scope.userQuest.getObj, function(result) {
-          $scope.progress = result.total || 0; //current progress 
-          var completed = $scope.progress >= $scope.winGoal; 
-          if (cb) { cb(completed) };    
-        });
+        // !!! do a check here to see if it spans through midnight
+        console.log('less than a day');
+        if ($scope.userQuest.getObj.startDate !== $scope.userQuest.getObj.endDate) {
+          var newGetObjectBeforeMidnight = {};
+          newGetObjectBeforeMidnight.startTime = $scope.userQuest.getObj.startTime;
+          newGetObjectBeforeMidnight.endTime = '23:59';
+          newGetObjectBeforeMidnight.startDate = $scope.userQuest.getObj.startDate;
+          newGetObjectBeforeMidnight.id = $scope.userQuest.getObj.id;
+          newGetObjectBeforeMidnight.activity = $scope.userQuest.getObj.activity;
+          NewTimesData.get(newGetObjectBeforeMidnight, function(result) {
+            var preMidnightTotal = parseInt(result.total) || 0;
+            console.log('pre midnight', result.total, preMidnightTotal);
+            var newGetObjectAfterMidnight = {};
+            newGetObjectAfterMidnight.startTime = '00:00';
+            newGetObjectAfterMidnight.endTime = $scope.userQuest.getObj.endTime;
+            newGetObjectAfterMidnight.startDate = $scope.userQuest.getObj.endDate;
+            newGetObjectAfterMidnight.id = $scope.userQuest.getObj.id;
+            newGetObjectAfterMidnight.activity = $scope.userQuest.getObj.activity;
+            NewTimesData.get(newGetObjectAfterMidnight, function(result2) {
+              var postMidnightTotal = parseInt(result2.total) || 0;
+              console.log('post midnight total', postMidnightTotal, result2.total);
+              $scope.progress = preMidnightTotal + postMidnightTotal;
+              console.log($scope.progress);
+              var completed = $scope.progress >= $scope.winGoal;
+              console.log('completed',completed);
+              if (cb) { cb(completed) };
+            });
+          });
+        } else {
+          TimesData.get($scope.userQuest.getObj, function(result) {
+            $scope.progress = result.total || 0; //current progress 
+            var completed = $scope.progress >= $scope.winGoal; 
+            if (cb) { cb(completed) };    
+          });
+        }
       } else if ($scope.userQuest.numDays > 0 ) { // multiday quests
         DatesData.get($scope.userQuest.getObj, function(result) {
           $scope.progress = result.total || 0; // current progress
@@ -307,7 +337,7 @@ angular.module('starter.controllers')
       } else {
         title    = 'Fail!';
         body     = 'Sorry, you did not complete your quest on time. You lost gold. Try again later.';
-        message  = 'I didn\'t complete my quest: ' + $scope.userQuest.shortDesc + 'I need to train more. @fitrpg';
+        message  = 'I didn\'t complete my quest: ' + $scope.userQuest.shortDesc + ' I need to train more. @fitrpg';
         endQuest = finishQuest.loseQuest;
       }
       User.update(endQuest($scope.user,$scope.userQuest));
