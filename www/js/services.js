@@ -82,6 +82,10 @@ angular.module('starter.services', ['ngResource'])
     {id : '@id', level: '@level'});
 }])
 
+.factory('UserSearch',['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
+  return $resource(SERVER_URL + '/api/users/search/:username', {username : '@username'});
+}])
+
 .factory('Leaderboard',['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
   return $resource(SERVER_URL + '/api/users/leaderboard');
 }])
