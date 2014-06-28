@@ -45,10 +45,17 @@ angular.module('starter.services', ['ngResource'])
 }])
 
 // get fitbit data based off of a time range
+.factory('NewTimesData', ['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
+  return $resource(SERVER_URL + '/fitbit/new/timerange/:id/:activity/:startDate/:startTime/:endTime',
+    {id: '@id', activity: '@activity', startDate: '@startDate', startTime: '@startTime', endTime: '@endTime'} );
+}])
+
+// OLD RESOURCE WE NEVER USE BECAUSE WE CHANGE IT--LEAVING IT HERE TO REMEMBER FOR BACKWARDS COMPATIABILITY
 .factory('TimesData', ['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
   return $resource(SERVER_URL + '/fitbit/timerange/:id/:activity/:startDate/:endDate/:startTime/:endTime',
     {id: '@id', activity: '@activity', startDate: '@startDate', endDate: '@endDate', startTime: '@startTime', endTime: '@endTime'} );
 }])
+
 
 .factory('Shop', ['$resource', 'SERVER_URL', function($resource, SERVER_URL) {
   return $resource(SERVER_URL + '/api/items/:id', {id : '@id'});
