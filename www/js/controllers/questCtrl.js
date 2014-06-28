@@ -194,8 +194,6 @@ angular.module('starter.controllers')
       $scope.$broadcast('timer-set-countdown');
       $scope.parsedDate = Date.parse($scope.userQuest.completionTime);
       if ($scope.userQuest.numDays < 1) {
-        // !!! do a check here to see if it spans through midnight
-        console.log('less than a day');
         if ($scope.userQuest.getObj.startDate !== $scope.userQuest.getObj.endDate) {
           var newGetObjectBeforeMidnight = {};
           newGetObjectBeforeMidnight.startTime = $scope.userQuest.getObj.startTime;
@@ -205,7 +203,6 @@ angular.module('starter.controllers')
           newGetObjectBeforeMidnight.activity = $scope.userQuest.getObj.activity;
           NewTimesData.get(newGetObjectBeforeMidnight, function(result) {
             var preMidnightTotal = parseInt(result.total) || 0;
-            console.log('pre midnight', result.total, preMidnightTotal);
             var newGetObjectAfterMidnight = {};
             newGetObjectAfterMidnight.startTime = '00:00';
             newGetObjectAfterMidnight.endTime = $scope.userQuest.getObj.endTime;
@@ -214,9 +211,7 @@ angular.module('starter.controllers')
             newGetObjectAfterMidnight.activity = $scope.userQuest.getObj.activity;
             NewTimesData.get(newGetObjectAfterMidnight, function(result2) {
               var postMidnightTotal = parseInt(result2.total) || 0;
-              console.log('post midnight total', postMidnightTotal, result2.total);
               $scope.progress = preMidnightTotal + postMidnightTotal;
-              console.log($scope.progress);
               var completed = $scope.progress >= $scope.winGoal;
               console.log('completed',completed);
               if (cb) { cb(completed) };
