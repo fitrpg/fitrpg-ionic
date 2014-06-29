@@ -180,6 +180,8 @@ angular.module('starter.controllers')
   $scope.notFound = false;
 
   $scope.friendSearch = function(username) {
+    $scope.friends = [];
+
     $scope.notFound = false;
 
     var loading = setTimeout(function(){
