@@ -57,7 +57,15 @@ angular.module('starter.controllers')
     msg = 'You leveled up! You\'ve gained skill points to increase your attributes.';
     $scope.alertCount++;
     $scope.levelUpAlerts.push({type: type, msg: msg});
-  }
+  };
+
+  var addFriendRequestAlert = function() {
+    var type, msg;
+    type = 'success';
+    msg = 'You have a new friend request. Click here to view the requests.';
+    $scope.alertCount++;
+    $scope.friendRequestAlerts.push({type: type, msg: msg});
+  };
 
   var addQuestAlert = function(quest) {
     var type, msg;
@@ -83,6 +91,10 @@ angular.module('starter.controllers')
 
   $scope.closeLevelUpAlert = function(index) {
     $scope.levelUpAlerts.splice(index, 1);
+  };
+
+  $scope.closeFriendRequestAlert = function(index) {
+    $scope.friendRequestAlerts.splice(index, 1);
   };
 
   $scope.closeQuestAlert = function(index) {
@@ -157,6 +169,20 @@ angular.module('starter.controllers')
     }
   };
 
+  var alertFriendRequestStatus = function() {
+    $scope.friendRequestAlerts = [];
+    var alertRequest = false;
+    if ($rootScope.user.friendRequests) {
+      for (var i=0; i<$rootScope.user.friendRequests.length; i++) {
+        var request = $rootScope.user.friendRequests[i];
+        if (request.status === 'request' && !alertRequest) {
+          alertRequest = true;
+          addFriendRequestAlert();
+        }
+      }
+    }
+  };
+
   var alertQuestStatus = function() {
     $scope.questAlerts = [];
     var today = parseInt(Date.parse(new Date()));
@@ -172,7 +198,6 @@ angular.module('starter.controllers')
                 if (total >= quest.winGoal) {
                   $rootScope.user.quests[i].status = 'success';
                   $rootScope.user.attributes.gold += quest.gold;
-                  $rootScope.user.attributes.experience += quest.gold*2;
                 } else {
                   $rootScope.user.quests[i].status = 'fail';
                   $rootScope.user.attributes.gold = $rootScope.user.attributes.gold - Math.floor(quest.gold/3);
@@ -186,7 +211,6 @@ angular.module('starter.controllers')
                 if (total >= quest.winGoal) {
                   $rootScope.user.quests[i].status = 'success';
                   $rootScope.user.attributes.gold += quest.gold;
-                  $rootScope.user.attributes.experience += quest.gold*2;
                 } else {
                   $rootScope.user.quests[i].status = 'fail';
                   $rootScope.user.attributes.gold = $rootScope.user.attributes.gold - Math.floor(quest.gold/3);
@@ -233,6 +257,7 @@ angular.module('starter.controllers')
             calculateData($rootScope.user);
             alertBattleStatus();
             alertLevelUpStatus();
+            alertFriendRequestStatus();
             alertQuestStatus();
             $rootScope.user.needsUpdate = false;
             User.update($rootScope.user);
@@ -261,6 +286,7 @@ angular.module('starter.controllers')
         $scope.showAlert = false;
         alertBattleStatus();
         alertLevelUpStatus();
+        alertFriendRequestStatus();
         User.update($rootScope.user);
         $scope.$broadcast('scroll.refreshComplete');
       });

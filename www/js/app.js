@@ -17,38 +17,41 @@ angular.module('starter', ['ionic', 'timer', 'starter.controllers','app.auth','s
 
     ionic.Platform.fullScreen();
 
-    var device = {
-      isApple: ionic.Platform.isIOS(),
-      isGoogle: ionic.Platform.isAndroid(),
-    };
+    if(window.cordova) {
+      var device = {
+        isApple: ionic.Platform.isIOS(),
+        isGoogle: ionic.Platform.isAndroid(),
+      };
 
-    var androidConfig = {
-      'senderID':'replace_with_sender_id',
-      'ecb':'onNotification'
-    };
+      var androidConfig = {
+        'senderID':'replace_with_sender_id',
+        'ecb':'onNotification'
+      };
 
-    var iosConfig = {
-      'badge':'true',
-      'sound':'true',
-      'alert':'true',
-      'ecb':'onNotificationAPN'
-    };
+      var iosConfig = {
+        'badge':'true',
+        'sound':'true',
+        'alert':'true',
+        'ecb':'onNotificationAPN'
+      };
 
-    var config;
+      var config;
 
-    if (device.isApple) {
-      config = iosConfig;
-    } else if (device.isGoogle) {
-      config = androidConfig;
+      if (device.isApple) {
+        config = iosConfig;
+      } else if (device.isGoogle) {
+        config = androidConfig;
+      }
+
+      $cordovaPush.register(config).then(function(result) {
+        console.log(result);
+      }, function(err) {
+        console.log(err);
+      });
     }
 
-    $cordovaPush.register(config).then(function(result) {
-      console.log(result);
-    }, function(err) {
-      console.log(err);
-    });
-
   });
+
   $ionicPlatform.registerBackButtonAction(function () {
     if ($state.current.name === 'app.character') {
       navigator.app.exitApp();

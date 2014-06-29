@@ -3,6 +3,18 @@ angular.module('starter.controllers')
 .controller('FriendsCtrl', function($scope, $state, User, $ionicLoading, $ionicListDelegate, $ionicPopup, $q) {
   // friends is accessed from $rootScope.user
   $scope.friends = [];
+  $scope.friendRequests = [];
+
+  $scope.showList = {
+    friend: true,
+    pending: true,
+    request: true,
+  };
+
+  $scope.toggleList = function(list) {
+    $scope.showList[list] = !$scope.showList[list];
+  };
+
   var loading = setTimeout(function(){
     $ionicLoading.show({
       template: '<p>Loading...</p><i class="icon ion-loading-c"></i>'
@@ -12,7 +24,7 @@ angular.module('starter.controllers')
   var stopLoading = function() {
     clearTimeout(loading);
     $ionicLoading.hide();
-  }
+  };
 
   if ($scope.user.friends.length === 0) {
     stopLoading();
@@ -21,13 +33,80 @@ angular.module('starter.controllers')
   for (var i=0; i<$scope.user.friends.length; i++) {
     var friend = $scope.user.friends[i];
     User.get({id: friend}, function(user){
-      if (user['_id']) {
+      if (user._id) {
         $scope.friends.push(user);
         $scope.hasFriends = true;
       }
       stopLoading();
     });
   }
+
+  if ($scope.user.friendRequests) {
+    for (var i=0; i<$scope.user.friendRequests.length; i++) {
+      var friendRequest = $scope.user.friendRequests[i];
+      var getFriend = function(request) {
+        User.get({id: friendRequest.id}, function(friend) {
+          friend.requestStatus = request.status;
+          $scope.friendRequests.push(friend);
+        });
+      };
+      getFriend(friendRequest);
+    }
+  }
+
+  var removeFriendRequest = function(user, friendId) {
+    var index;
+    for (var i=0; i<user.friendRequests.length; i++) {
+      var friendRequest = user.friendRequests[i];
+      if (friendRequest.id === friendId) {
+        index = i;
+      }
+    }
+    user.friendRequests.splice(index,1);
+  };
+
+  $scope.friendPrompt = function(index) {
+    var friend = $scope.friendRequests[index];
+    var title = 'Friend Request';
+    var body = friend.username + ' wants to add you as their friend.';
+    util.showPrompt($ionicPopup,title,body,'Accept','Reject',
+      function(){
+        $scope.acceptFriend(index);
+      },
+      function(){
+        $scope.rejectFriend(index);
+      }
+    );
+  };
+
+  $scope.acceptFriend = function(index) {
+    var friend = $scope.friendRequests[index];
+    $scope.user.friends.push(friend._id);
+    $scope.friends.push(friend);
+
+    removeFriendRequest($scope.user, friend._id);
+    $scope.friendRequests.splice(index,1);
+
+    User.get({id: friend._id}, function(user) {
+      removeFriendRequest(user, $scope.user._id);
+      user.friends.push($scope.user._id);
+      User.update(user);
+    });
+    User.update($scope.user);
+  };
+
+  $scope.rejectFriend = function(index) {
+    var friend = $scope.friendRequests[index];
+
+    removeFriendRequest($scope.user, friend._id);
+    $scope.friendRequests.splice(index,1);
+
+    User.get({id: friend._id}, function(friend) {
+      removeFriendRequest(friend, $scope.user._id);
+      User.update(friend);
+    });
+    User.update($scope.user);
+  };
 
   $scope.hasFriends = false;
   $scope.navTo = function(location) {
@@ -59,7 +138,7 @@ angular.module('starter.controllers')
         for (var i=0; i<$scope.friends.length; i++) {
           var friend = $scope.friends[i];
           if (friend['_id'] === friendId) {
-            friend.missionsVersus.push({type:'battle',enemy:$scope.user['_id'],status:'request'})
+            friend.missionsVersus.push({type:'battle',enemy:$scope.user['_id'],status:'request'});
             User.update(friend);
           }
         }
@@ -76,18 +155,64 @@ angular.module('starter.controllers')
   };
 })
 
-.controller('AddFriendsCtrl', function($scope, User, $ionicPopup) {
+.controller('AddFriendsCtrl', function($scope, User, $ionicPopup,  $ionicLoading, UserSearch) {
   // friends is accessed from $rootScope.user.friends in the template
   $scope.friends = [];
-  User.query(function(users){
-    for (var i=0; i<users.length; i++) {
-      if ($scope.user['_id'] !== users[i]['_id']) {
-        $scope.friends.push(users[i]);
+
+  // User.query(function(users){
+  //   for (var i=0; i<users.length; i++) {
+  //     if ($scope.user['_id'] !== users[i]['_id']) {
+  //       $scope.friends.push(users[i]);
+  //     }
+  //   }
+  //   stopLoading();
+  // });
+
+  $scope.addFriendPrompt = function(friend) {
+    var title = 'Add Friend';
+    var body = 'Do you want to add ' + friend.username + ' to your friends list?';
+
+    util.showPrompt($ionicPopup, title, body, 'Add', 'Cancel', function() {
+      $scope.addFriend(friend._id);
+    });
+  };
+
+  $scope.notFound = false;
+
+  $scope.friendSearch = function(username) {
+    $scope.friends = [];
+
+    $scope.notFound = false;
+
+    var loading = setTimeout(function(){
+      $ionicLoading.show({
+        template: '<p>Searching...</p><i class="icon ion-loading-c"></i>'
+      });
+    }, 500);
+
+    var stopLoading = function() {
+      clearTimeout(loading);
+      $ionicLoading.hide();
+    };
+
+    UserSearch.query({username: username}, function(users) {
+      if (users.length === 0) {
+        $scope.notFound = true;
       }
-    }
-  });
+
+      for (var i=0; i<users.length; i++) {
+        if ($scope.user['_id'] !== users[i]['_id']) {
+          $scope.friends.push(users[i]);
+        }
+      }
+
+      stopLoading();
+    });
+  };
 
   $scope.addFriend = function(id) {
+    var title, body;
+
     var friendExists = false;
     for (var i=0; i<$scope.user.friends.length; i++) {
       var friend = $scope.user.friends[i];
@@ -95,14 +220,37 @@ angular.module('starter.controllers')
         friendExists = true;
       }
     }
-    if (!friendExists) {
-      $scope.user.friends.push(id);
+
+    var requestExists = false;
+    if ($scope.user.friendRequests) {
+      for (var i=0; i<$scope.user.friendRequests.length; i++) {
+        var request = $scope.user.friendRequests[i];
+        if (request.id === id) {
+          requestExists = true;
+        }
+      }
+    }
+
+    if (!friendExists && !requestExists) {
+      // $scope.user.friends.push(id);
+      $scope.user.friendRequests = $scope.user.friendRequests || [];
+      $scope.user.friendRequests.push({status: 'pending', id: id});
       User.update($scope.user);
-      title = 'Friend Added';
-      body = 'Your friend has been added.';
+      User.get({id:id}, function(friend){
+        friend.friendRequests = friend.friendRequests || [];
+        friend.friendRequests.push({status: 'request', id: $scope.user._id});
+        User.update(friend);
+      });
+      title = 'Friend Request Sent';
+      body = 'Your friend request has been sent.';
     } else {
-      title = 'Alread Friends'
-      body = 'You are already friends.'
+      if (friendExists) {
+        title = 'Already Friends'
+        body = 'You are already friends.'
+      } else if (requestExists) {
+        title = 'Request Sent'
+        body = 'Your request to be friends has already been sent.'
+      }
     }
     util.showAlert($ionicPopup,title,body,'OK',function(){});
   }

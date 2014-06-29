@@ -4,7 +4,7 @@
 /*Quest page*/
 .questTimer {
   text-align: center;
-  font-weight:bold;
+  font-style: italic;
 }
 
 .battleStatus {
@@ -164,8 +164,13 @@
   color: #fff;
   border: 0;
   font-size: 20px;
+  font-style: normal;
+  padding: 7px 30px 7px 30px;
 }
 
+.no-bottom-margin {
+  margin-bottom: 0px;
+}
 
 /* END CHARACTER SCREEN */
 

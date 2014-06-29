@@ -200,3 +200,21 @@ var util = {
   },
 
 };
+
+// Necessary to format to the way Fitbit wants our dates  
+Date.prototype.yyyymmdd = function() {
+  var yyyy = this.getFullYear().toString();
+  var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+  var dd  = this.getDate().toString();
+  return yyyy + '-' + (mm[1]?mm:'0'+mm[0]) + '-' + (dd[1]?dd:'0'+dd[0]);
+};
+
+// Useful to add days and hours to the start time/day
+Date.prototype.addDays = function(days,hours) {
+  var date = new Date(this.valueOf());
+  date.setDate(date.getDate() + days);
+  if(hours) {
+    date.setHours(this.getHours()+hours);
+  }
+  return date;
+};
