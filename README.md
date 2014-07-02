@@ -32,5 +32,3 @@ FitRPG is a mobile app created by [Amira Anuar](https://github.com/aellawind), [
   * Push Notfications
   * Versus Missions
   * Jawbone Support
-  * Random Battle Matching (v1.0.6)
-  * Social Sharing
