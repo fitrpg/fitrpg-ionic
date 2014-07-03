@@ -21,6 +21,7 @@ angular.module('starter.controllers')
 		{question: 'What is a quest and how does it work?', goTo: 'quest' },
 		{question: 'How often can I do a specific quest?', goTo: 'questFrequency' },
 		{question: 'What are skill points and what can I do with them?', goTo: 'skillPts' },
+		{question: 'How do attributes help me in battle?', goTo: 'attributeDef' },
 		{question: 'What are weapons, equipment, and potions? How do I buy them?', goTo: 'purchasing' },
     {question: 'What can I do with the weapons I buy?', goTo: 'weapons' },
     {question: 'What is weapon size?', goTo: 'weaponsize' },
@@ -55,6 +56,9 @@ angular.module('starter.controllers')
 		},
 		{ question: 'What are skill points and what can I do with them?', id: 'skillPts',
 		 answer: 'You gain skill points through leveling up. Each point you get is one you can add to your endurance, dexterity, strength, or vitality. When you have skill points, you will see a small plus button next to your attributes on your dashboard, and you can tap it to increase that attribute.'
+		},
+		{ question: 'How do attributes help me in battle?', id: 'attributeDef',
+		 answer: 'Strength increase your attack damage. Dexterity increases your evasion rate. Endurance increases your attack rate. Vitality increase your max HP.'
 		},
 		{ question: 'What are weapons, equipment, and potions? How do I buy them?', id: 'purchasing' ,
 		 answer: 'You can equip your character with weapons and equipment to give yourself a better chance to beat bosses or friends. To buy them you have to have gold that you\'ve won from quests or battles. Go to the store from the side menu. You can buy multiples of the same item'
