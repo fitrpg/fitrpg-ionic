@@ -381,5 +381,9 @@ i.ion-refresh.refresh {
 }
 
 .scroll-content {
-  padding-bottom: 20;
+  padding-bottom: 20px;
+}
+
+.icon-btn {
+  padding: 0 10px;
 }
