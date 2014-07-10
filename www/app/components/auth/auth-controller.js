@@ -38,3 +38,18 @@ angular.module('mobile.authentication.controllers')
   };
 
 });
+
+var isTokenInDate = function(localStorageService){
+  var tokenDate = new Date(JSON.parse(localStorageService.get('token-date')));
+  if (tokenDate) {
+    var today = new Date();
+    var timeDiff = Math.abs(today.getTime() - tokenDate.getTime());
+    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    if(diffDays > 10) {
+      return false;
+    }
+  } else {
+    return false;
+  }
+  return true;
+};
