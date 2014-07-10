@@ -1,0 +1,115 @@
+<ion-view title="Quests" hide-back-button="true">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon-gray icon ion-navicon"></button>
+  </ion-nav-buttons>
+
+  <div class="bar bar-subheader custom-subheader">
+    <div class="button-bar bar-light">
+      <a class="button button-tab" ng-class="allTab" ng-click="all()">All</a>
+      <a class="button button-tab" ng-class="activeTab" ng-click="active()">Active</a>
+      <a class="button button-tab" ng-class="completedTab" ng-click="completed()">Completed</a>
+    </div>
+  </div>
+
+
+  <ion-content class="has-header has-subheader">
+
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}" ng-click="navTo('quest')" close="closeAlert($index)">{{alert.msg}}</alert>
+
+    <div class="list">
+
+      <!-- Steps quests -->
+      <div ng-show="isAll">
+        <div class="item item-divider" ng-click="toggleList('steps')">
+          Step Up<i class="icon ion-chevron-down pull-right" ng-show="showList['steps']"></i><i class="icon ion-chevron-right pull-right" ng-hide="showList['steps']"></i>
+        </div>
+        <a ng-show="showList['steps']" class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in availableQuests | filter: {activity:'steps'}  | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
+          <i class="icon {{quest.icon}}"></i>
+            <h2>{{quest.title}}</h2>
+            <p>{{quest.shortDescription}} Time: {{quest.numDays}} days, {{quest.numHours}} hrs</p>
+          <i class="icon icon-gray ion-ios7-arrow-right"></i>
+        </a>
+
+        <!-- Distance quests -->
+        <div class="item item-divider" ng-click="toggleList('distance')">
+          Go the Distance<i class="icon ion-chevron-down pull-right" ng-show="showList['distance']"></i><i class="icon ion-chevron-right pull-right" ng-hide="showList['distance']"></i>
+        </div>
+        <a ng-show="showList['distance']" class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in availableQuests | filter: {activity:'distance'}  | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
+          <i class="icon {{quest.icon}}"></i>
+            <h2>{{quest.title}}</h2>
+            <p>{{quest.shortDescription}} Time: {{quest.numDays}} days, {{quest.numHours}} hrs</p>
+          <i class="icon icon-gray ion-ios7-arrow-right"></i>
+        </a>
+
+        <!-- Strength quests -->
+        <div class="item item-divider" ng-click="toggleList('strength')">
+          Crush It<i class="icon ion-chevron-down pull-right" ng-show="showList['strength']"></i><i class="icon ion-chevron-right pull-right" ng-hide="showList['strength']"></i>
+        </div>
+        <span class="item item-padding noquest">
+          Quests to improve your strength and working out will be coming soon!
+        </span>
+       <!--  <a ng-show="showList['strength']" class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in availableQuests | filter: {activity:'null'} | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
+          <i class="icon {{quest.icon}}"></i>
+            <h2>{{quest.title}}</h2>
+            <p>{{quest.shortDescription}}</p>
+          <i class="icon icon-gray ion-ios7-arrow-right"></i>
+        </a> -->
+
+        <!-- Sleep quests -->
+        <div class="item item-divider" ng-click="toggleList('sleep')">
+          Sleep It Off<i class="icon ion-chevron-down pull-right" ng-show="showList['sleep']"></i><i class="icon ion-chevron-right pull-right" ng-hide="showList['sleep']"></i>
+        </div>
+        <span class="item item-padding noquest">
+          Quests to improve your sleep will be coming soon!
+        </span>
+        <!-- <a ng-show="showList['sleep']" class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in availableQuests | filter: {type:'sleep'}  | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
+          <i class="icon {{quest.icon}}"></i>
+            <h2>{{quest.title}}</h2>
+            <p>{{quest.shortDescription}}</p>
+          <i class="icon icon-gray ion-ios7-arrow-right"></i>
+        </a> -->
+
+
+      </div>
+
+
+      <!-- Active quests -->
+      <div ng-show="isActive">
+        <div class="item item-divider">
+          Your Current Quests
+        </div>
+        <a class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in quests | orderBy: 'gold'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
+          <i class="icon {{quest.icon}}"></i>
+            <h2>{{quest.title}}</h2>
+            <p>{{quest.shortDescription}}</p>
+          <i class="icon icon-gray ion-ios7-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Completed quests -->
+      <div ng-show="isComplete">
+        <div class="item item-divider" ng-click="toggleList('succeed')">
+          Succeeded Quests<i class="icon ion-chevron-down pull-right" ng-show="showList['succeed']"></i><i class="icon ion-chevron-right pull-right" ng-hide="showList['succeed']"></i>
+        </div>
+        <a ng-show="showList['succeed']" class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in successfulQuests | orderBy: 'completionTime'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
+          <i class="icon {{quest.icon}}"></i>
+            <h2>{{quest.title}}</h2>
+            <p>{{quest.shortDescription}}</p>
+          <i class="icon icon-gray ion-ios7-arrow-right"></i>
+        </a>
+
+        <div class="item item-divider" ng-click="toggleList('fail')">
+          Failed Quests<i class="icon ion-chevron-down pull-right" ng-show="showList['fail']"></i><i class="icon ion-chevron-right pull-right" ng-hide="showList['fail']"></i>
+        </div>
+        <a ng-show="showList['fail']" class="item item-icon-left item-icon-right item-padding" ng-repeat="quest in failedQuests | orderBy: 'completionTime'" type="item-text-wrap" href="#/app/quest/{{quest._id}}">
+          <i class="icon {{quest.icon}}"></i>
+            <h2>{{quest.title}}</h2>
+            <p>{{quest.shortDescription}}</p>
+          <i class="icon icon-gray ion-ios7-arrow-right"></i>
+        </a>
+      </div>
+
+    </div>
+
+  </ion-content>
+</ion-view>

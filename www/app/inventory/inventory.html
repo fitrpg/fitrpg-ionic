@@ -1,0 +1,74 @@
+<ion-view title="Inventory" hide-back-button="true">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon-gray icon ion-navicon"></button>
+  </ion-nav-buttons>
+
+  <div class="bar bar-subheader custom-subheader">
+    <div class="button-bar bar-light">
+      <a class="button button-tab" ng-class="equipmentTab" ng-click="equipment()">Equipment</a>
+      <a class="button button-tab" ng-class="itemsTab" ng-click="potion()">Items</a>
+    </div>
+  </div>
+
+  <ion-content class="has-header has-subheader">
+
+    <div class="list" ng-show="isEquipment">
+      <div class="item item-divider" ng-click="toggleList('weapons')">
+        Weapons<i class="icon ion-chevron-down pull-right" ng-show="showList['weapons']"></i><i class="icon ion-chevron-right pull-right" ng-hide="showList['weapons']"></i>
+      </div>
+
+      <div ng-show="showList['weapons']">
+        <a class="item item-icon-right item-padding" ng-repeat="item in inventory | filter: { type: 'weapon' } | orderBy: '-level' track by $index" href="#/app/inventory/{{item.inventoryId}}">
+          <h2>{{item.name}}</h2>
+          <p>{{item.equipped}}</p>
+          <i class="icon icon-gray ion-ios7-arrow-right"></i>
+        </a>
+        <span class="item item-padding" ng-hide="hasItem['weapon']">No Weapons Available</span>
+      </div>
+
+      <div class="item item-divider" ng-click="toggleList('armor')">
+        Armor<i class="icon ion-chevron-down pull-right" ng-show="showList['armor']"></i><i class="icon ion-chevron-right pull-right" ng-hide="showList['armor']"></i>
+      </div>
+
+      <div ng-show="showList['armor']">
+        <a class="item item-icon-right item-padding" ng-repeat="item in inventory | filter: { type: 'armor' } | orderBy: '-level' track by $index" href="#/app/inventory/{{item.inventoryId}}">
+          <h2>{{item.name}}</h2>
+          <p>{{item.equipped}}</p>
+          <i class="icon icon-gray ion-ios7-arrow-right"></i>
+        </a>
+        <span class="item item-padding" ng-hide="hasItem['armor']">No Armor Available</span>
+      </div>
+
+      <div class="item item-divider" ng-click="toggleList('accessories')">
+        Accessories<i class="icon ion-chevron-down pull-right" ng-show="showList['accessories']"></i><i class="icon ion-chevron-right pull-right" ng-hide="showList['accessories']"></i>
+      </div>
+
+      <div ng-show="showList['accessories']">
+        <a class="item item-icon-right item-padding" ng-repeat="item in inventory | filter: { type: 'accessory' } | orderBy: '-level' track by $index" href="#/app/inventory/{{item.inventoryId}}">
+          <i class="icon {{item.icon}}"></i>
+          <h2>{{item.name}}</h2>
+          <p>{{item.equipped}}</p>
+          <i class="icon icon-gray ion-ios7-arrow-right"></i>
+        </a>
+        <span class="item item-padding" ng-hide="hasItem['accessory']">No Accessories Available</span>
+      </div>
+
+    </div>
+
+    <div class="list" ng-hide="isEquipment" ng-click="toggleList('potions')">
+      <div class="item item-divider">
+        Potions<i class="icon ion-chevron-down pull-right" ng-show="showList['potions']"></i><i class="icon ion-chevron-right pull-right" ng-hide="showList['potions']"></i>
+      </div>
+
+      <div ng-show="showList['potions']">
+        <a class="item item-icon-right item-padding" ng-repeat="item in inventory | filter: { type: 'potion' }" href="#/app/inventory/{{item.inventoryId}}">
+          <i class="icon {{item.icon}}"></i>
+          <h2>{{item.name}}</h2>
+          <i class="icon icon-gray ion-ios7-arrow-right"></i>
+        </a>
+        <span class="item item-padding" ng-hide="hasItem['potion']">No Potions Available</span>
+      </div>
+    </div>
+
+  </ion-content>
+</ion-view>

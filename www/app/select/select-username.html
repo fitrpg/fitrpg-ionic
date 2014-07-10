@@ -1,0 +1,17 @@
+<div class="bar bar-header bar-assertive">
+  <h1 class="title">FitRPG</h1>
+</div>
+<div class="bar bar-subheader">
+  <h2 class="title">Choose Character Name</h2>
+</div>
+<ion-content class="has-subheader has-header paddding" >
+  <!-- <h3>Choose your username:</h3> -->
+  <div class="list list-inset">
+    <label class="item item-input">
+      <input type="text" placeholder="Character Name" ng-model="username">
+    </label>
+  </div>
+
+  <button type="button" data-ng-disabled="!username" ng-click="submit(username)" class="button button-block button-positive">Next</button>
+
+</ion-content>

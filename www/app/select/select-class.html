@@ -1,0 +1,19 @@
+<div class="bar bar-header bar-assertive">
+  <h1 class="title">FitRPG</h1>
+</div>
+<div class="bar bar-subheader">
+  <h2 class="title">Choose A Character Class</h2>
+</div>
+<ion-content class="has-subheader has-header paddding" >
+  <ion-radio ng-repeat="item in characterClasses"
+             ng-value="item.value"
+             ng-model="data.serverSide"
+             ng-change="selected(item)"
+             name="server-side">
+    <h2>{{ item.text }}</h2>
+    <p class="small-text">{{ item.description }}</p>
+  </ion-radio>
+
+  <button type="button" data-ng-disabled="disable" ng-click="submit()" class="button button-block button-positive">Submit</button>
+
+</ion-content>

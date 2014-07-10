@@ -1,0 +1,50 @@
+<ion-view title="Quests">
+  <ion-content class="has-header padding dashboard">
+    <ion-refresher
+      pulling-text="Pull to refresh..."
+      on-refresh="refresh()">
+    </ion-refresher>
+
+    <div class="list">
+      <div class="card no-bottom-margin">
+        <div class='item item-avatar item-main'>
+          <img src="assets/img/questIcon.png">
+          <h3>{{quest.title}}</h3>
+          <p>Difficulty:
+            <i class="ion-star" ng-show="difficulty(1)"></i>
+            <i class="ion-star" ng-show="difficulty(2)"></i>
+            <i class="ion-star" ng-show="difficulty(3)"></i>
+            <i class="ion-star" ng-show="difficulty(4)"></i>
+            <i class="ion-star" ng-show="difficulty(5)"></i>
+          </p>
+        </div>
+
+        <div class="item item-body">
+          <p><b>{{quest.shortDescription}}</b></p>
+          <p>{{quest.longDescription}}</p><br>
+          <p>Time Limit: {{quest.numDays}} day(s), {{quest.numHours}} hour(s)</p>
+          <p>Reward: {{quest.gold}} gold pieces</p><br>
+        </div>
+
+        <div ng-show="activeQuest"  class="item">
+          <div class="col">
+            <p>Your Progress<span class="pull-right medium-text">{{progress}} / {{winGoal}}</span></p>
+            <progressbar max="100" value="(progress*100)/winGoal"></progressbar>
+          </div>
+        </div>
+
+        <div ng-show="completedQuest || availableQuest" class="item item-body tabs tabs-secondary tabs-icon-left">
+          <a class="tab-item" ng-show="availableQuest" ng-click="startQuest()">
+          <i class="icon ion-flag"></i>Start Quest</a>
+          <p ng-show="completedQuest"><b>You recently completed this quest!</b></p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="questTimer" ng-show="activeQuest">
+      <timer class="questTimer"end-time="parsedDate"> You have {{days}} day(s), {{hours}} hour(s), {{minutes}} minute(s), and {{seconds}} second(s) remaining.</timer><br><br>
+      <button class="button-custom" ng-click="manualCompleteQuest()">Complete this Quest</button>
+    </div>
+  </ion-content>
+</ion-view>

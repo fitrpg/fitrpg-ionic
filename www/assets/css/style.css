@@ -1,0 +1,389 @@
+/*#f3796a*/
+/*#adaeae*/
+
+/*Quest page*/
+.questTimer {
+  text-align: center;
+  font-style: italic;
+}
+
+.battleStatus {
+  float:right;
+}
+
+/* FAQ & HELP PAGE */
+.item.faq {
+  font-size:17px;
+  white-space: normal;
+  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  padding:11px 11px 11px 11px;
+}
+
+.list.marg {
+  margin:3px 10px -5px 10px;
+}
+
+.scrollUp {
+  position:absolute;
+  right:-36px;
+  top:15px;
+}
+
+/* Make sure text wraps around */
+.item.list-heading.faqanswer h1 {
+  white-space:normal;
+  padding-right:13px;
+}
+
+.item.list-heading.faqanswer p {
+  white-space:normal;
+}
+
+.item.item-padding.noquest {
+  white-space:normal;
+}
+
+/* MAIN CHARACTER SCREEN */
+.bar-custom {
+  background-color: #fff;
+  border-bottom: 2px solid #f3796a;
+}
+
+.icon-gray {
+  color: #777;
+}
+
+.bar .title {
+  color: #f3796a;
+  text-align: left;
+  left: 52px !important;
+}
+
+.item-main {
+  background-color: #f3796a;
+  padding-left: 85px;
+}
+
+.item-main h3 {
+  font-weight: bold;
+  color: #fff;
+}
+
+.item-main p {
+  color: #fff;
+  font-size: 12px;
+}
+
+.item-main > img:first-child {
+  top: 0;
+  left: 0;
+  max-width: 70px;
+  max-height: 100%;
+  border-radius: 0;
+}
+
+.tab-main-left {
+  text-align: left;
+  padding-left: 20px;
+}
+
+.tab-main-right {
+  text-align: right;
+  padding-right: 20px;
+}
+
+.title-red {
+  font-size: 20px;
+  color: #f3796a;
+}
+
+.small-text {
+  font-size: 10px;
+}
+
+.medium-text {
+  font-size: 11px;
+}
+
+.main-attributes {
+  text-align: center;
+}
+
+.main-attributes i {
+  position: relative;
+  float: right;
+  top: 0px;
+  right: 0px;
+}
+
+.main-attributes h1 {
+  font-size: 20px;
+  color: #777;
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+.main-attributes p {
+  font-size: 11px;
+}
+
+.progress-bar {
+  background-color: #f3796a;
+}
+
+.card-title {
+  background-color: #f3796a;
+  font-weight: bold;
+  color: #fff;
+}
+
+.list-heading {
+  color: #777;
+  border-top: none;
+  border-bottom: none;
+}
+
+.list-heading h1 {
+  font-size: 16px;
+  font-weight: normal;
+  color: #777;
+  padding-left: 10px;
+  padding-bottom: 5px;
+  border-bottom: thin solid #eee;
+}
+
+.list-heading p {
+  font-size: 14px;
+  padding-left: 15px;
+  padding-bottom: 10px;
+}
+
+.button-custom {
+  background-color: #f3796a;
+  text-align: center;
+  color: #fff;
+  border: 0;
+  font-size: 20px;
+  font-style: normal;
+  padding: 7px 30px 7px 30px;
+}
+
+.no-bottom-margin {
+  margin-bottom: 0px;
+}
+
+/* END CHARACTER SCREEN */
+
+/* BEGIN LIST SCREEN */
+
+.button-tab {
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+.button-bar > .button-tab-active {
+  border-bottom: 2px solid #f3796a;
+}
+
+.bar-light .button {
+  font-size: 14px;
+  color: #f3796a;
+}
+
+.item-divider {
+  padding: 4px 25px;
+  min-height: 18px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #f3796a;
+}
+
+.has-subheader {
+  top: 84px;
+}
+
+.custom-subheader {
+  padding-bottom: 0;
+  height: 39px;
+}
+
+.item p {
+  margin: 0;
+}
+
+.item-padding {
+  padding: 10px 25px;
+}
+
+/* END LIST SCREEN */
+
+/* BEGIN BATTLE STATS */
+.battle-stats {
+  text-align: center;
+}
+
+.battle-stats h1 {
+  font-size: 20px;
+  color: #777;
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+.battle-stats p {
+  font-size: 11px;
+}
+/* END BATTLE STATS */
+
+/* MISC */
+
+.alert-dismissable .close {
+  width: 33px;
+  height: 41px;
+  top: -12px;
+  right: -31px;
+}
+
+/* END MISC */
+
+ion-item.refresh.item {
+   border-style:none;
+   width: 15px;
+   right:14px;
+   position:absolute;
+   background-color: #EEEEEE;
+   margin-bottom:20px;
+}
+
+i.ion-refresh.refresh {
+  position: absolute;
+  right:13px;
+  font-size:19px;
+  color:gray;
+  top: 0px;
+}
+
+.username {
+  height: 46px;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 6px;
+  border-style: double;
+  border-color: black;
+}
+
+.padding-horizontal {
+  padding: 30px;
+}
+
+.row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.dashboard {
+  background-color: #EEEEEE;
+}
+
+.text-red {
+  color: red;
+  font-weight: bold;
+}
+
+.text-green {
+  color: green;
+  font-weight: bold;
+}
+
+.donut {
+  margin: 0 auto;
+  width: 200px;
+}
+
+.popup {
+  border-radius: 12px;
+}
+
+.popup-head {
+  background-color: #ef4e3a;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.popup-title {
+  color: #fff;
+}
+
+.popup-body {
+  text-align: center;
+  min-height: 100px;
+}
+
+.button {
+  border-width: 0;
+}
+
+.popup-buttons.row {
+  padding: 10px 40px;
+}
+
+.popup-buttons .button {
+  border-radius: 45px;
+}
+
+.button.button-positive {
+  background-color: #777;
+}
+
+.button-swipe {
+  padding-top: 15px;
+}
+
+.item-input {
+  margin: 0;
+}
+
+.card .item:last-child, .list-inset .item:last-child {
+  margin: 0;
+}
+
+#login {
+  background-color: #f3796a
+}
+
+.login-text {
+  position: absolute;
+  width: 250px;
+  text-align: center;
+  left: 50%;
+  top: 20%;
+  margin-left: -125px;
+}
+
+.login-text h1{
+  color: #fff;
+  font-size: 50px;
+}
+
+.login-text p{
+  color: #fff;
+  font-size: 21px;
+  line-height: 1.2em;
+}
+
+.loginbutton {
+  position: absolute;
+  left: 50%;
+  margin-left: -150px;
+  max-width: 300px;
+  bottom: 15%;
+}
+
+.scroll-content {
+  padding-bottom: 20px;
+}
+
+.icon-btn {
+  padding: 0 10px;
+}

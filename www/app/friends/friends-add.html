@@ -1,0 +1,36 @@
+<ion-view title="Add Friends">
+
+  <ion-content class="has-header">
+  <!--SEARCH BAR-->
+<!--
+    <div class="list list-inset">
+      <label class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" placeholder="Search Friend By Username" ng-model="searchText">
+      </label>
+    </div>
+ -->
+
+    <div class="item item-input-inset">
+      <label class="item-input-wrapper">
+        <input type="text" placeholder="Search Friend By Username" ng-model="searchText">
+      </label>
+      <button class="button button-small" ng-click="friendSearch(searchText)">
+        Search
+      </button>
+    </div>
+
+    <div class="item" ng-show="notFound">
+      No matches found!
+    </div>
+
+    <ion-list>
+      <ion-item class="item-avatar" ng-repeat="friend in friends | orderBy:'profile.displayName'" type="item-text-wrap" ng-click="addFriendPrompt(friend)">
+        <img ng-src="{{friend.profile.avatar}}">
+        <h2>{{friend.username}}</h2>
+        <p>Level {{friend.attributes.level}} {{friend.character}}</p>
+        <ion-option-button class="button-positive button-swipe" ng-click="addFriend(friend['_id'])">Add</ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

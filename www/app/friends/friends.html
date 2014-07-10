@@ -1,0 +1,60 @@
+<ion-view title="Friends" hide-back-button="true">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon-gray icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <a href="#/app/friends/add"><button class="button button-icon icon-gray icon ion-plus"></button></a>
+  </ion-nav-buttons>
+
+  <ion-content class="has-header">
+  <!--SEARCH BAR-->
+<!--
+    <div class="list list-inset">
+      <label class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" placeholder="Search" ng-model="searchText">
+      </label>
+    </div>
+ -->
+    <ion-list>
+
+      <div class="item item-divider" ng-click="toggleList('friend')">
+        Friends<i class="icon ion-chevron-down pull-right" ng-show="showList['friend']"></i><i class="icon ion-chevron-right pull-right" ng-hide="showList['friend']"></i>
+      </div>
+
+      <ion-item class="item-avatar" ng-repeat="friend in friends | filter:searchText | orderBy:'profile.displayName'" type="item-text-wrap" ng-show="showList['friend']">
+        <img ng-src="{{friend.profile.avatar}}">
+        <h2>{{friend.username}}</h2>
+        <p>Level {{friend.attributes.level}} {{friend.character}}</p>
+        <!-- add ngclick event to add battle to user database with status waiting -->
+        <ion-option-button class="button-positive button-swipe" ng-click="requestBattle(friend['_id'])">Battle</ion-option-button>
+      </ion-item>
+      <span class="item item-padding" ng-hide="hasFriends" ng-click="navTo('addfriends')">Add Friends</span>
+
+      <div class="item item-divider" ng-click="toggleList('request')">
+        Requests<i class="icon ion-chevron-down pull-right" ng-show="showList['request']"></i><i class="icon ion-chevron-right pull-right" ng-hide="showList['request']"></i>
+      </div>
+
+      <ion-item class="item-avatar" ng-repeat="friend in friendRequests | filter: { requestStatus: 'request' } | orderBy:'profile.displayName'" type="item-text-wrap" ng-show="showList['request']" ng-click="friendPrompt($index)">
+        <img ng-src="{{friend.profile.avatar}}">
+        <h2>{{friend.username}}</h2>
+        <p>Level {{friend.attributes.level}} {{friend.character}}</p>
+        <ion-option-button class="button-positive button-swipe" ng-click="acceptFriend($index)">Accept</ion-option-button>
+        <ion-option-button class="button-assertive button-swipe" ng-click="rejectFriend($index)">Reject</ion-option-button>
+      </ion-item>
+
+      <div class="item item-divider" ng-click="toggleList('pending')">
+        Pending<i class="icon ion-chevron-down pull-right" ng-show="showList['pending']"></i><i class="icon ion-chevron-right pull-right" ng-hide="showList['pending']"></i>
+      </div>
+
+      <ion-item class="item-avatar" ng-repeat="friend in friendRequests | filter: { requestStatus: 'pending' } | orderBy:'profile.displayName'" type="item-text-wrap" ng-show="showList['pending']">
+        <img ng-src="{{friend.profile.avatar}}">
+        <h2>{{friend.username}}</h2>
+        <p>Level {{friend.attributes.level}} {{friend.character}}</p>
+      </ion-item>
+
+
+
+    </ion-list>
+  </ion-content>
+</ion-view>

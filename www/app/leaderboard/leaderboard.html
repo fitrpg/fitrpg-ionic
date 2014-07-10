@@ -1,0 +1,22 @@
+<ion-view title="Leaderboard" hide-back-button="true">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon-gray icon ion-navicon"></button>
+  </ion-nav-buttons>
+
+  <div class="bar bar-subheader custom-subheader">
+    <div class="button-bar bar-light">
+      <a class="button button-tab" ng-class="allTab" ng-click="all()">All</a>
+      <a class="button button-tab" ng-class="friendsTab" ng-click="friends()">Friends</a>
+    </div>
+  </div>
+
+  <ion-content class="has-header has-subheader">
+    <ion-list>
+      <ion-item class="item-avatar" ng-repeat="leader in leaderboard | orderBy:'-attributes.level'" type="item-text-wrap">
+        <img ng-src="{{leader.profile.avatar}}">
+        <h2>{{leader.username}}</h2>
+        <p>Level {{leader.attributes.level}} {{leader.character}}</p>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
