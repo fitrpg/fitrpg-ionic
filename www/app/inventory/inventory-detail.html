@@ -1,0 +1,69 @@
+<ion-view title="Item Details">
+  <ion-content class="has-header padding dashboard">
+  <div class="list">
+    <div class="card">
+
+    <div class="item item-avatar item-main">
+      <img src="assets/img/arrow.png">
+      <h3>{{inventoryItem.name}}</h3>
+      <p>Type: {{inventoryItem.type}}</p>
+    </div>
+
+    <div class="item item-body" ng-hide="checkType()">
+      <p class="pull-left">
+        Strength<br><br>
+        Vitality<br><br>
+        Endurance<br><br>
+        Dexterity<br><br>
+        <span ng-show="isWeapon">Size<br><br></span>
+        Sell Price
+      </p>
+      <p class="pull-right">
+        <!-- Current attributes and add weapon attributes -->
+        {{ user.attributes.strength }} <i class="icon ion-ios7-arrow-thin-right"></i>
+        <span ng-class="addClass(inventoryItem.strength)">{{ user.attributes.strength + inventoryItem.strength }}</span>
+        <br><br>
+        {{ user.attributes.vitality }} <i class="icon ion-ios7-arrow-thin-right"></i>
+        <span ng-class="addClass(inventoryItem.vitality)">{{ user.attributes.vitality + inventoryItem.vitality }}</span>
+        <br><br>
+        {{ user.attributes.endurance }} <i class="icon ion-ios7-arrow-thin-right"></i>
+        <span ng-class="addClass(inventoryItem.endurance)">{{ user.attributes.endurance + inventoryItem.endurance }}</span>
+        <br><br>
+        {{ user.attributes.dexterity }} <i class="icon ion-ios7-arrow-thin-right"></i>
+        <span ng-class="addClass(inventoryItem.dexterity)">{{ user.attributes.dexterity + inventoryItem.dexterity }}</span>
+        <br><br>
+        <span ng-show="isWeapon">{{ inventoryItem.sizeText }}
+        <br><br></span>
+        {{ inventoryItem.sellPrice }} Gold
+        <br><br>
+      </p>
+
+    </div>
+
+    <div class="item item-body" ng-show="checkType()">
+      <p>{{ inventoryItem.description }}</p><br>
+      <p>Quantity: {{ inventoryItem.quantity }}</p><br>
+      <p class="pull-left">Sell Price</p>
+      <p class="pull-right">{{ inventoryItem.sellPrice }} Gold</p>
+    </div>
+
+    <div class="item tabs tabs-secondary tabs-icon-left">
+      <a class="tab-item" ng-click="sellItem()">
+        <i class="icon ion-pricetag"></i>
+        Sell
+      </a>
+      <a class="tab-item" ng-click="equipItem()" ng-hide="checkType()">
+        <i class="icon ion-person-add"></i>
+        Equip
+      </a>
+      <a class="tab-item" ng-click="useItem()" ng-show="checkType()">
+        <i class="icon ion-person-add"></i>
+        Use
+      </a>
+    </div>
+  </div>
+
+  </div>
+
+  </ion-content>
+</ion-view>

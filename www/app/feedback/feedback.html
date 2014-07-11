@@ -1,0 +1,17 @@
+<ion-view title="Send Feedback">
+
+  <ion-content class="has-header padding dashboard" scroll="false">
+    <div class="list">
+        <label class="item item-input">
+          <input type="text" placeholder="Email" ng-model="feedback.email">
+        </label>
+
+        <label class="item item-input">
+          <textarea rows="8" placeholder="Comments" ng-model="feedback.message"></textarea>
+        </label>
+
+        <button class="button button-block button-assertive" ng-click="submit(feedback)">Send</button>
+    </div>
+  </ion-content>
+
+</ion-view>

@@ -1,0 +1,43 @@
+<ion-view title="Help" hide-back-button="true">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon-gray icon ion-navicon"></button>  </ion-nav-buttons>
+
+  <ion-content class="has-header padding dashboard">
+
+  <!--SEARCH BAR-->
+<div class="list list-inset marg">
+  <label class="item item-input">
+    <i class="icon ion-search placeholder-icon"></i>
+    <input type="text" placeholder="Search" ng-model="searchText">
+  </label>
+</div>
+
+  <div class="list">
+    <div class="card">
+      <div class="item card-title">
+      Frequently Asked Questions
+      <span class="item-icon-right">
+              <i class="icon ion-help-circled"></i>
+          </span>
+      </div>
+
+      <div class="item row faq" ng-repeat="question in questions | filter:searchText" ng-click="scrollTo(question.goTo)"><a>{{question.question}}</a></div>
+
+  </div>
+
+    <div class="card">
+      <div class="item card-title">
+      Answers
+      </div>
+      <div ng-repeat="answer in answers | filter:searchText" id='{{answer.id}}' class="item list-heading faqanswer">
+          <h1>{{ answer.question }} <i ng-click="scrollTop()" class="item-icon-right ion-chevron-up scrollUp"></i></h1>
+
+          <!-- </span> -->
+          <p> {{ answer.answer }} </p>
+        </div>
+
+    </div>
+
+  </div>
+  </ion-content>
+</ion-view>
