@@ -6,13 +6,13 @@
 var pluginlist = [
   // 'org.apache.cordova.console',
   'org.apache.cordova.device',
-  'org.apache.cordova.file',
+  // 'org.apache.cordova.file',
   'org.apache.cordova.inappbrowser',
-  'org.apache.cordova.media'
+  // 'org.apache.cordova.media'
   'org.apache.cordova.statusbar',
   'https://github.com/driftyco/ionic-plugins-keyboard.git',
   'https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git',
-  'https://github.com/phonegap-build/PushPlugin.git',
+  // 'https://github.com/phonegap-build/PushPlugin.git',
 ];
 
 // no need to configure below
