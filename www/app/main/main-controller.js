@@ -391,6 +391,27 @@ angular.module('mobile.main.controllers')
 
   getSettings();
 
+  var kickstarterAlert = function() {
+    var title = 'Support Us!';
+    var body = 'Please help us make FitRPG even better. Support our Kickstarter campaign so we can create a more immersive storyline, a more RPG-like gameplay, and add amazing graphics! We appreciate your help.';
+    var supportBtn = 'Support';
+    var remindBtn = 'Cancel';
+
+    util.showPrompt($ionicPopup,title,body,supportBtn,remindBtn,
+      function(){
+        $window.open('https://www.kickstarter.com/projects/435971909/fitrpg-gamifying-fitness-trackers-fitbit-for-ios-a', '_system');
+        localStorageService.set('support',true);
+      },
+      function(){
+        localStorageService.set('support',true);
+      }
+    );
+  };
+
+  if (!localStorageService.get('support')) {
+    kickstarterAlert();
+  }
+
   $scope.rateApp = function() {
     var title = 'Having Fun?';
     var body;
