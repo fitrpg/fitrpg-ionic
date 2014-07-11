@@ -53,11 +53,11 @@ angular.module('mobile', [
         config = androidConfig;
       }
 
-      $cordovaPush.register(config).then(function(result) {
-        console.log(result);
-      }, function(err) {
-        console.log(err);
-      });
+      // $cordovaPush.register(config).then(function(result) {
+      //   console.log(result);
+      // }, function(err) {
+      //   console.log(err);
+      // });
     }
 
   });
