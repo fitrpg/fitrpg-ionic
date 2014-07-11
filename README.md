@@ -3,8 +3,15 @@
   <img alt="Get it on Google Play"
        src="readme/google_play.png" />
 </a>
+<a href="https://itunes.apple.com/us/app/fitrpg-gamifying-fitbit/id887067605?mt=8&uo=4">
+  <img alt="Get it on the App Store"
+       src="readme/app_store.png" />
+</a>
 
 FitRPG is a mobile app created by [Amira Anuar](https://github.com/aellawind), [Matt Gutierrez](https://github.com/fatchicken007), and [Conor Fennell](https://github.com/conorfennell) at [Hack Reactor](http://www.hackreactor.com/). FitRPG transforms a Fitbit user's data into a character that can fight friends, battle bosses, and go on quests using the steps, distance, and sleep tracked by the Fitbit. The game logic seeks to motivate users to stay fit and challenge themselves to go that extra mile in order to win a battle or complete a quest.
+
+<h2>Featured On</h2>
+  * [Lifehacker](http://lifehacker.com/fitrpg-turns-your-fitbit-into-a-game-you-play-with-frie-1602140820)
 
 <h2>Tech Stack</h2>
   * [Ionic Framework](http://ionicframework.com/)
