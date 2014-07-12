@@ -1,8 +1,5 @@
 node_modules/
-platforms/android
-platforms/ios
+platforms/
+plugins/
 www/lib
-.DS_store
-www/._.DS_store
-plugins/android.json
-npm-debug.log
+*.DS_store

@@ -1,0 +1,60 @@
+<ion-view title="Item Details">
+  <ion-content class="has-header padding dashboard">
+    <div class="list">
+     <div class="card">
+
+      <div class="item item-avatar item-main">
+        <img src="assets/img/dagger.png">
+        <h3>{{shopItem.name}}</h3>
+        <p>Type: {{shopItem.type}}</p>
+      </div>
+
+      <div class="item item-body" ng-hide="checkType()">
+        <p class="pull-left">
+          Strength<br><br>
+          Vitality<br><br>
+          Endurance<br><br>
+          Dexterity<br><br>
+          <span ng-show="isWeapon">Size<br><br></span>
+          Cost
+        </p>
+        <p class="pull-right">
+          <!-- Current attributes and add weapon attributes -->
+          {{ user.attributes.strength }} <i class="icon ion-ios7-arrow-thin-right"></i>
+          <span ng-class="addClass(shopItem.strength)">{{ user.attributes.strength + shopItem.strength }}</span>
+          <br><br>
+          {{ user.attributes.vitality }} <i class="icon ion-ios7-arrow-thin-right"></i>
+          <span ng-class="addClass(shopItem.vitality)">{{ user.attributes.vitality + shopItem.vitality }}</span>
+          <br><br>
+          {{ user.attributes.endurance }} <i class="icon ion-ios7-arrow-thin-right"></i>
+          <span ng-class="addClass(shopItem.endurance)">{{ user.attributes.endurance + shopItem.endurance }}</span>
+          <br><br>
+          {{ user.attributes.dexterity }} <i class="icon ion-ios7-arrow-thin-right"></i>
+          <span ng-class="addClass(shopItem.dexterity)">{{ user.attributes.dexterity + shopItem.dexterity }}</span>
+          <br><br>
+          <span ng-show="isWeapon">{{ shopItem.sizeText }}
+          <br><br></span>
+          {{ shopItem.cost }} Gold
+        </p>
+
+      </div>
+
+
+      <div class="item item-body" ng-show="checkType()">
+        <p>{{ shopItem.description }}</p>
+        <br>
+        <p class="pull-left">Cost</p>
+        <p class="pull-right">{{ shopItem.cost }} Gold</p>
+      </div>
+
+
+      <div class="item tabs tabs-secondary tabs-icon-left">
+        <a class="tab-item" ng-click="buyItem()">
+          <i class="icon ion-pricetag"></i>
+          Buy
+        </a>
+      </div>
+    </div>
+    </div>
+  </ion-content>
+</ion-view>

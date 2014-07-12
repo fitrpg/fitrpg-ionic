@@ -1,0 +1,151 @@
+<ion-view title="" hide-back-button="true">
+
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon-gray icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button class="button button-icon" ng-click="displayAlerts()" ng-show="alertCount"><span class="badge badge-assertive">{{alertCount}}</span></button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button class="button button-icon icon-gray icon ion-star" ng-click="rateApp()"></button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button class="button button-icon icon-gray icon ion-map" ng-click="navTo('quest')"></button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button class="button button-icon icon-gray icon icon-fight" ng-click="navTo('battle')"></button>
+  </ion-nav-buttons>
+
+  <ion-content class="has-header dashboard">
+    <ion-refresher
+      pulling-text="Pull to refresh..."
+      on-refresh="refresh()">
+    </ion-refresher>
+
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}" ng-click="navTo('battle')" close="closeAlert($index)" ng-show="showAlert">{{alert.msg}}</alert>
+    <alert ng-repeat="alert in levelUpAlerts" type="{{alert.type}}" close="closeLevelUpAlert($index)" ng-show="showAlert">{{alert.msg}}</alert>
+    <alert ng-repeat="alert in friendRequestAlerts" type="{{alert.type}}" ng-click="navTo('friends')" close="closeFriendRequestAlert($index)" ng-show="showAlert">{{alert.msg}}</alert>
+    <alert ng-repeat="alert in questAlerts" type="{{alert.type}}" ng-click="navTo('quest')" close="closeQuestAlert($index)" ng-show="showAlert">{{alert.msg}}</alert>
+
+    <div class="list">
+      <div class="card">
+        <div class='item item-avatar item-main'>
+          <img ng-src="{{user.profile.avatar}}">
+          <h3>{{user.username}}</h3>
+          <p>Level: {{user.attributes.level}} {{user.character}}</p>
+        </div>
+
+        <div class="item tabs tabs-secondary tabs-icon-left">
+          <div class="tab-item tab-main-left">
+            <span class="title-red">{{user.attributes.skillPts}} </span><span class="medium-text">Skill Points</span>
+          </div>
+          <div class="tab-item tab-main-right">
+            <span class="title-red">{{user.attributes.gold}} </span><span class="medium-text">Gold</span>
+          </div>
+        </div>
+
+        <div class="item row">
+          <div class="col">
+            <p>
+              XP
+              <span class="pull-right medium-text">{{calculatedData.currentXp}} / {{calculatedData.requiredXp}}</span>
+            </p>
+            <progressbar max="100" value="(calculatedData.currentXp*100)/calculatedData.requiredXp"></progressbar>
+          </div>
+        </div>
+
+        <div class="item row">
+          <div class="col">
+            <p>
+              HP
+              <span class="pull-right medium-text">{{user.attributes.HP}} / {{calculatedData.maxHp}}</span>
+            </p>
+            <progressbar max="100" value="(user.attributes.HP*100)/calculatedData.maxHp"></progressbar>
+          </div>
+        </div>
+
+        <div class="item row main-attributes">
+          <div class="col" ng-click="applyAttributes('strength')">
+            <i class="icon ion-plus-circled" ng-show="hasSkillPoints()"></i>
+            <h1>{{calculatedData.strength}}</h1>
+            <p>Strength</p>
+          </div>
+          <div class="col" ng-click="applyAttributes('vitality')">
+            <i class="icon ion-plus-circled" ng-show="hasSkillPoints()"></i>
+            <h1>{{calculatedData.vitality}}</h1>
+            <p>Vitality</p>
+          </div>
+          <div class="col" ng-click="applyAttributes('endurance')">
+            <i class="icon ion-plus-circled" ng-show="hasSkillPoints()"></i>
+            <h1>{{calculatedData.endurance}}</h1>
+            <p>Endurance</p>
+          </div>
+          <div class="col" ng-click="applyAttributes('dexterity')">
+            <i class="icon ion-plus-circled" ng-show="hasSkillPoints()"></i>
+            <h1>{{calculatedData.dexterity}}</h1>
+            <p>Dexterity</p>
+          </div>
+        </div>
+<!--
+        <div class="item row main-attributes">
+          <div class="col">
+            <h1>{{user.fitbit.strength}}</h1>
+            <p>Strength</p>
+          </div>
+          <div class="col">
+            <h1>{{user.fitbit.vitality}}</h1>
+            <p>Vitality</p>
+          </div>
+          <div class="col">
+            <h1>{{user.fitbit.endurance}}</h1>
+            <p>Endurance</p>
+          </div>
+          <div class="col">
+            <h1>{{user.fitbit.dexterity}}</h1>
+            <p>Dexterity</p>
+          </div>
+        </div>
+ -->
+      </div>
+
+      <div class="card">
+        <div class="item card-title">
+          What I'm Wielding
+          <span class="item-icon-right" ng-click="navTo('shop')">
+            <i class="icon icon-anvil"></i>
+          </span>
+        </div>
+
+        <div class="item list-heading">
+          <h1>Weapons<i class="icon ion-plus pull-right icon-btn" ng-click="navTo('inventory')"></i></h1>
+          <div ng-show="isEquipped('weapon1')">
+            <p>{{user.equipped.weapon1.name}}<i class="pull-right ion-close icon-btn" ng-click="unequip('weapon1')"></i></p>
+          </div>
+          <div ng-show="isEquipped('weapon2')">
+            <p>{{user.equipped.weapon2.name}}<i class="pull-right ion-close icon-btn" ng-click="unequip('weapon2')"></i></p>
+          </div>
+        </div>
+
+        <div class="item list-heading">
+          <h1>Armor<i class="icon ion-plus pull-right icon-btn" ng-click="navTo('inventory')"></i></h1>
+          <div ng-show="isEquipped('armor')">
+            <p>{{user.equipped.armor.name}}<i class="pull-right ion-close icon-btn" ng-click="unequip('armor')"></i></p>
+          </div>
+        </div>
+
+        <div class="item list-heading">
+          <h1>Accessories<i class="icon ion-plus pull-right icon-btn" ng-click="navTo('inventory')"></i></h1>
+          <div ng-show="isEquipped('accessory1')">
+            <p>{{user.equipped.accessory1.name}}<i class="pull-right ion-close icon-btn" ng-click="unequip('accessory1')"></i></p>
+          </div>
+          <div ng-show="isEquipped('accessory2')">
+            <p>{{user.equipped.accessory2.name}}<i class="pull-right ion-close icon-btn" ng-click="unequip('accessory2')"></i></p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </ion-content>
+</ion-view>
