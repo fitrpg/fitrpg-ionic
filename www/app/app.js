@@ -168,7 +168,7 @@ angular.module('mobile', [
       url: '/friends/add',
       views: {
         'menuContent': {
-          templateUrl: 'app/friends/friend-add.html',
+          templateUrl: 'app/friends/friends-add.html',
           controller: 'AddFriendsCtrl'
         }
       }
