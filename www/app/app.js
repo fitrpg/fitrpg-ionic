@@ -73,7 +73,7 @@ angular.module('mobile', [
   }, 100);
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider) {
 
   $stateProvider
 
