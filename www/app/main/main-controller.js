@@ -382,7 +382,7 @@ angular.module('mobile.main.controllers')
     if (device.isApple) {
       platform = 'ios';
     } else if (device.isGoogle) {
-      platforom = 'android'
+      platform = 'android'
     }
     Settings.get( { platform: platform }, function(item) {
       showIncentive = item.incentive;

@@ -1,12 +1,42 @@
 angular.module('mobile.common.services')
 
-.service('CommonService', function($state, $ionicPopup, localStorageService, $window) {
+.service('CommonService', function(
+    $state,
+    $ionicPopup,
+    $ionicLoading,
+    $ionicPlatform,
+    localStorageService,
+    $window)
+  {
+
+  this.device = {
+    isApple: ionic.Platform.isIOS(),
+    isGoogle: ionic.Platform.isAndroid()
+  }
+
+  this.loading = setTimeout(function(){
+    $ionicLoading.show({
+      template: '<p>Loading...</p><i class="icon ion-loading-c"></i>'
+    });
+  }, 500);
 
   this.navTo = function(location) {
     $state.go('app.' + location);
   };
 
-  this.rateApp = function(user) {
+  this.getSettings = function() {
+    var platform;
+    if (this.device.isApple) {
+      platform = 'ios';
+    } else if (this.device.isGoogle) {
+      platform = 'android';
+    }
+    return Settings.get( {platform: platform}, function(item) {
+      return item.incentive;
+    });
+  };
+
+  this.rateApp = function(user, showIncentive) {
     var title = 'Having Fun?';
     var body;
     if (localStorageService.get('rate') || !showIncentive) {
@@ -23,9 +53,9 @@ angular.module('mobile.common.services')
           localStorageService.set('rate',true);
           user.attributes.gold += 500;
         }
-        if (device.isApple) {
+        if (this.device.isApple) {
           $window.open('http://itunes.apple.com/app/id887067605', '_system');
-        } else if (device.isGoogle) {
+        } else if (this.device.isGoogle) {
           $window.open('http://play.google.com/store/apps/details?id=com.fatchickenstudios.fitrpg', '_system');
         }
       },
